@@ -2,9 +2,9 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PostUserDto } from './dtos/post-user.dto';
 import { HttpService } from '@nestjs/axios';
 import { PrismaService } from 'src/db/prisma.service';
-
 import * as crypto from 'crypto';
 import { $Enums } from '@prisma/client';
+import { SnsUser } from '@type';
 
 @Injectable()
 export class UsersService {
@@ -37,10 +37,7 @@ export class UsersService {
     return { type: $Enums.AccountsType.Google, id: response.data.sub };
   }
 
-  public async signInOrUp(
-    dto: PostUserDto,
-    snsUser: { type: $Enums.AccountsType; id: string },
-  ) {
+  public async signInOrUp(dto: PostUserDto, snsUser: SnsUser) {
     const existAccount = await this.prismaService.accounts.findUnique({
       where: { id_type: { id: snsUser.id, type: snsUser.type } },
     });
@@ -64,10 +61,7 @@ export class UsersService {
     return { user, token };
   }
 
-  private async signUp(
-    dto: PostUserDto,
-    snsUser: { type: $Enums.AccountsType; id: string },
-  ) {
+  private async signUp(dto: PostUserDto, snsUser: SnsUser) {
     return this.prismaService.$transaction(async (prisma) => {
       const user = await prisma.users.create({
         data: {
