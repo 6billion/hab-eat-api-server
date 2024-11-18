@@ -1,11 +1,11 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { PostUserDto } from './dtos/post-user.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 import { Users } from '@prisma/client';
-import { RequestUser } from 'src/request-user.decorator';
-import { BearerGuard } from 'src/auth/guards/bearer.guard';
+import { RequestUser } from '../request-user.decorator';
+import { BearerGuard } from '../auth/guards/bearer.guard';
 
 @ApiTags('배너')
 @Controller('users')
@@ -27,6 +27,13 @@ export class UsersController {
   @Get()
   @UseGuards(BearerGuard)
   async getUser(@RequestUser() user: Users) {
+    return user;
+  }
+
+  @Delete()
+  @UseGuards(BearerGuard)
+  async deleteUser(@RequestUser() user: Users) {
+    await this.userService.deleteUser(user.id);
     return user;
   }
 }

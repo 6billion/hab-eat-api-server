@@ -46,6 +46,10 @@ export class UsersService {
     return this.signUp(dto, snsUser);
   }
 
+  public deleteUser(userId: number) {
+    return this.prismaService.users.delete({ where: { id: userId } });
+  }
+
   private async signIn(userId: number) {
     const user = await this.prismaService.users.findUnique({
       where: { id: userId },
