@@ -1,7 +1,8 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
+import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { useSwagger } from './swagger';
+import { AppModule } from './app.module';
 
 import * as _cluster from 'cluster';
 import * as os from 'os';
@@ -13,9 +14,16 @@ async function bootstrap() {
 
   const port = configService.get('PORT') || 3000;
 
-  configService.getOrThrow('NODE_ENV') !== 'production' && useSwagger(app);
-
   app.enableShutdownHooks();
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+    }),
+  );
+
+  configService.getOrThrow('NODE_ENV') !== 'production' && useSwagger(app);
 
   if (
     cluster.isPrimary &&
