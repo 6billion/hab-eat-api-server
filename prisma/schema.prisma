@@ -13,7 +13,39 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id    Int     @id @default(autoincrement())
-  name  String?
+model Users {
+  id        Int      @unique @default(autoincrement())
+  nickname  String
+  hight     Int
+  weight    Int
+  goalKcal  Int
+  createdAt DateTime @default(now())
+
+  token   Tokens?    @relation("userToToken")
+  account Accounts[] @relation("userToAccount")
+}
+
+model Accounts {
+  id        String
+  type      AccountsType
+  userId    Int          @unique
+  createdAt DateTime     @default(now())
+
+  user Users @relation("userToAccount", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([id, type])
+}
+
+model Tokens {
+  userId    Int      @unique
+  token     String   @unique
+  updatedAt DateTime @updatedAt
+
+  user Users @relation("userToToken", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+enum AccountsType {
+  Google
+  Facebook
+  Local
 }

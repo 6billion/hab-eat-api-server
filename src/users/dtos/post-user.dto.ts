@@ -5,9 +5,6 @@ export class PostUserDto {
   snsToken: string;
 
   @IsString()
-  snsType: string;
-
-  @IsString()
   @IsOptional()
   nickname?: string;
 
