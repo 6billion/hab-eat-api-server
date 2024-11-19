@@ -11,7 +11,7 @@ export class PostUserDto {
   @IsOptional()
   nickname?: string;
 
-  @ApiProperty({ description: '키', type: String })
+  @ApiProperty({ description: '키', type: Number })
   @IsNumber()
   @IsOptional()
   hight?: number;

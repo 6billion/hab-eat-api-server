@@ -45,7 +45,7 @@ model Tokens {
 }
 
 enum AccountsType {
-  Google
-  Facebook
+  Kakao
+  Naver
   Local
 }

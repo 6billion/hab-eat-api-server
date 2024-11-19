@@ -13,28 +13,35 @@ export class UsersService {
     private readonly prismaService: PrismaService,
   ) {}
 
-  public async getFacebookUser(snsToken: string) {
-    const response = await this.httpService.axiosRef
-      .get<{ id: string }>('https://graph.facebook.com/v7.0/me', {
+  public async getKakaoUser(snsToken: string) {
+    const response = await this.httpService.axiosRef.get<{ id: string }>(
+      'https://kapi.kakao.com/v2/user/me',
+      {
         headers: { Authorization: `Bearer ${snsToken}` },
-      })
-      .catch(() => {
-        throw new ForbiddenException();
-      });
+        validateStatus: (status) => status < 500,
+      },
+    );
 
-    return { type: $Enums.AccountsType.Facebook, id: response.data.id };
+    if (response.status !== 200 || !response?.data?.id) {
+      throw new ForbiddenException();
+    }
+
+    return { type: $Enums.AccountsType.Kakao, id: response.data.id };
   }
 
-  public async getGoolgeUser(snsToken: string) {
-    const response = await this.httpService.axiosRef
-      .get<{ sub: string }>('https://oauth2.googleapis.com/tokeninfo', {
-        headers: { Authorization: `Bearer ${snsToken}` },
-      })
-      .catch(() => {
-        throw new ForbiddenException();
-      });
+  public async getNaverUser(snsToken: string) {
+    const response = await this.httpService.axiosRef.get<{
+      response: { id: string };
+    }>('https://openapi.naver.com/v1/nid/me', {
+      headers: { Authorization: `Bearer ${snsToken}` },
+      validateStatus: (status) => status < 500,
+    });
 
-    return { type: $Enums.AccountsType.Google, id: response.data.sub };
+    if (response.status !== 200 || !response?.data?.response?.id) {
+      throw new ForbiddenException();
+    }
+
+    return { type: $Enums.AccountsType.Naver, id: response.data.response.id };
   }
 
   public async signInOrUp(dto: PostUserDto, snsUser: SnsUser) {

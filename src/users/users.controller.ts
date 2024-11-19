@@ -12,19 +12,19 @@ import { BearerGuard } from '../auth/guards/bearer.guard';
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
-  @ApiOperation({ summary: '페이스북 로그인' })
+  @ApiOperation({ summary: '카카오 로그인' })
   @ApiBody({ type: PostUserDto })
-  @Post('facebook-login')
-  async facebookLogin(@Body() body: PostUserDto) {
-    const snsUser = await this.userService.getFacebookUser(body.snsToken);
+  @Post('kakao-login')
+  async kakaoLogin(@Body() body: PostUserDto) {
+    const snsUser = await this.userService.getKakaoUser(body.snsToken);
     return this.userService.signInOrUp(body, snsUser);
   }
 
-  @ApiOperation({ summary: '구글 로그인' })
+  @ApiOperation({ summary: '네이버 로그인' })
   @ApiBody({ type: PostUserDto })
-  @Post('google-login')
-  async gooleLogin(@Body() body: PostUserDto) {
-    const snsUser = await this.userService.getGoolgeUser(body.snsToken);
+  @Post('naver-login')
+  async naverLogin(@Body() body: PostUserDto) {
+    const snsUser = await this.userService.getNaverUser(body.snsToken);
     return this.userService.signInOrUp(body, snsUser);
   }
 
