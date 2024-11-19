@@ -15,6 +15,7 @@ import { Users } from '@prisma/client';
 import { RequestUser } from '../request-user.decorator';
 import { BearerGuard } from '../auth/guards/bearer.guard';
 import { PutUserDto } from './dtos/put-user.dto';
+import { User } from './user';
 
 @ApiTags('유저')
 @ApiBearerAuth()
@@ -41,7 +42,7 @@ export class UsersController {
   @ApiOperation({ summary: '유저 조회' })
   @Get()
   @UseGuards(BearerGuard)
-  async getUser(@RequestUser() user: Users) {
+  async getUser(@RequestUser() user: User) {
     return user;
   }
 

@@ -10,6 +10,7 @@ import {
   SnsUser,
 } from '@type';
 import { PutUserDto } from './dtos/put-user.dto';
+import { User } from './user';
 
 @Injectable()
 export class UsersService {
@@ -147,6 +148,6 @@ export class UsersService {
     const user = await this.prismaService.users.findUniqueOrThrow({
       where: { id: token.userId },
     });
-    return user;
+    return new User(user);
   }
 }
