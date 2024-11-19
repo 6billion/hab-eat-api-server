@@ -139,4 +139,14 @@ export class UsersService {
   private generateToken() {
     return crypto.randomBytes(48).toString('base64url');
   }
+
+  public async getUserByToken(requestToken: string) {
+    const token = await this.prismaService.tokens.findUniqueOrThrow({
+      where: { token: requestToken },
+    });
+    const user = await this.prismaService.users.findUniqueOrThrow({
+      where: { id: token.userId },
+    });
+    return user;
+  }
 }
