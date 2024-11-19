@@ -40,6 +40,7 @@ export class PostUserDto {
 
   @ApiProperty({ description: '활동 레벨', type: String, required: false })
   @IsEnum($Enums.UserActivityLevel)
+  @IsOptional()
   activityLevel: $Enums.UserActivityLevel;
 
   @ApiProperty({ description: '질병 여부', type: Boolean })
