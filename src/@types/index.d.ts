@@ -1,5 +1,5 @@
 export type SnsUser = {
-  type: $Enums.AccountsType;
+  type: $Enums.AccountType;
   id: string;
   nickname?: string;
 };

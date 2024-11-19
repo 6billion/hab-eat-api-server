@@ -32,7 +32,7 @@ export class UsersService {
     }
 
     return {
-      type: $Enums.AccountsType.Kakao,
+      type: $Enums.AccountType.kakao,
       id: response.data.id,
       nickname: response.data.kakao_account?.profile?.nickname,
     };
@@ -53,7 +53,7 @@ export class UsersService {
     }
 
     return {
-      type: $Enums.AccountsType.Naver,
+      type: $Enums.AccountType.naver,
       id: response.data.response.id,
       nickname: response.data.response.nickname,
     };
@@ -94,7 +94,10 @@ export class UsersService {
           nickname: dto.nickname || snsUser.nickname,
           hight: dto.hight,
           weight: dto.weight,
-          goalKcal: dto.goalKcal,
+          age: dto.age,
+          sex: dto.sex,
+          type: dto.type,
+          hasDisease: dto.hasDisease,
         },
       });
 

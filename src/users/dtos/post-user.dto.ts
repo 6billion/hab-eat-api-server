@@ -1,5 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { $Enums } from '@prisma/client';
+import {
+  IsBoolean,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class PostUserDto {
   @ApiProperty({ description: 'sns 토큰', type: String })
@@ -13,16 +20,25 @@ export class PostUserDto {
 
   @ApiProperty({ description: '키', type: Number })
   @IsNumber()
-  @IsOptional()
-  hight?: number;
+  hight: number;
 
   @ApiProperty({ description: '몸무게', type: Number })
   @IsNumber()
-  @IsOptional()
-  weight?: number;
+  weight: number;
 
-  @ApiProperty({ description: '목표 칼로리', type: Number })
+  @ApiProperty({ description: '나이', type: Number })
   @IsNumber()
-  @IsOptional()
-  goalKcal?: number;
+  age: number;
+
+  @ApiProperty({ description: '성별', type: Number })
+  @IsEnum($Enums.Sex)
+  sex: $Enums.Sex;
+
+  @ApiProperty({ description: '유저 타입', type: Number })
+  @IsEnum($Enums.UserType)
+  type: $Enums.UserType;
+
+  @ApiProperty({ description: '질병 여부', type: Boolean })
+  @IsBoolean()
+  hasDisease: boolean;
 }

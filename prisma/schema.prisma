@@ -14,12 +14,15 @@ datasource db {
 }
 
 model Users {
-  id        Int      @unique @default(autoincrement())
-  nickname  String
-  hight     Int
-  weight    Int
-  goalKcal  Int
-  createdAt DateTime @default(now())
+  id         Int      @unique @default(autoincrement())
+  nickname   String   @default("햅잇")
+  hight      Int
+  weight     Int
+  age        Int
+  sex        Sex
+  type       UserType
+  hasDisease Boolean  @default(false)
+  createdAt  DateTime @default(now())
 
   token   Tokens?    @relation("userToToken")
   account Accounts[] @relation("userToAccount")
@@ -27,9 +30,9 @@ model Users {
 
 model Accounts {
   id        String
-  type      AccountsType
-  userId    Int          @unique
-  createdAt DateTime     @default(now())
+  type      AccountType
+  userId    Int         @unique
+  createdAt DateTime    @default(now())
 
   user Users @relation("userToAccount", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
@@ -44,8 +47,18 @@ model Tokens {
   user Users @relation("userToToken", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
-enum AccountsType {
-  Kakao
-  Naver
-  Local
+enum UserType {
+  diet
+  bulk
+  maintain
+}
+
+enum AccountType {
+  kakao
+  naver
+}
+
+enum Sex {
+  male
+  felmale
 }
