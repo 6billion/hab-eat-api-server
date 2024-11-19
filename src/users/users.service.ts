@@ -9,6 +9,7 @@ import {
   NaverGetUserProfileApiResponse,
   SnsUser,
 } from '@type';
+import { PutUserDto } from './dtos/put-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -70,6 +71,21 @@ export class UsersService {
 
   public deleteUser(userId: number) {
     return this.prismaService.users.delete({ where: { id: userId } });
+  }
+
+  public updateUser(id: number, dto: PutUserDto) {
+    return this.prismaService.users.update({
+      where: { id },
+      data: {
+        nickname: dto.nickname,
+        hight: dto.hight,
+        weight: dto.weight,
+        age: dto.age,
+        sex: dto.sex,
+        type: dto.type,
+        hasDisease: dto.hasDisease,
+      },
+    });
   }
 
   private async signIn(userId: number) {

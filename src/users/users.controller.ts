@@ -1,13 +1,23 @@
-import { Body, Controller, Delete, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { PostUserDto } from './dtos/post-user.dto';
-import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { Users } from '@prisma/client';
 import { RequestUser } from '../request-user.decorator';
 import { BearerGuard } from '../auth/guards/bearer.guard';
+import { PutUserDto } from './dtos/put-user.dto';
 
 @ApiTags('유저')
+@ApiBearerAuth()
 @Controller('users')
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
@@ -33,6 +43,14 @@ export class UsersController {
   @UseGuards(BearerGuard)
   async getUser(@RequestUser() user: Users) {
     return user;
+  }
+
+  @ApiOperation({ summary: '유저 수정' })
+  @Put()
+  @ApiBody({ type: PutUserDto, required: false })
+  @UseGuards(BearerGuard)
+  updateUser(@RequestUser() user: Users, @Body() body: PutUserDto) {
+    return this.userService.updateUser(user.id, body);
   }
 
   @ApiOperation({ summary: '유저 탈퇴' })
