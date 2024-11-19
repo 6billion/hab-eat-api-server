@@ -46,6 +46,16 @@ export class UsersController {
     return user;
   }
 
+  @ApiOperation({ summary: '목표 섭취 칼로리/영양분 조회' })
+  @Get('target-nutrients')
+  @UseGuards(BearerGuard)
+  async getUserTargetNutrients(@RequestUser() user: User) {
+    return {
+      targetNutrients: user.targetNutrients,
+      targetCalories: user.targetCalories,
+    };
+  }
+
   @ApiOperation({ summary: '유저 수정' })
   @Put()
   @ApiBody({ type: PutUserDto, required: false })
