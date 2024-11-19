@@ -4,7 +4,11 @@ import { HttpService } from '@nestjs/axios';
 import { PrismaService } from 'src/db/prisma.service';
 import * as crypto from 'crypto';
 import { $Enums } from '@prisma/client';
-import { SnsUser } from '@type';
+import {
+  KakaoGetUserProfileApiResponse,
+  NaverGetUserProfileApiResponse,
+  SnsUser,
+} from '@type';
 
 @Injectable()
 export class UsersService {
@@ -14,34 +18,45 @@ export class UsersService {
   ) {}
 
   public async getKakaoUser(snsToken: string) {
-    const response = await this.httpService.axiosRef.get<{ id: string }>(
-      'https://kapi.kakao.com/v2/user/me',
-      {
-        headers: { Authorization: `Bearer ${snsToken}` },
-        validateStatus: (status) => status < 500,
-      },
-    );
+    const response =
+      await this.httpService.axiosRef.get<KakaoGetUserProfileApiResponse>(
+        'https://kapi.kakao.com/v2/user/me',
+        {
+          headers: { Authorization: `Bearer ${snsToken}` },
+          validateStatus: (status) => status < 500,
+        },
+      );
 
     if (response.status !== 200 || !response?.data?.id) {
       throw new ForbiddenException();
     }
 
-    return { type: $Enums.AccountsType.Kakao, id: response.data.id };
+    return {
+      type: $Enums.AccountsType.Kakao,
+      id: response.data.id,
+      nickname: response.data.kakao_account?.profile?.nickname,
+    };
   }
 
   public async getNaverUser(snsToken: string) {
-    const response = await this.httpService.axiosRef.get<{
-      response: { id: string };
-    }>('https://openapi.naver.com/v1/nid/me', {
-      headers: { Authorization: `Bearer ${snsToken}` },
-      validateStatus: (status) => status < 500,
-    });
+    const response =
+      await this.httpService.axiosRef.get<NaverGetUserProfileApiResponse>(
+        'https://openapi.naver.com/v1/nid/me',
+        {
+          headers: { Authorization: `Bearer ${snsToken}` },
+          validateStatus: (status) => status < 500,
+        },
+      );
 
     if (response.status !== 200 || !response?.data?.response?.id) {
       throw new ForbiddenException();
     }
 
-    return { type: $Enums.AccountsType.Naver, id: response.data.response.id };
+    return {
+      type: $Enums.AccountsType.Naver,
+      id: response.data.response.id,
+      nickname: response.data.response.nickname,
+    };
   }
 
   public async signInOrUp(dto: PostUserDto, snsUser: SnsUser) {
@@ -76,7 +91,7 @@ export class UsersService {
     return this.prismaService.$transaction(async (prisma) => {
       const user = await prisma.users.create({
         data: {
-          nickname: dto.nickname,
+          nickname: dto.nickname || snsUser.nickname,
           hight: dto.hight,
           weight: dto.weight,
           goalKcal: dto.goalKcal,
