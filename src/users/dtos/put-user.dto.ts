@@ -17,7 +17,7 @@ export class PutUserDto {
   @ApiProperty({ description: '키', type: Number, required: false })
   @IsOptional()
   @IsNumber()
-  hight: number;
+  height: number;
 
   @ApiProperty({ description: '몸무게', type: Number, required: false })
   @IsOptional()
@@ -29,15 +29,19 @@ export class PutUserDto {
   @IsNumber()
   age: number;
 
-  @ApiProperty({ description: '성별', type: Number, required: false })
+  @ApiProperty({ description: '성별', type: String, required: false })
   @IsOptional()
   @IsEnum($Enums.Sex)
   sex: $Enums.Sex;
 
-  @ApiProperty({ description: '유저 타입', type: Number, required: false })
+  @ApiProperty({ description: '유저 타입', type: String, required: false })
   @IsOptional()
   @IsEnum($Enums.UserType)
   type: $Enums.UserType;
+
+  @ApiProperty({ description: '활동 레벨', type: String, required: false })
+  @IsEnum($Enums.UserActivityLevel)
+  activityLevel: $Enums.UserActivityLevel;
 
   @ApiProperty({ description: '질병 여부', type: Boolean, required: false })
   @IsOptional()

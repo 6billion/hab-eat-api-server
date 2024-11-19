@@ -78,11 +78,12 @@ export class UsersService {
       where: { id },
       data: {
         nickname: dto.nickname,
-        hight: dto.hight,
+        height: dto.height,
         weight: dto.weight,
         age: dto.age,
         sex: dto.sex,
         type: dto.type,
+        activityLevel: dto.activityLevel,
         hasDisease: dto.hasDisease,
       },
     });
@@ -108,12 +109,13 @@ export class UsersService {
       const user = await prisma.users.create({
         data: {
           nickname: dto.nickname || snsUser.nickname,
-          hight: dto.hight,
+          height: dto.height,
           weight: dto.weight,
           age: dto.age,
           sex: dto.sex,
           type: dto.type,
           hasDisease: dto.hasDisease,
+          activityLevel: dto.activityLevel,
         },
       });
 

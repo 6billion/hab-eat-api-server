@@ -14,15 +14,16 @@ datasource db {
 }
 
 model Users {
-  id         Int      @unique @default(autoincrement())
-  nickname   String   @default("햅잇")
-  hight      Int
-  weight     Int
-  age        Int
-  sex        Sex
-  type       UserType
-  hasDisease Boolean  @default(false)
-  createdAt  DateTime @default(now())
+  id            Int               @unique @default(autoincrement())
+  nickname      String            @default("햅잇")
+  height        Int
+  weight        Int
+  age           Int
+  sex           Sex
+  type          UserType
+  activityLevel UserActivityLevel @default(lightlyActive)
+  hasDisease    Boolean           @default(false)
+  createdAt     DateTime          @default(now())
 
   token   Tokens?    @relation("userToToken")
   account Accounts[] @relation("userToAccount")
@@ -51,6 +52,14 @@ enum UserType {
   diet
   bulk
   maintain
+}
+
+enum UserActivityLevel {
+  sedentary
+  lightlyActive
+  moderatelyActive
+  veryActive
+  extraActive
 }
 
 enum AccountType {
