@@ -37,9 +37,9 @@ export class ChallengesService {
     const ongingChallenges = [];
 
     for (const challenge of challenges) {
-      const participant = participants.find(({ challengeId }) => {
-        challengeId === challenge.id;
-      });
+      const participant = participants.find(
+        ({ challengeId }) => challengeId === challenge.id,
+      );
 
       if (participant) {
         ongingChallenges.push(new OngoingChallenge(challenge, participant));
