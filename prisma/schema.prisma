@@ -59,6 +59,8 @@ model Challenges {
 
   challengesParticipants      ChallengesParticipants[]     @relation("challengeToParticipant")
   nutrientChallengeConditions NutrientChallengeConditions? @relation("challengeToNutriChallengeConditoin")
+
+  @@index([startDate, endDate])
 }
 
 model ChallengesParticipants {

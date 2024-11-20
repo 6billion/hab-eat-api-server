@@ -12,7 +12,7 @@ export class UtilService {
 
   private readonly KST_TIMEZONE = 'Asia/Seoul';
 
-  getKSTDate() {
+  getKSTDate(): string {
     return dayjs().tz(this.KST_TIMEZONE).format('YYYY-MM-DD');
   }
 
