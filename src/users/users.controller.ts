@@ -50,10 +50,7 @@ export class UsersController {
   @Get('target-nutrients')
   @UseGuards(BearerGuard)
   async getUserTargetNutrients(@RequestUser() user: User) {
-    return {
-      targetNutrients: user.targetNutrients,
-      targetCalories: user.targetCalories,
-    };
+    return user.targetNutrients;
   }
 
   @ApiOperation({ summary: '유저 수정' })

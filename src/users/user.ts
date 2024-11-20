@@ -12,7 +12,50 @@ export class User {
   hasDisease: boolean;
   createdAt: Date;
 
-  get targetCalories() {
+  get targetNutrients() {
+    const kcal = this.targetCalories;
+
+    let carbohydrate: number;
+    let protein: number;
+    let fat: number;
+
+    const natrium = 2000;
+    const cholesterol = 200;
+
+    const sugar = this.hasDisease ? kcal / 80 : kcal / 40;
+
+    switch (this.type) {
+      case $Enums.UserType.bulk:
+        carbohydrate = kcal * 0.1;
+        protein = kcal * 0.1;
+        fat = kcal * 0.022;
+        break;
+
+      case $Enums.UserType.diet:
+        carbohydrate = kcal * 0.125;
+        protein = kcal * 0.075;
+        fat = kcal * 0.022;
+        break;
+
+      case $Enums.UserType.maintain:
+        carbohydrate = kcal * 0.15;
+        protein = kcal * 0.05;
+        fat = kcal * 0.022;
+        break;
+    }
+
+    return {
+      kcal,
+      carbohydrate,
+      protein,
+      fat,
+      natrium,
+      cholesterol,
+      sugar,
+    };
+  }
+
+  private get targetCalories() {
     const BMR = this.BMR;
     let TDEE: number;
     let targetCalories: number;
@@ -51,48 +94,6 @@ export class User {
     }
 
     return targetCalories;
-  }
-
-  get targetNutrients() {
-    const targetCalories = this.targetCalories;
-
-    let carbohydrate: number;
-    let protein: number;
-    let fat: number;
-
-    const natrium = 2000;
-    const cholesterol = 200;
-
-    const sugar = this.hasDisease ? targetCalories / 80 : targetCalories / 40;
-
-    switch (this.type) {
-      case $Enums.UserType.bulk:
-        carbohydrate = targetCalories * 0.1;
-        protein = targetCalories * 0.1;
-        fat = targetCalories * 0.022;
-        break;
-
-      case $Enums.UserType.diet:
-        carbohydrate = targetCalories * 0.125;
-        protein = targetCalories * 0.075;
-        fat = targetCalories * 0.022;
-        break;
-
-      case $Enums.UserType.maintain:
-        carbohydrate = targetCalories * 0.15;
-        protein = targetCalories * 0.05;
-        fat = targetCalories * 0.022;
-        break;
-    }
-
-    return {
-      carbohydrate,
-      protein,
-      fat,
-      natrium,
-      cholesterol,
-      sugar,
-    };
   }
 
   private get BMR() {
