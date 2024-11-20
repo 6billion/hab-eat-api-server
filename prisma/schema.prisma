@@ -48,6 +48,62 @@ model Tokens {
   user Users @relation("userToToken", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
+model Challenges {
+  id             Int           @id @default(autoincrement())
+  name           String
+  description    String
+  startDate      DateTime      @db.Date
+  endDate        DateTime      @db.Date
+  targetUserType UserType
+  type           ChallengeType
+
+  challengesParticipants      ChallengesParticipants[]     @relation("challengeToParticipant")
+  nutrientChallengeConditions NutrientChallengeConditions? @relation("challengeToNutriChallengeConditoin")
+}
+
+model ChallengesParticipants {
+  id            Int           @id @default(autoincrement())
+  userId        Int
+  challengeId   Int
+  challengeType ChallengeType
+  goalDays      Int
+  successDays   Int
+  joinDate      DateTime      @db.Date
+  endDate       DateTime      @db.Date
+  status        Boolean
+  updatedAt     DateTime      @updatedAt
+
+  challengeCertificationLogs ChallengeCertificationLogs[] @relation("challengeParticipantToLog")
+  challenge                  Challenges                   @relation("challengeToParticipant", fields: [challengeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([userId, challengeId])
+  @@index([userId, endDate])
+}
+
+model ChallengeCertificationLogs {
+  id                       Int      @id @default(autoincrement())
+  userId                   Int
+  challengesParticipantsId Int
+  date                     DateTime @db.Date
+
+  challengesParticipants ChallengesParticipants @relation("challengeParticipantToLog", fields: [challengesParticipantsId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([userId, challengesParticipantsId, date])
+}
+
+model NutrientChallengeConditions {
+  challengeId  Int    @id
+  kcal         Float?
+  carbohydrate Float?
+  protein      Float?
+  fat          Float?
+  natrium      Float?
+  cholesterol  Float?
+  sugar        Float?
+
+  challenge Challenges @relation("challengeToNutriChallengeConditoin", fields: [challengeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
 enum UserType {
   diet
   bulk
@@ -70,4 +126,10 @@ enum AccountType {
 enum Sex {
   male
   felmale
+}
+
+enum ChallengeType {
+  bulk
+  diet
+  habit
 }
