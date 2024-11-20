@@ -5,7 +5,7 @@ import { User } from 'src/users/user';
 import {
   AvaliableChallenge,
   OngoingChallenge,
-} from './dtos/get-challenges.dto';
+} from '../dtos/get-challenges.dto';
 
 @Injectable()
 export class ChallengesService {

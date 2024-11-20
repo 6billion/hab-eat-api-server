@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { BearerGuard } from 'src/auth/guards/bearer.guard';
-import { ChallengesService } from './challenges.service';
+import { ChallengesService } from './services/challenges.service';
 import { RequestUser } from 'src/request-user.decorator';
 import { User } from 'src/users/user';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';

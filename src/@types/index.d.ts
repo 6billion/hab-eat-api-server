@@ -12,3 +12,13 @@ export type KakaoGetUserProfileApiResponse = {
 export type NaverGetUserProfileApiResponse = {
   response: { id: string; nickname: string };
 };
+
+export type TargetNutrients = {
+  kcal: number;
+  carbohydrate: number;
+  protein: number;
+  fat: number;
+  natrium: number;
+  cholesterol: number;
+  sugar: number;
+};

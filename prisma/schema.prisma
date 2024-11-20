@@ -64,16 +64,17 @@ model Challenges {
 }
 
 model ChallengesParticipants {
-  id            Int           @id @default(autoincrement())
-  userId        Int
-  challengeId   Int
-  challengeType ChallengeType
-  goalDays      Int
-  successDays   Int
-  joinDate      DateTime      @db.Date
-  endDate       DateTime      @db.Date
-  status        Boolean
-  updatedAt     DateTime      @updatedAt
+  id              Int           @id @default(autoincrement())
+  userId          Int
+  challengeId     Int
+  challengeType   ChallengeType
+  goalDays        Int
+  successDays     Int
+  joinDate        DateTime      @db.Date
+  endDate         DateTime      @db.Date
+  lastSuccessDate DateTime?     @db.Date
+  lastCheckDate   DateTime?     @db.Date
+  status          Boolean
 
   challengeCertificationLogs ChallengeCertificationLogs[] @relation("challengeParticipantToLog")
   challenge                  Challenges                   @relation("challengeToParticipant", fields: [challengeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -83,14 +84,13 @@ model ChallengesParticipants {
 }
 
 model ChallengeCertificationLogs {
-  id                       Int      @id @default(autoincrement())
   userId                   Int
   challengesParticipantsId Int
   date                     DateTime @db.Date
 
   challengesParticipants ChallengesParticipants @relation("challengeParticipantToLog", fields: [challengesParticipantsId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  @@index([userId, challengesParticipantsId, date])
+  @@unique([userId, challengesParticipantsId, date])
 }
 
 model NutrientChallengeConditions {
@@ -134,4 +134,5 @@ enum ChallengeType {
   bulk
   diet
   habit
+  protein2x
 }
