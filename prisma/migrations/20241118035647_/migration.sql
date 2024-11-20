@@ -36,3 +36,51 @@ ALTER TABLE `Accounts` ADD CONSTRAINT `Accounts_userId_fkey` FOREIGN KEY (`userI
 
 -- AddForeignKey
 ALTER TABLE `Tokens` ADD CONSTRAINT `Tokens_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `Users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- CreateTable
+CREATE TABLE `DailyNutritions` (
+    `userId` INTEGER NOT NULL,
+    `date` DATETIME(3) NOT NULL,
+    `amount` DOUBLE NOT NULL,
+    `kcal` DOUBLE NOT NULL,
+    `carbohydrate` DOUBLE NOT NULL,
+    `sugar` DOUBLE NOT NULL,
+    `fat` DOUBLE NOT NULL,
+    `protein` DOUBLE NOT NULL,
+    `calcium` DOUBLE NOT NULL,
+    `phosphorus` DOUBLE NOT NULL,
+    `natrium` DOUBLE NOT NULL,
+    `kalium` DOUBLE NOT NULL,
+    `magnesium` DOUBLE NOT NULL,
+    `iron` DOUBLE NOT NULL,
+    `zinc` DOUBLE NOT NULL,
+    `cholesterol` DOUBLE NOT NULL,
+    `transfat` DOUBLE NOT NULL,
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    PRIMARY KEY (`userId`, `date`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `MealNutritions` (
+    `userId` INTEGER NOT NULL,
+    `date` DATETIME(3) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL,
+    `amount` DOUBLE NOT NULL,
+    `kcal` DOUBLE NOT NULL,
+    `carbohydrate` DOUBLE NOT NULL,
+    `sugar` DOUBLE NOT NULL,
+    `fat` DOUBLE NOT NULL,
+    `protein` DOUBLE NOT NULL,
+    `calcium` DOUBLE NOT NULL,
+    `phosphorus` DOUBLE NOT NULL,
+    `natrium` DOUBLE NOT NULL,
+    `kalium` DOUBLE NOT NULL,
+    `magnesium` DOUBLE NOT NULL,
+    `iron` DOUBLE NOT NULL,
+    `zinc` DOUBLE NOT NULL,
+    `cholesterol` DOUBLE NOT NULL,
+    `transfat` DOUBLE NOT NULL,
+
+    PRIMARY KEY (`userId`, `date`, `createdAt`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

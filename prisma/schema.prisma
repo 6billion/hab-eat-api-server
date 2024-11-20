@@ -49,3 +49,46 @@ enum AccountsType {
   Facebook
   Local
 }
+model DailyNutritions {
+  userId       Int
+  date         DateTime
+  amount       Float
+  kcal         Float
+  carbohydrate Float
+  sugar        Float
+  fat          Float
+  protein      Float
+  calcium      Float
+  phosphorus   Float
+  natrium      Float
+  kalium       Float
+  magnesium    Float
+  iron         Float
+  zinc         Float
+  cholesterol  Float
+  transfat     Float
+  updatedAt    DateTime @updatedAt
+  @@id([userId, date]) 
+}
+
+model MealNutritions {
+  userId       Int
+  date         DateTime
+  createdAt    DateTime 
+  amount       Float
+  kcal         Float
+  carbohydrate Float
+  sugar        Float
+  fat          Float
+  protein      Float
+  calcium      Float
+  phosphorus   Float
+  natrium      Float
+  kalium       Float
+  magnesium    Float
+  iron         Float
+  zinc         Float
+  cholesterol  Float
+  transfat     Float
+  @@id([userId, date, createdAt])
+}
