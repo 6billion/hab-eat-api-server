@@ -1,0 +1,50 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { $Enums, ChallengesParticipants } from '@prisma/client';
+import { IsNumber, Max, Min } from 'class-validator';
+
+export class PostParticipantsRequestDto {
+  @IsNumber()
+  @Min(1)
+  @Max(7)
+  @ApiProperty({ minimum: 1, maximum: 7, description: '목표일수' })
+  goalDays: number;
+}
+
+export class PostParticipantsResponseDto {
+  @ApiProperty({ description: '챌린지 참여 고유아이디', type: Number })
+  id: number;
+
+  @ApiProperty({ description: '종료일', type: Date })
+  endDate: Date;
+
+  @ApiProperty({ description: '유저 고유 아이디', type: Number })
+  userId: number;
+
+  @ApiProperty({ description: '챌린지 고유 아이디', type: Number })
+  challengeId: number;
+
+  @ApiProperty({
+    description: '챌린지 타입',
+    enum: $Enums.ChallengeType,
+  })
+  challengeType: $Enums.ChallengeType;
+
+  @ApiProperty({ minimum: 1, maximum: 7, description: '목표일수' })
+  goalDays: number;
+
+  @ApiProperty({ minimum: 1, maximum: 7, description: '성공일수' })
+  successDays: number;
+
+  @ApiProperty({ description: '참여일', type: Date })
+  joinDate: Date;
+
+  @ApiProperty({ description: '성공여부', type: Boolean })
+  status: boolean;
+
+  @ApiProperty({ description: '참여 정보 업데이트 시간', type: Boolean })
+  updatedAt: Date;
+
+  constructor(participant: ChallengesParticipants) {
+    Object.assign(this, participant);
+  }
+}

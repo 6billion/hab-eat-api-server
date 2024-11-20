@@ -1,11 +1,11 @@
 import { UtilService } from '@lib/util';
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/db/prisma.service';
 import { User } from 'src/users/user';
 import {
   AvaliableChallenge,
   OngoingChallenge,
-} from './dtos/get-challenges-response.dto';
+} from './dtos/get-challenges.dto';
 
 @Injectable()
 export class ChallengesService {
@@ -47,5 +47,41 @@ export class ChallengesService {
     }
 
     return { availableChallenges, ongingChallenges };
+  }
+
+  public async createChallengeParticipants({
+    id,
+    userId,
+    goalDays,
+  }: {
+    id: number;
+    userId: number;
+    goalDays: number;
+  }) {
+    const now = new Date(this.util.getKSTDate());
+
+    const challenge = await this.prismaService.challenges.findUniqueOrThrow({
+      where: { id, startDate: { lte: now }, endDate: { gte: now } },
+    });
+
+    const participant =
+      await this.prismaService.challengesParticipants.findUnique({
+        where: { userId_challengeId: { userId, challengeId: id } },
+      });
+
+    if (participant) throw new ConflictException();
+
+    return this.prismaService.challengesParticipants.create({
+      data: {
+        userId,
+        challengeId: id,
+        challengeType: challenge.type,
+        goalDays,
+        successDays: 0,
+        joinDate: now,
+        endDate: challenge.endDate,
+        status: false,
+      },
+    });
   }
 }
