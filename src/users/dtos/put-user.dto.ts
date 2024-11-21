@@ -29,17 +29,25 @@ export class PutUserDto {
   @IsNumber()
   age: number;
 
-  @ApiProperty({ description: '성별', type: String, required: false })
+  @ApiProperty({ description: '성별', enum: $Enums.Sex, required: false })
   @IsOptional()
   @IsEnum($Enums.Sex)
   sex: $Enums.Sex;
 
-  @ApiProperty({ description: '유저 타입', type: String, required: false })
+  @ApiProperty({
+    description: '유저 타입',
+    enum: $Enums.UserType,
+    required: false,
+  })
   @IsOptional()
   @IsEnum($Enums.UserType)
   type: $Enums.UserType;
 
-  @ApiProperty({ description: '활동 레벨', type: String, required: false })
+  @ApiProperty({
+    description: '활동 레벨',
+    enum: $Enums.UserActivityLevel,
+    required: false,
+  })
   @IsEnum($Enums.UserActivityLevel)
   @IsOptional()
   activityLevel: $Enums.UserActivityLevel;
