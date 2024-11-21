@@ -8,6 +8,7 @@ export class GetCertificationLogsRequestDto {
   startDate: Date;
 
   @ApiProperty({ description: '조회 마지막 날짜', type: Date })
+  @IsDate()
   endDate: Date;
 }
 

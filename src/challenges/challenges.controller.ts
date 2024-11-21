@@ -97,7 +97,6 @@ export class ChallengesController {
 
   @Get(':id/certification-logs')
   @ApiOperation({ summary: '챌린지 인증 로그 조회 (챌린지 캘린더 조회)' })
-  @ApiQuery({ type: GetCertificationLogsRequestDto })
   @ApiResponse({ type: [GetCertificationLogsResponseDto] })
   getChallengeCertificationLogs(
     @Param('id') challengeId: number,
