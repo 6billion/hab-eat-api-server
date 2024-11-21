@@ -70,11 +70,12 @@ model ChallengeParticipants {
   challengeType   ChallengeType
   goalDays        Int
   successDays     Int
-  joinDate        DateTime      @db.Date
+  startDate       DateTime      @db.Date
   endDate         DateTime      @db.Date
   lastSuccessDate DateTime?     @db.Date
   lastCheckDate   DateTime?     @db.Date
   status          Boolean
+  joinedAt        DateTime      @default(now())
 
   challengeCertificationLogs ChallengeCertificationLogs[] @relation("challengeParticipantToLog")
   challenge                  Challenges                   @relation("challengeToParticipant", fields: [challengeId], references: [id], onDelete: Cascade, onUpdate: Cascade)

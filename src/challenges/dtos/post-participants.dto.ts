@@ -35,8 +35,8 @@ export class PostParticipantsResponseDto {
   @ApiProperty({ minimum: 1, maximum: 7, description: '성공일수' })
   successDays: number;
 
-  @ApiProperty({ description: '참여일', type: Date })
-  joinDate: Date;
+  @ApiProperty({ description: '챌린지 시작일', type: Date })
+  startDate: Date;
 
   @ApiProperty({ description: '성공여부', type: Boolean })
   status: boolean;

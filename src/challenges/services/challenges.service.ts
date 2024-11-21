@@ -83,7 +83,7 @@ export class ChallengesService {
         challengeType: challenge.type,
         goalDays,
         successDays: 0,
-        joinDate: now,
+        startDate: challenge.startDate,
         endDate: challenge.endDate,
         status: false,
       },
