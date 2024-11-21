@@ -59,7 +59,12 @@ export abstract class NutriChallengeCertificationService
 
     await this.prisma.$transaction([
       this.prisma.challengeParticipants.update({
-        where: { userId_challengeId: participant },
+        where: {
+          userId_challengeId: {
+            userId: participant.userId,
+            challengeId: participant.challengeId,
+          },
+        },
         data: { ...participant, lastSuccessDate: today, successDays, status },
       }),
       this.prisma.challengeCertificationLogs.create({
@@ -81,7 +86,12 @@ export abstract class NutriChallengeCertificationService
 
     await this.prisma.$transaction([
       this.prisma.challengeParticipants.update({
-        where: { userId_challengeId: participant },
+        where: {
+          userId_challengeId: {
+            userId: participant.userId,
+            challengeId: participant.challengeId,
+          },
+        },
         data: {
           ...participant,
           lastSuccessDate: null,
