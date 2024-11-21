@@ -57,8 +57,9 @@ model Challenges {
   targetUserType UserType
   type           ChallengeType
 
-  challengeParticipants      ChallengeParticipants[]     @relation("challengeToParticipant")
-  nutrientChallengeConditions NutrientChallengeConditions? @relation("challengeToNutriChallengeConditoin")
+  challengeParticipants      ChallengeParticipants[]            @relation("challengeToParticipant")
+  nutrientChallengeCondition NutrientChallengeConditions?       @relation("challengeToNutriChallengeConditoin")
+  imageDetectionServerUrl    ChallengeImageDetectionServerUrls? @relation("challengeToImageDetectionServerUrl")
 
   @@index([startDate, endDate])
 }
@@ -85,9 +86,9 @@ model ChallengeParticipants {
 }
 
 model ChallengeCertificationLogs {
-  userId                   Int
+  userId                  Int
   challengeParticipantsId Int
-  date                     DateTime @db.Date
+  date                    DateTime @db.Date
 
   challengesParticipants ChallengeParticipants @relation("challengeParticipantToLog", fields: [challengeParticipantsId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
@@ -105,6 +106,13 @@ model NutrientChallengeConditions {
   sugar        Float?
 
   challenge Challenges @relation("challengeToNutriChallengeConditoin", fields: [challengeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model ChallengeImageDetectionServerUrls {
+  challengeId Int    @id
+  url         String
+
+  challenge Challenges @relation("challengeToImageDetectionServerUrl", fields: [challengeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 enum UserType {
