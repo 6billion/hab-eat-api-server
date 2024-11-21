@@ -26,12 +26,11 @@ export abstract class NutriChallengeCertificationService
     private readonly prisma: PrismaService,
   ) {}
 
-  protected cachedNutrientConditions: {
-    [challengeId: string]: {
-      nutrientConditions: TargetNutrients;
-      cacheExpiryTime: number;
-    };
+  private cachedNutrientConditions: {
+    [challengeId: string]: TargetNutrients;
   } = {};
+
+  private cacheExpiryTime: number = 0;
 
   public async certyfiyChallenge(params: {
     participant: ChallengeParticipants;
@@ -52,15 +51,8 @@ export abstract class NutriChallengeCertificationService
   }): Promise<boolean>;
 
   protected async getNutriCondition(challengeId: number) {
-    const now = Date.now();
-
-    const cachedNutrientCondition =
-      this.cachedNutrientConditions[challengeId]?.nutrientConditions;
-    const cacheExpiryTime =
-      this.cachedNutrientConditions[challengeId]?.cacheExpiryTime;
-
-    if (cachedNutrientCondition && now < cacheExpiryTime) {
-      console.log('old cache', this.cachedNutrientConditions[challengeId]);
+    const cachedNutrientCondition = this.cachedNutrientConditions[challengeId];
+    if (cachedNutrientCondition) {
       return cachedNutrientCondition;
     }
 
@@ -76,12 +68,12 @@ export abstract class NutriChallengeCertificationService
       }),
     ]);
 
-    const utcEndTme = endDate.getTime() - KR_TIME_DIFF + HOUR * 24;
-    this.cachedNutrientConditions[challengeId] = {
-      nutrientConditions,
-      cacheExpiryTime: utcEndTme,
-    };
+    if (Date.now() > this.cacheExpiryTime) {
+      this.cachedNutrientConditions = {};
+      this.cacheExpiryTime = endDate.getTime() - KR_TIME_DIFF + HOUR * 24;
+    }
 
+    this.cachedNutrientConditions[challengeId] = nutrientConditions;
     return nutrientConditions as TargetNutrients;
   }
 
