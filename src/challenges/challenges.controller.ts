@@ -19,7 +19,6 @@ import {
   ApiBody,
   ApiConsumes,
   ApiOperation,
-  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -106,7 +105,7 @@ export class ChallengesController {
     return this.challengesService.getChallengeCertificationLogs({
       challengeId,
       userId: user.id,
-      startDate: query.endDate,
+      startDate: query.startDate,
       endDate: query.endDate,
     });
   }
