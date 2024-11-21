@@ -1,4 +1,19 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
+import { DietService } from './diet.service';
 
 @Controller('diet')
-export class DietController {}
+export class DietController {
+  constructor(private readonly dietService: DietService) {}
+
+  @Get('daily')
+  async getDailyNutrition(@Query('userId') userId: number) {
+    return this.dietService.getDailyNutrition(userId);
+  }
+  @Get('meals')
+  async getMealNutrition(
+    @Query('userId') userId: number,
+    @Query('date') date: string,
+  ) {
+    return this.dietService.getMealNutrition(userId, date);
+  }
+}
