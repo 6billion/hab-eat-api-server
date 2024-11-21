@@ -19,7 +19,7 @@ export class ChallengeCertificationServiceFactory {
 
   getChallengeCertificationService(
     type: $Enums.ChallengeType,
-  ): IChallengeCertificationService<File | TargetNutrients> {
+  ): IChallengeCertificationService<Express.Multer.File | TargetNutrients> {
     if (type === $Enums.ChallengeType.diet) {
       return this.dietChallengeCertificationService;
     } else if (type === $Enums.ChallengeType.bulk) {

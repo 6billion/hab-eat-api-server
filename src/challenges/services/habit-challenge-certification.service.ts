@@ -5,13 +5,13 @@ import { IChallengeCertificationService } from './challenge-certification.servic
 
 @Injectable()
 export class HabitChallengeCertificationService
-  implements IChallengeCertificationService<File>
+  implements IChallengeCertificationService<Express.Multer.File>
 {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async certyfiyChallenge(params: {
     participant: ChallengeParticipants;
     user: User;
-    data: File;
+    data: Express.Multer.File;
   }) {
     throw new NotImplementedException();
   }

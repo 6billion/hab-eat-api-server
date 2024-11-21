@@ -3,9 +3,12 @@ import {
   Controller,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Query,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { BearerGuard } from 'src/auth/guards/bearer.guard';
 import { ChallengesService } from './services/challenges.service';
@@ -14,6 +17,7 @@ import { User } from 'src/users/user';
 import {
   ApiBearerAuth,
   ApiBody,
+  ApiConsumes,
   ApiOperation,
   ApiQuery,
   ApiResponse,
@@ -31,6 +35,8 @@ import {
   GetCertificationLogsRequestDto,
   GetCertificationLogsResponseDto,
 } from './dtos/get-certification-logs.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { PostChallengeCertificationRequestDto } from './dtos/post-certification.dto';
 
 @ApiTags('챌린지')
 @ApiBearerAuth()
@@ -63,6 +69,29 @@ export class ChallengesController {
       });
 
     return new PostParticipantsResponseDto(participant);
+  }
+
+  @ApiOperation({ summary: '습관 챌린지 이미지 업로드 하기' })
+  @ApiBody({ type: PostChallengeCertificationRequestDto })
+  @ApiConsumes('multipart/form-data')
+  @Post(':id/image')
+  @UseInterceptors(FileInterceptor('file'))
+  async postChallengeCertifications(
+    @UploadedFile() data: Express.Multer.File,
+    @RequestUser() user: User,
+    @Param('id', ParseIntPipe) challengeId: number,
+  ) {
+    const participant =
+      await this.challengesService.findUniqueParticipantOrThrow(
+        user.id,
+        challengeId,
+      );
+
+    return this.challengesService.certyfyChallenge({
+      data,
+      participant,
+      user,
+    });
   }
 
   @Get(':id/certification-logs')

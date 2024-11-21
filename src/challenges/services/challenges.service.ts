@@ -101,6 +101,39 @@ export class ChallengesService {
     });
   }
 
+  findUniqueParticipantOrThrow(userId: number, challengeId: number) {
+    const today = new Date(this.util.getKSTDate());
+
+    return this.prismaService.challengeParticipants.findUniqueOrThrow({
+      where: {
+        userId_challengeId: { userId, challengeId },
+        startDate: { lte: today },
+        endDate: { gte: today },
+      },
+    });
+  }
+
+  async certyfyChallenge({
+    participant,
+    user,
+    data,
+  }: {
+    participant: ChallengeParticipants;
+    user: User;
+    data: Express.Multer.File | TargetNutrients;
+  }) {
+    const certificationService =
+      this.certificationServiceFactory.getChallengeCertificationService(
+        participant.challengeType,
+      );
+
+    return certificationService.certyfiyChallenge({
+      participant,
+      user,
+      data,
+    });
+  }
+
   async certifyManyNutritionChallenges({
     user,
     participants,
