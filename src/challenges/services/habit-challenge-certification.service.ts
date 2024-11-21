@@ -38,6 +38,7 @@ export class HabitChallengeCertificationService
     }
 
     await this.increaseSuccessCount(params.participant);
+    return true;
   }
 
   private async validateCertifyCondition(

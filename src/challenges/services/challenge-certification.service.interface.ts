@@ -10,7 +10,7 @@ export interface IChallengeCertificationService<T> {
     participant: ChallengeParticipants;
     user: User;
     data: T;
-  }) => Promise<void>;
+  }) => Promise<boolean>;
 }
 
 export abstract class NutriChallengeCertificationService
@@ -29,6 +29,8 @@ export abstract class NutriChallengeCertificationService
     const isSuccess = await this.validateCertifyCondition(params);
     if (isSuccess) await this.increaseSuccessCount(params.participant);
     else await this.decreaseSuccessCounts(params.participant);
+
+    return isSuccess;
   }
 
   protected abstract validateCertifyCondition(input: {
