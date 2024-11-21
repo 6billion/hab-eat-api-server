@@ -6,6 +6,9 @@ import * as _ from 'lodash';
 import { PrismaService } from 'src/db/prisma.service';
 import { Injectable } from '@nestjs/common';
 
+const HOUR = 60 * 60 * 1000;
+const KR_TIME_DIFF = 9 * HOUR;
+
 export interface IChallengeCertificationService<T> {
   certyfiyChallenge: (params: {
     participant: ChallengeParticipants;
@@ -22,6 +25,13 @@ export abstract class NutriChallengeCertificationService
     private readonly util: UtilService,
     private readonly prisma: PrismaService,
   ) {}
+
+  protected cachedNutrientConditions: {
+    [challengeId: string]: {
+      nutrientConditions: TargetNutrients;
+      cacheExpiryTime: number;
+    };
+  } = {};
 
   public async certyfiyChallenge(params: {
     participant: ChallengeParticipants;
@@ -42,10 +52,35 @@ export abstract class NutriChallengeCertificationService
   }): Promise<boolean>;
 
   protected async getNutriCondition(challengeId: number) {
-    const nutrientConditions = await this.prisma.nutrientChallengeConditions
-      .findFirst({ where: { challengeId } })
-      .then((result) => _.omitBy(result, _.isNil))
-      .then((result) => _.omit(result, 'challengeId'));
+    const now = Date.now();
+
+    const cachedNutrientCondition =
+      this.cachedNutrientConditions[challengeId]?.nutrientConditions;
+    const cacheExpiryTime =
+      this.cachedNutrientConditions[challengeId]?.cacheExpiryTime;
+
+    if (cachedNutrientCondition && now < cacheExpiryTime) {
+      console.log('old cache', this.cachedNutrientConditions[challengeId]);
+      return cachedNutrientCondition;
+    }
+
+    const [nutrientConditions, { endDate }] = await Promise.all([
+      this.prisma.nutrientChallengeConditions
+        .findFirst({ where: { challengeId } })
+        .then((result) => _.omitBy(result, _.isNil))
+        .then((result) =>
+          _.omit(result, 'challengeId'),
+        ) as Promise<TargetNutrients>,
+      this.prisma.challenges.findUnique({
+        where: { id: challengeId },
+      }),
+    ]);
+
+    const utcEndTme = endDate.getTime() - KR_TIME_DIFF + HOUR * 24;
+    this.cachedNutrientConditions[challengeId] = {
+      nutrientConditions,
+      cacheExpiryTime: utcEndTme,
+    };
 
     return nutrientConditions as TargetNutrients;
   }
