@@ -73,7 +73,7 @@ model DailyNutritions {
 
 model MealNutritions {
   userId       Int
-  date         DateTime
+  date         String
   createdAt    DateTime 
   amount       Float
   kcal         Float

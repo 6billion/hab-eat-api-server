@@ -65,7 +65,7 @@ CREATE TABLE `DailyNutritions` (
 -- CreateTable
 CREATE TABLE `MealNutritions` (
     `userId` INTEGER NOT NULL,
-    `date` DATETIME(3) NOT NULL,
+    `date`  VARCHAR(255) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL,
     `amount` DOUBLE NOT NULL,
     `kcal` DOUBLE NOT NULL,
