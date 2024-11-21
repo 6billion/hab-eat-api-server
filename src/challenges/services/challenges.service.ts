@@ -125,4 +125,25 @@ export class ChallengesService {
 
     return Promise.allSettled(promises);
   }
+
+  async getChallengeCertificationLogs({
+    challengeId,
+    userId,
+    startDate,
+    endDate,
+  }: {
+    challengeId: number;
+    userId: number;
+    startDate: Date;
+    endDate: Date;
+  }) {
+    return this.prismaService.challengeParticipants.findMany({
+      where: {
+        challengeId,
+        userId,
+        endDate: { gte: startDate, lte: endDate },
+      },
+      include: { challengeCertificationLogs: true },
+    });
+  }
 }
