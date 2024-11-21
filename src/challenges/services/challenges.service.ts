@@ -6,10 +6,10 @@ import {
   AvaliableChallenge,
   OngoingChallenge,
 } from '../dtos/get-challenges.dto';
-import { NutriChallengeTypes } from 'src/constants';
 import { ChallengeCertificationServiceFactory } from './challenge-certification.factory';
-import { ChallengesParticipants } from '@prisma/client';
+import { ChallengeParticipants } from '@prisma/client';
 import { TargetNutrients } from '@type';
+import { NutriChallengeTypes } from 'src/constants';
 
 @Injectable()
 export class ChallengesService {
@@ -30,7 +30,7 @@ export class ChallengesService {
           targetUserType: user.type,
         },
       }),
-      this.prismaService.challengesParticipants.findMany({
+      this.prismaService.challengeParticipants.findMany({
         where: {
           userId: user.id,
           endDate: { gte: now },
@@ -70,13 +70,13 @@ export class ChallengesService {
     });
 
     const participant =
-      await this.prismaService.challengesParticipants.findUnique({
+      await this.prismaService.challengeParticipants.findUnique({
         where: { userId_challengeId: { userId, challengeId: id } },
       });
 
     if (participant) throw new ConflictException();
 
-    return this.prismaService.challengesParticipants.create({
+    return this.prismaService.challengeParticipants.create({
       data: {
         userId,
         challengeId: id,
@@ -92,7 +92,7 @@ export class ChallengesService {
 
   async findNutritionChallengeParticipants(userId: number) {
     const today = new Date(this.util.getKSTDate());
-    return this.prismaService.challengesParticipants.findMany({
+    return this.prismaService.challengeParticipants.findMany({
       where: {
         userId,
         endDate: { gte: today },
@@ -107,7 +107,7 @@ export class ChallengesService {
     data,
   }: {
     user: User;
-    participants: ChallengesParticipants[];
+    participants: ChallengeParticipants[];
     data: TargetNutrients;
   }) {
     const promises = participants.map((participant) => {

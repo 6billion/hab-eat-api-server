@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ChallengesParticipants } from '@prisma/client';
+import { ChallengeParticipants } from '@prisma/client';
 import { TargetNutrients } from '@type';
 import { User } from 'src/users/user';
 import { NutriChallengeCertificationService } from './challenge-certification.service.interface';
@@ -11,7 +11,7 @@ export class DietChallengeCertificationService extends NutriChallengeCertificati
     user,
     data,
   }: {
-    participant: ChallengesParticipants;
+    participant: ChallengeParticipants;
     user: User;
     data: TargetNutrients;
   }) {

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ChallengesParticipants } from '@prisma/client';
+import { ChallengeParticipants } from '@prisma/client';
 import { TargetNutrients } from '@type';
 import { User } from 'src/users/user';
 import {
@@ -16,7 +16,7 @@ export class Protein2xChallengecertificationService
     user,
     data,
   }: {
-    participant: ChallengesParticipants;
+    participant: ChallengeParticipants;
     user: User;
     data: TargetNutrients;
   }) {

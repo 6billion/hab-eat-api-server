@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { $Enums, ChallengesParticipants } from '@prisma/client';
+import { $Enums, ChallengeParticipants } from '@prisma/client';
 import { IsNumber, Max, Min } from 'class-validator';
 
 export class PostParticipantsRequestDto {
@@ -44,7 +44,7 @@ export class PostParticipantsResponseDto {
   @ApiProperty({ description: '참여 정보 업데이트 시간', type: Boolean })
   updatedAt: Date;
 
-  constructor(participant: ChallengesParticipants) {
+  constructor(participant: ChallengeParticipants) {
     Object.assign(this, participant);
   }
 }

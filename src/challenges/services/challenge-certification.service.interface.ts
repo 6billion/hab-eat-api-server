@@ -1,4 +1,4 @@
-import { ChallengesParticipants } from '@prisma/client';
+import { ChallengeParticipants } from '@prisma/client';
 import { User } from 'src/users/user';
 import { UtilService } from '@lib/util';
 import { TargetNutrients } from '@type';
@@ -7,7 +7,7 @@ import { PrismaService } from 'src/db/prisma.service';
 
 export interface IChallengeCertificationService<T> {
   certyfiyChallenge: (params: {
-    participant: ChallengesParticipants;
+    participant: ChallengeParticipants;
     user: User;
     data: T;
   }) => Promise<void>;
@@ -22,7 +22,7 @@ export abstract class NutriChallengeCertificationService
   ) {}
 
   public async certyfiyChallenge(params: {
-    participant: ChallengesParticipants;
+    participant: ChallengeParticipants;
     user: User;
     data: TargetNutrients;
   }) {
@@ -32,7 +32,7 @@ export abstract class NutriChallengeCertificationService
   }
 
   protected abstract validateCertifyCondition(input: {
-    participant: ChallengesParticipants;
+    participant: ChallengeParticipants;
     user: User;
     data: TargetNutrients;
   }): Promise<boolean>;
@@ -46,7 +46,7 @@ export abstract class NutriChallengeCertificationService
     return nutrientConditions as TargetNutrients;
   }
 
-  private async increaseSuccessCount(participant: ChallengesParticipants) {
+  private async increaseSuccessCount(participant: ChallengeParticipants) {
     const today = new Date(this.util.getKSTDate());
     if (participant.lastSuccessDate == today) return;
 
@@ -54,21 +54,21 @@ export abstract class NutriChallengeCertificationService
     const status = successDays >= participant.goalDays;
 
     await this.prisma.$transaction([
-      this.prisma.challengesParticipants.update({
+      this.prisma.challengeParticipants.update({
         where: { userId_challengeId: participant },
         data: { ...participant, lastSuccessDate: today, successDays, status },
       }),
       this.prisma.challengeCertificationLogs.create({
         data: {
           userId: participant.userId,
-          challengesParticipantsId: participant.id,
+          challengeParticipantsId: participant.id,
           date: today,
         },
       }),
     ]);
   }
 
-  private async decreaseSuccessCounts(participant: ChallengesParticipants) {
+  private async decreaseSuccessCounts(participant: ChallengeParticipants) {
     const today = new Date(this.util.getKSTDate());
     if (participant.lastSuccessDate !== today) return;
 
@@ -76,7 +76,7 @@ export abstract class NutriChallengeCertificationService
     const status = successDays >= participant.goalDays;
 
     await this.prisma.$transaction([
-      this.prisma.challengesParticipants.update({
+      this.prisma.challengeParticipants.update({
         where: { userId_challengeId: participant },
         data: {
           ...participant,
@@ -88,9 +88,9 @@ export abstract class NutriChallengeCertificationService
       }),
       this.prisma.challengeCertificationLogs.delete({
         where: {
-          userId_challengesParticipantsId_date: {
+          userId_challengeParticipantsId_date: {
             userId: participant.userId,
-            challengesParticipantsId: participant.id,
+            challengeParticipantsId: participant.id,
             date: today,
           },
         },

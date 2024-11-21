@@ -57,13 +57,13 @@ model Challenges {
   targetUserType UserType
   type           ChallengeType
 
-  challengesParticipants      ChallengesParticipants[]     @relation("challengeToParticipant")
+  challengeParticipants      ChallengeParticipants[]     @relation("challengeToParticipant")
   nutrientChallengeConditions NutrientChallengeConditions? @relation("challengeToNutriChallengeConditoin")
 
   @@index([startDate, endDate])
 }
 
-model ChallengesParticipants {
+model ChallengeParticipants {
   id              Int           @id @default(autoincrement())
   userId          Int
   challengeId     Int
@@ -85,12 +85,12 @@ model ChallengesParticipants {
 
 model ChallengeCertificationLogs {
   userId                   Int
-  challengesParticipantsId Int
+  challengeParticipantsId Int
   date                     DateTime @db.Date
 
-  challengesParticipants ChallengesParticipants @relation("challengeParticipantToLog", fields: [challengesParticipantsId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  challengesParticipants ChallengeParticipants @relation("challengeParticipantToLog", fields: [challengeParticipantsId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  @@unique([userId, challengesParticipantsId, date])
+  @@unique([userId, challengeParticipantsId, date])
 }
 
 model NutrientChallengeConditions {

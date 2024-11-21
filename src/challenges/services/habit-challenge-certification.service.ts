@@ -1,5 +1,5 @@
 import { Injectable, NotImplementedException } from '@nestjs/common';
-import { ChallengesParticipants } from '@prisma/client';
+import { ChallengeParticipants } from '@prisma/client';
 import { User } from 'src/users/user';
 import { IChallengeCertificationService } from './challenge-certification.service.interface';
 
@@ -9,7 +9,7 @@ export class HabitChallengeCertificationService
 {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async certyfiyChallenge(params: {
-    participant: ChallengesParticipants;
+    participant: ChallengeParticipants;
     user: User;
     data: File;
   }) {

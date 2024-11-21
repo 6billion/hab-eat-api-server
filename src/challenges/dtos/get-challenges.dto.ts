@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { $Enums, Challenges, ChallengesParticipants } from '@prisma/client';
+import { $Enums, Challenges, ChallengeParticipants } from '@prisma/client';
 
 export class AvaliableChallenge {
   @ApiProperty({ description: '고유이이디', type: Number })
@@ -38,7 +38,7 @@ export class OngoingChallenge extends AvaliableChallenge {
   @ApiProperty({ description: '성공여부', type: Boolean })
   status: boolean;
 
-  constructor(challenge: Challenges, participant: ChallengesParticipants) {
+  constructor(challenge: Challenges, participant: ChallengeParticipants) {
     super(challenge);
     this.goalDays = participant.goalDays;
     this.successDays = participant.successDays;
