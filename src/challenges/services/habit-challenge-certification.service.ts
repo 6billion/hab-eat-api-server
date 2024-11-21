@@ -25,7 +25,10 @@ export class HabitChallengeCertificationService
     data: Express.Multer.File;
   }) {
     const today = new Date(this.util.getKSTDate());
-    if (params.participant.lastSuccessDate === today) {
+    if (
+      params.participant.lastSuccessDate &&
+      params.participant.lastCheckDate.getTime() === today.getTime()
+    ) {
       throw new ConflictException();
     }
 

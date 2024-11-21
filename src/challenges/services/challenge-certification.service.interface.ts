@@ -52,7 +52,11 @@ export abstract class NutriChallengeCertificationService
 
   private async increaseSuccessCount(participant: ChallengeParticipants) {
     const today = new Date(this.util.getKSTDate());
-    if (participant.lastSuccessDate == today) return;
+    if (
+      participant.lastSuccessDate &&
+      participant.lastSuccessDate.getTime() === today.getTime()
+    )
+      return;
 
     const successDays = participant.successDays + 1;
     const status = successDays >= participant.goalDays;
@@ -79,8 +83,11 @@ export abstract class NutriChallengeCertificationService
 
   private async decreaseSuccessCounts(participant: ChallengeParticipants) {
     const today = new Date(this.util.getKSTDate());
-    if (participant.lastSuccessDate !== today) return;
-
+    if (
+      !participant.lastSuccessDate ||
+      participant.lastSuccessDate.getTime() !== today.getTime()
+    )
+      return;
     const successDays = participant.successDays - 1;
     const status = successDays >= participant.goalDays;
 
