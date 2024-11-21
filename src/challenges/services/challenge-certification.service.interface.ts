@@ -69,7 +69,13 @@ export abstract class NutriChallengeCertificationService
             challengeId: participant.challengeId,
           },
         },
-        data: { ...participant, lastSuccessDate: today, successDays, status },
+        data: {
+          ...participant,
+          lastCheckDate: today,
+          lastSuccessDate: today,
+          successDays,
+          status,
+        },
       }),
       this.prisma.challengeCertificationLogs.create({
         data: {

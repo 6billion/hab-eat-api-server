@@ -81,7 +81,13 @@ export class HabitChallengeCertificationService
     await this.prisma.$transaction([
       this.prisma.challengeParticipants.update({
         where: { userId_challengeId: participant },
-        data: { ...participant, lastSuccessDate: today, successDays, status },
+        data: {
+          ...participant,
+          lastCheckDate: today,
+          lastSuccessDate: today,
+          successDays,
+          status,
+        },
       }),
       this.prisma.challengeCertificationLogs.create({
         data: {
