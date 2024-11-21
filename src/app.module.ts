@@ -6,6 +6,7 @@ import { HttpModule } from '@nestjs/axios';
 import { DbModule } from './db/db.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { DietModule } from './diet/diet.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { AuthModule } from './auth/auth.module';
     DbModule,
     UsersModule,
     AuthModule,
+    DietModule,
   ],
   controllers: [AppController],
   providers: [AppService],

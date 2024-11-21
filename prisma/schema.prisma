@@ -51,7 +51,7 @@ enum AccountsType {
 }
 model DailyNutritions {
   userId       Int
-  date         DateTime
+  date         String
   amount       Float
   kcal         Float
   carbohydrate Float
@@ -92,3 +92,21 @@ model MealNutritions {
   transfat     Float
   @@id([userId, date, createdAt])
 }
+model Food {
+  name          String   @unique
+  amount        Float    
+  kcal          Float    
+  carbohydrate  Float    
+  sugar         Float    
+  fat           Float    
+  protein       Float    
+  calcium       Float    
+  phosphorus    Float    
+  natrium       Float    
+  kalium        Float    
+  magnesium     Float    
+  iron          Float    
+  zinc          Float    
+  cholesterol   Float    
+  transfat      Float    
+} 

@@ -40,7 +40,7 @@ ALTER TABLE `Tokens` ADD CONSTRAINT `Tokens_userId_fkey` FOREIGN KEY (`userId`) 
 -- CreateTable
 CREATE TABLE `DailyNutritions` (
     `userId` INTEGER NOT NULL,
-    `date` DATETIME(3) NOT NULL,
+    `date` VARCHAR(191) NOT NULL,
     `amount` DOUBLE NOT NULL,
     `kcal` DOUBLE NOT NULL,
     `carbohydrate` DOUBLE NOT NULL,
@@ -59,6 +59,7 @@ CREATE TABLE `DailyNutritions` (
     `updatedAt` DATETIME(3) NOT NULL,
 
     PRIMARY KEY (`userId`, `date`)
+    FOREIGN KEY (`userId`) REFERENCES `Users` (`id`) ON DELETE CASCADE
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -83,4 +84,25 @@ CREATE TABLE `MealNutritions` (
     `transfat` DOUBLE NOT NULL,
 
     PRIMARY KEY (`userId`, `date`, `createdAt`)
+    FOREIGN KEY (`userId`) REFERENCES `Users` (`id`) ON DELETE CASCADE
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Food` (   
+    `name` VARCHAR(255) NOT NULL UNIQUE,  
+    `amount` FLOAT,                       
+    `kcal` FLOAT,                         
+    `carbohydrate` FLOAT,                 
+    `sugar` FLOAT,                        
+    `fat` FLOAT,                          
+    `protein` FLOAT,                      
+    `calcium` FLOAT,                      
+    `phosphorus` FLOAT,                   
+    `natrium` FLOAT,                      
+    `kalium` FLOAT,                       
+    `magnesium` FLOAT,                    
+    `iron` FLOAT,                         
+    `zinc` FLOAT,                         
+    `cholesterol` FLOAT,                  
+    `transfat` FLOAT,                     
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

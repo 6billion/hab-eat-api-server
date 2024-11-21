@@ -1,45 +1,26 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../db/prisma.service';
+import { PrismaService } from 'src/db/prisma.service';
 
 @Injectable()
 export class DietService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getDailyNutrition(userId: number) {
-    const today = new Date().toISOString().slice(0, 10);
-
+  async getDailyNutrition(userId: number, date: string) {
     const dailyNutrition = await this.prisma.dailyNutritions.findUnique({
       where: {
         userId_date: {
           userId: userId,
-          date: new Date(today),
+          date: date,
         },
       },
     });
 
     if (!dailyNutrition) {
-      return { message: '오늘의 데이터가 없습니다.' };
+      return { message: '${date}의 데이터가 없습니다.' };
     }
-
-    return {
-      userId: dailyNutrition.userId,
-      date: dailyNutrition.date,
-      kcal: dailyNutrition.kcal,
-      carbohydrate: dailyNutrition.carbohydrate,
-      sugar: dailyNutrition.sugar,
-      fat: dailyNutrition.fat,
-      protein: dailyNutrition.protein,
-      calcium: dailyNutrition.calcium,
-      phosphorus: dailyNutrition.phosphorus,
-      natrium: dailyNutrition.natrium,
-      kalium: dailyNutrition.kalium,
-      magnesium: dailyNutrition.magnesium,
-      iron: dailyNutrition.iron,
-      zinc: dailyNutrition.zinc,
-      cholesterol: dailyNutrition.cholesterol,
-      transfat: dailyNutrition.transfat,
-    };
+    return dailyNutrition;
   }
+
   async getMealNutrition(userId: number, date: string) {
     const meals = await this.prisma.mealNutritions.findMany({
       where: {

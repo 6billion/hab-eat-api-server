@@ -6,8 +6,11 @@ export class DietController {
   constructor(private readonly dietService: DietService) {}
 
   @Get('daily')
-  async getDailyNutrition(@Query('userId') userId: number) {
-    return this.dietService.getDailyNutrition(userId);
+  async getDailyNutrition(
+    @Query('userId') userId: number,
+    @Query('date') date: string,
+  ) {
+    return this.dietService.getDailyNutrition(userId, date);
   }
   @Get('meals')
   async getMealNutrition(
