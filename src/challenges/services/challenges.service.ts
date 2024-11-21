@@ -6,10 +6,15 @@ import {
   AvaliableChallenge,
   OngoingChallenge,
 } from '../dtos/get-challenges.dto';
+import { NutriChallengeTypes } from 'src/constants';
+import { ChallengeCertificationServiceFactory } from './challenge-certification.factory';
+import { ChallengesParticipants } from '@prisma/client';
+import { TargetNutrients } from '@type';
 
 @Injectable()
 export class ChallengesService {
   constructor(
+    private readonly certificationServiceFactory: ChallengeCertificationServiceFactory,
     private readonly prismaService: PrismaService,
     private readonly util: UtilService,
   ) {}
@@ -83,5 +88,41 @@ export class ChallengesService {
         status: false,
       },
     });
+  }
+
+  async findNutritionChallengeParticipants(userId: number) {
+    const today = new Date(this.util.getKSTDate());
+    return this.prismaService.challengesParticipants.findMany({
+      where: {
+        userId,
+        endDate: { gte: today },
+        challengeType: { in: NutriChallengeTypes },
+      },
+    });
+  }
+
+  async certifyManyNutritionChallenges({
+    user,
+    participants,
+    data,
+  }: {
+    user: User;
+    participants: ChallengesParticipants[];
+    data: TargetNutrients;
+  }) {
+    const promises = participants.map((participant) => {
+      const certificationService =
+        this.certificationServiceFactory.getChallengeCertificationService(
+          participant.challengeType,
+        );
+
+      return certificationService.certyfiyChallenge({
+        participant,
+        user,
+        data,
+      });
+    });
+
+    return Promise.allSettled(promises);
   }
 }

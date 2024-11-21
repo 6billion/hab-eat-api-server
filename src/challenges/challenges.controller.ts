@@ -9,6 +9,9 @@ import {
   PostParticipantsRequestDto,
   PostParticipantsResponseDto,
 } from './dtos/post-participants.dto';
+import { OnEvent } from '@nestjs/event-emitter';
+import { EventNames } from 'src/constants';
+import { TargetNutrients } from '@type';
 
 @ApiTags('challenges')
 @ApiBearerAuth()
@@ -38,5 +41,22 @@ export class ChallengesController {
       });
 
     return new PostParticipantsResponseDto(participant);
+  }
+
+  @OnEvent(EventNames.certifiyNutritionChallenges)
+  async certifiyNutritionChallenges({
+    user,
+    data,
+  }: {
+    user: User;
+    data: TargetNutrients;
+  }) {
+    const participants =
+      await this.challengesService.findNutritionChallengeParticipants(user.id);
+    return this.challengesService.certifyManyNutritionChallenges({
+      user,
+      data,
+      participants,
+    });
   }
 }
