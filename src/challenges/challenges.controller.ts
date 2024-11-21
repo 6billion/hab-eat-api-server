@@ -74,7 +74,7 @@ export class ChallengesController {
   @ApiOperation({ summary: '습관 챌린지 이미지 업로드 하기' })
   @ApiBody({ type: PostChallengeCertificationRequestDto })
   @ApiConsumes('multipart/form-data')
-  @Post(':id/image')
+  @Post(':id/images')
   @UseInterceptors(FileInterceptor('file'))
   async postChallengeCertifications(
     @UploadedFile() data: Express.Multer.File,
