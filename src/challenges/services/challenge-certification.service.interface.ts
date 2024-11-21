@@ -4,6 +4,7 @@ import { UtilService } from '@lib/util';
 import { TargetNutrients } from '@type';
 import * as _ from 'lodash';
 import { PrismaService } from 'src/db/prisma.service';
+import { Injectable } from '@nestjs/common';
 
 export interface IChallengeCertificationService<T> {
   certyfiyChallenge: (params: {
@@ -13,6 +14,7 @@ export interface IChallengeCertificationService<T> {
   }) => Promise<boolean>;
 }
 
+@Injectable()
 export abstract class NutriChallengeCertificationService
   implements IChallengeCertificationService<TargetNutrients>
 {
