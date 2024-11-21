@@ -21,7 +21,7 @@ export class BulkChallengeCertificationService extends NutriChallengeCertificati
     for (const key of Object.keys(nutrientConditions)) {
       const threshold = nutrientConditions[key] || targetNutrients[key];
       const intakeAmount = data[key];
-      if (threshold >= intakeAmount) return false;
+      if (threshold > intakeAmount) return false;
     }
 
     return true;
