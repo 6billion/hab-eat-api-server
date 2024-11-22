@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Post, Body } from '@nestjs/common';
+import { Controller, Get, Query, Post, Body, Delete } from '@nestjs/common';
 import { DietService } from './diet.service';
 
 @Controller('diet')
@@ -26,5 +26,22 @@ export class DietController {
     @Body('foodName') foodName: string,
   ) {
     return await this.dietService.updateNutrition(userId, date, foodName);
+  }
+  @Delete('delete')
+  async deleteNutrition(
+    @Query('userId') userId: number,
+    @Query('date') date: string,
+    @Query('createdAt') createdAt: string,
+    @Query('updatedAt') updatedAt: string,
+  ) {
+    const createdAtDate = new Date(createdAt);
+    const updatedAtDate = new Date(updatedAt);
+
+    return await this.dietService.deleteNutrition(
+      userId,
+      date,
+      createdAtDate,
+      updatedAtDate,
+    );
   }
 }

@@ -106,4 +106,25 @@ export class DietService {
       updatedAt: new Date(),
     });
   }
+  async deleteNutrition(
+    userId: number,
+    date: string,
+    createdAt: Date,
+    updatedAt: Date,
+  ) {
+    await this.prisma.mealNutritions.deleteMany({
+      where: {
+        userId,
+        date,
+        createdAt,
+      },
+    });
+    await this.prisma.dailyNutritions.deleteMany({
+      where: {
+        userId,
+        date,
+        updatedAt,
+      },
+    });
+  }
 }
