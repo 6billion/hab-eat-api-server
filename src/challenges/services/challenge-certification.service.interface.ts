@@ -27,7 +27,7 @@ export abstract class NutriChallengeCertificationService
   ) {}
 
   private cachedNutrientConditions: {
-    [challengeId: string]: TargetNutrients;
+    [challengeId: string]: Partial<TargetNutrients>;
   } = {};
 
   private cacheExpiryTime: number = 0;
@@ -60,9 +60,7 @@ export abstract class NutriChallengeCertificationService
       this.prisma.nutrientChallengeConditions
         .findFirst({ where: { challengeId } })
         .then((result) => _.omitBy(result, _.isNil))
-        .then((result) =>
-          _.omit(result, 'challengeId'),
-        ) as Promise<TargetNutrients>,
+        .then((result) => _.omit(result, 'challengeId')),
       this.prisma.challenges.findUnique({
         where: { id: challengeId },
       }),
@@ -74,7 +72,7 @@ export abstract class NutriChallengeCertificationService
     }
 
     this.cachedNutrientConditions[challengeId] = nutrientConditions;
-    return nutrientConditions as TargetNutrients;
+    return nutrientConditions;
   }
 
   private async increaseSuccessCount(participant: ChallengeParticipants) {
