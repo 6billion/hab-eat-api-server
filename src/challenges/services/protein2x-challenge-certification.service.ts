@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { ChallengeParticipants } from '@prisma/client';
-import { TargetNutrients } from '@type';
+import { CertifyCondition, TargetNutrients } from '@type';
 import { User } from 'src/users/user';
 import {
   IChallengeCertificationService,
   NutriChallengeCertificationService,
 } from './challenge-certification.service.interface';
+import { NutriChallengeCondition } from 'src/constants';
 
 @Injectable()
 export class Protein2xChallengecertificationService
@@ -25,5 +26,14 @@ export class Protein2xChallengecertificationService
 
     if (threshold <= intakeAmount) return true;
     return false;
+  }
+
+  async getCertifyCondition(
+    challengeId: number,
+    user: User,
+  ): Promise<CertifyCondition> {
+    const threshold = { protein: user.weight * 2 };
+    const condition = NutriChallengeCondition.gte;
+    return { threshold, condition };
   }
 }

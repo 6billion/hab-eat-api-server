@@ -36,6 +36,7 @@ import {
 } from './dtos/get-certification-logs.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { PostChallengeCertificationRequestDto } from './dtos/post-certification.dto';
+import { GetChallengeConditonResponseDto } from './dtos/get-challenge-condition.dto';
 
 @ApiTags('챌린지')
 @ApiBearerAuth()
@@ -108,6 +109,16 @@ export class ChallengesController {
       startDate: query.startDate,
       endDate: query.endDate,
     });
+  }
+
+  @Get(':id/conditions')
+  @ApiOperation({ summary: '챌린지 인증 조건 조회("habit" 타입 챌린지 제외)' })
+  @ApiResponse({ type: GetChallengeConditonResponseDto })
+  async getChallengeNutrientCondition(
+    @Param('id') id: number,
+    @RequestUser() user: User,
+  ) {
+    return this.challengesService.getChallengeConditions(id, user);
   }
 
   @OnEvent(EventNames.certifiyNutritionChallenges)

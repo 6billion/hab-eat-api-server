@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ChallengeParticipants } from '@prisma/client';
-import { TargetNutrients } from '@type';
+import { CertifyCondition, TargetNutrients } from '@type';
 import { User } from 'src/users/user';
 import { NutriChallengeCertificationService } from './challenge-certification.service.interface';
+import { NutriChallengeCondition } from 'src/constants';
 
 @Injectable()
 export class BulkChallengeCertificationService extends NutriChallengeCertificationService {
@@ -25,5 +26,20 @@ export class BulkChallengeCertificationService extends NutriChallengeCertificati
     }
 
     return true;
+  }
+
+  async getCertifyCondition(
+    challengeId: number,
+    user: User,
+  ): Promise<CertifyCondition> {
+    const threshold = await this.getNutriCondition(challengeId);
+    const target = user.targetNutrients;
+    const condition = NutriChallengeCondition.gte;
+
+    Object.keys(threshold).forEach((key) => {
+      if (threshold[key] === 0) threshold[key] = target[key];
+    });
+
+    return { threshold, condition };
   }
 }

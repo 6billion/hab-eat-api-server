@@ -1,7 +1,7 @@
 import { ChallengeParticipants } from '@prisma/client';
 import { User } from 'src/users/user';
 import { UtilService } from '@lib/util';
-import { TargetNutrients } from '@type';
+import { CertifyCondition, TargetNutrients } from '@type';
 import * as _ from 'lodash';
 import { PrismaService } from 'src/db/prisma.service';
 import { Injectable } from '@nestjs/common';
@@ -15,6 +15,11 @@ export interface IChallengeCertificationService<T> {
     user: User;
     data: T;
   }) => Promise<boolean>;
+
+  getCertifyCondition: (
+    challengeId: number,
+    user: User,
+  ) => Promise<CertifyCondition>;
 }
 
 @Injectable()
@@ -49,6 +54,11 @@ export abstract class NutriChallengeCertificationService
     user: User;
     data: TargetNutrients;
   }): Promise<boolean>;
+
+  public abstract getCertifyCondition(
+    challengeId: number,
+    user: User,
+  ): Promise<CertifyCondition>;
 
   protected async getNutriCondition(challengeId: number) {
     const cachedNutrientCondition = this.cachedNutrientConditions[challengeId];

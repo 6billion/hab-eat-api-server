@@ -179,4 +179,15 @@ export class ChallengesService {
       include: { challengeCertificationLogs: true },
     });
   }
+
+  async getChallengeConditions(challengeId: number, user: User) {
+    const challenge = await this.prismaService.challenges.findUnique({
+      where: { id: challengeId },
+    });
+    const certificationService =
+      this.certificationServiceFactory.getChallengeCertificationService(
+        challenge.type,
+      );
+    return certificationService.getCertifyCondition(challengeId, user);
+  }
 }

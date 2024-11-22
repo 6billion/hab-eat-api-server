@@ -1,3 +1,5 @@
+import { NutriChallengeCondition } from 'src/constants';
+
 export type SnsUser = {
   type: $Enums.AccountType;
   id: string;
@@ -21,4 +23,9 @@ export type TargetNutrients = {
   natrium: number;
   cholesterol: number;
   sugar: number;
+};
+
+export type CertifyCondition = {
+  threshold: Partial<TargetNutrients>;
+  condition: NutriChallengeCondition;
 };

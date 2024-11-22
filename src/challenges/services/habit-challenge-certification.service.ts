@@ -10,6 +10,7 @@ import { IChallengeCertificationService } from './challenge-certification.servic
 import { PrismaService } from 'src/db/prisma.service';
 import { UtilService } from '@lib/util';
 import { HttpService } from '@nestjs/axios';
+import { CertifyCondition } from '@type';
 
 @Injectable()
 export class HabitChallengeCertificationService
@@ -97,5 +98,9 @@ export class HabitChallengeCertificationService
         },
       }),
     ]);
+  }
+
+  async getCertifyCondition(): Promise<CertifyCondition> {
+    throw new BadRequestException();
   }
 }

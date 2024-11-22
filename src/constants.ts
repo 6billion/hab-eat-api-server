@@ -9,3 +9,8 @@ export const NutriChallengeTypes = [
   $Enums.ChallengeType.diet,
   $Enums.ChallengeType.protein2x,
 ];
+
+export enum NutriChallengeCondition {
+  lte,
+  gte,
+}
