@@ -112,7 +112,10 @@ export class ChallengesController {
   }
 
   @Get(':id/conditions')
-  @ApiOperation({ summary: '챌린지 인증 조건 조회("habit" 타입 챌린지 제외)' })
+  @ApiOperation({
+    summary:
+      '영양 챌린지 인증 조건 조회(영양 챌린지: "habit" 타입 챌린지 제외한 모든 챌린지)',
+  })
   @ApiResponse({ type: GetChallengeConditonResponseDto })
   async getChallengeNutrientCondition(
     @Param('id') id: number,
