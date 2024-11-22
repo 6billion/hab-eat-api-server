@@ -103,6 +103,7 @@ export class DietService {
     });
     await this.prisma.dailyNutritions.create({
       data: nutritionData,
+      updatedAt: new Date(),
     });
   }
 }
