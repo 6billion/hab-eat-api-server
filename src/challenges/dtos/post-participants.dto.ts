@@ -14,9 +14,6 @@ export class PostParticipantsResponseDto {
   @ApiProperty({ description: '챌린지 참여 고유아이디', type: Number })
   id: number;
 
-  @ApiProperty({ description: '종료일', type: Date })
-  endDate: Date;
-
   @ApiProperty({ description: '유저 고유 아이디', type: Number })
   userId: number;
 
@@ -38,11 +35,20 @@ export class PostParticipantsResponseDto {
   @ApiProperty({ description: '챌린지 시작일', type: Date })
   startDate: Date;
 
+  @ApiProperty({ description: '종료일', type: Date })
+  endDate: Date;
+
+  @ApiProperty({ description: '마지막 챌린지 성공일', type: Date })
+  lastSuccessDate: Date;
+
+  @ApiProperty({ description: '챌린지 성공일 수 수정일 ', type: Date })
+  lastCheckDate;
+
   @ApiProperty({ description: '성공여부', type: Boolean })
   status: boolean;
 
   @ApiProperty({ description: '참여 정보 업데이트 시간', type: Boolean })
-  updatedAt: Date;
+  joinedAt: Date;
 
   constructor(participant: ChallengeParticipants) {
     Object.assign(this, participant);
