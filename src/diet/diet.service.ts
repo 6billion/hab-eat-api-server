@@ -14,7 +14,6 @@ export class DietService {
         },
       },
     });
-
     if (!dailyNutrition) {
       return { message: '${date}의 데이터가 없습니다.' };
     }
@@ -68,5 +67,42 @@ export class DietService {
       lunch,
       dinner,
     };
+  }
+  async updateNutrition(userId: number, date: string, foodName: string) {
+    const foodData = await this.prisma.food.findUnique({
+      where: { name: foodName },
+    });
+
+    if (!foodData) {
+      throw new Error('해당 음식이 존재하지 않습니다.');
+    }
+    const nutritionData = {
+      userId,
+      date,
+      amount: foodData.amount,
+      kcal: foodData.kcal,
+      carbohydrate: foodData.carbohydrate,
+      sugar: foodData.sugar,
+      fat: foodData.fat,
+      protein: foodData.protein,
+      calcium: foodData.calcium,
+      phosphorus: foodData.phosphorus,
+      natrium: foodData.natrium,
+      kalium: foodData.kalium,
+      magnesium: foodData.magnesium,
+      iron: foodData.iron,
+      zinc: foodData.zinc,
+      cholesterol: foodData.cholesterol,
+      transfat: foodData.transfat,
+    };
+    await this.prisma.mealNutritions.create({
+      data: {
+        ...nutritionData,
+        createdAt: new Date(),
+      },
+    });
+    await this.prisma.dailyNutritions.create({
+      data: nutritionData,
+    });
   }
 }
