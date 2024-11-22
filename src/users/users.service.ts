@@ -1,4 +1,8 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PostUserDto } from './dtos/post-user.dto';
 import { HttpService } from '@nestjs/axios';
 import { PrismaService } from 'src/db/prisma.service';
@@ -142,9 +146,11 @@ export class UsersService {
   }
 
   public async getUserByToken(requestToken: string) {
-    const token = await this.prismaService.tokens.findUniqueOrThrow({
+    const token = await this.prismaService.tokens.findUnique({
       where: { token: requestToken },
     });
+    if (!token) throw new UnauthorizedException();
+
     const user = await this.prismaService.users.findUniqueOrThrow({
       where: { id: token.userId },
     });
