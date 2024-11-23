@@ -51,7 +51,7 @@ enum AccountsType {
 }
 model DailyNutritions {
   userId       Int
-  date         String
+  date         DateTime @db.Date
   amount       Float
   kcal         Float
   carbohydrate Float
@@ -73,7 +73,7 @@ model DailyNutritions {
 
 model MealNutritions {
   userId       Int
-  date         String
+  date         DateTime @db.Date
   createdAt    DateTime 
   amount       Float
   kcal         Float

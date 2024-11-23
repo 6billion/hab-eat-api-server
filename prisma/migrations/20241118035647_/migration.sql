@@ -40,7 +40,7 @@ ALTER TABLE `Tokens` ADD CONSTRAINT `Tokens_userId_fkey` FOREIGN KEY (`userId`) 
 -- CreateTable
 CREATE TABLE `DailyNutritions` (
     `userId` INTEGER NOT NULL,
-    `date` VARCHAR(191) NOT NULL,
+    `date` DATE NOT NULL,
     `amount` DOUBLE NOT NULL,
     `kcal` DOUBLE NOT NULL,
     `carbohydrate` DOUBLE NOT NULL,
@@ -65,7 +65,7 @@ CREATE TABLE `DailyNutritions` (
 -- CreateTable
 CREATE TABLE `MealNutritions` (
     `userId` INTEGER NOT NULL,
-    `date`  VARCHAR(255) NOT NULL,
+    `date`  DATE NOT NULL,
     `createdAt` DATETIME(3) NOT NULL,
     `amount` DOUBLE NOT NULL,
     `kcal` DOUBLE NOT NULL,
