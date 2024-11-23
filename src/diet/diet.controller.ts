@@ -1,45 +1,53 @@
 import { Controller, Get, Query, Post, Body, Delete } from '@nestjs/common';
 import { DietService } from './diet.service';
+import {
+  GetDailyNutritionDto,
+  GetMealNutritionDto,
+  UpdateNutritionDto,
+  DeleteNutritionDto,
+} from 'src/diet/dtos/diet.dto';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
+@ApiTags('Diet')
 @Controller('diet')
 export class DietController {
   constructor(private readonly dietService: DietService) {}
 
   @Get('daily')
-  async getDailyNutrition(
-    @Query('userId') userId: number,
-    @Query('date') date: string,
-  ) {
-    return this.dietService.getDailyNutrition(userId, date);
+  @ApiOperation({ summary: 'Get daily nutrition' })
+  async getDailyNutrition(@Query() params: GetDailyNutritionDto) {
+    const { userId, date } = params;
+    const dateObj = new Date(date);
+    return await this.dietService.getDailyNutrition(userId, dateObj);
   }
+
   @Get('meals')
-  async getMealNutrition(
-    @Query('userId') userId: number,
-    @Query('date') date: string,
-  ) {
-    return this.dietService.getMealNutrition(userId, date);
+  @ApiOperation({ summary: 'Get meal nutrition' })
+  async getMealNutrition(@Query() params: GetMealNutritionDto) {
+    const { userId, date } = params;
+    const dateObj = new Date(date);
+    return await this.dietService.getMealNutrition(userId, dateObj);
   }
+
   @Post('update')
-  async updateNutrition(
-    @Body('userId') userId: number,
-    @Body('date') date: string,
-    @Body('foodName') foodName: string,
-  ) {
-    return await this.dietService.updateNutrition(userId, date, foodName);
+  @ApiOperation({ summary: 'Update nutrition' })
+  async updateNutrition(@Body() updateNutritionDto: UpdateNutritionDto) {
+    const { userId, date, foodName } = updateNutritionDto;
+    const dateObj = new Date(date);
+    return await this.dietService.updateNutrition(userId, dateObj, foodName);
   }
+
   @Delete('delete')
-  async deleteNutrition(
-    @Query('userId') userId: number,
-    @Query('date') date: string,
-    @Query('createdAt') createdAt: string,
-    @Query('updatedAt') updatedAt: string,
-  ) {
-    const createdAtDate = new Date(createdAt);
-    const updatedAtDate = new Date(updatedAt);
+  @ApiOperation({ summary: 'Delete nutrition' })
+  async deleteNutrition(@Query() params: DeleteNutritionDto) {
+    const { userId, date, createdAt, updatedAt } = params;
+    const dateObj = new Date(date);
+    const createdAtDate = createdAt ? new Date(createdAt) : undefined;
+    const updatedAtDate = updatedAt ? new Date(updatedAt) : undefined;
 
     return await this.dietService.deleteNutrition(
       userId,
-      date,
+      dateObj,
       createdAtDate,
       updatedAtDate,
     );

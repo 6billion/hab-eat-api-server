@@ -5,7 +5,7 @@ import { PrismaService } from 'src/db/prisma.service';
 export class DietService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getDailyNutrition(userId: number, date: string) {
+  async getDailyNutrition(userId: number, date: Date) {
     const dailyNutrition = await this.prisma.dailyNutritions.findUnique({
       where: {
         userId_date: {
@@ -17,7 +17,7 @@ export class DietService {
     return dailyNutrition;
   }
 
-  async getMealNutrition(userId: number, date: string) {
+  async getMealNutrition(userId: number, date: Date) {
     const meals = await this.prisma.mealNutritions.findMany({
       where: {
         userId: userId,
@@ -60,7 +60,7 @@ export class DietService {
       dinner,
     };
   }
-  async updateNutrition(userId: number, date: string, foodName: string) {
+  async updateNutrition(userId: number, date: Date, foodName: string) {
     const foodData = await this.prisma.food.findUnique({
       where: { name: foodName },
     });
@@ -91,13 +91,15 @@ export class DietService {
       },
     });
     await this.prisma.dailyNutritions.create({
-      data: nutritionData,
-      updatedAt: new Date(),
+      data: {
+        ...nutritionData,
+        updatedAt: new Date(),
+      },
     });
   }
   async deleteNutrition(
     userId: number,
-    date: string,
+    date: Date,
     createdAt: Date,
     updatedAt: Date,
   ) {
