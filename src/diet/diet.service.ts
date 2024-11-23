@@ -14,9 +14,6 @@ export class DietService {
         },
       },
     });
-    if (!dailyNutrition) {
-      return { message: '${date}의 데이터가 없습니다.' };
-    }
     return dailyNutrition;
   }
 
@@ -30,11 +27,6 @@ export class DietService {
         createdAt: 'asc',
       },
     });
-
-    if (meals.length === 0) {
-      return { message: '해당 날짜에 식단 데이터가 없습니다.' };
-    }
-
     const breakfast = meals.filter((meal) => {
       const mealDate = new Date(meal.createdAt);
       const localTime = new Date(
@@ -73,9 +65,6 @@ export class DietService {
       where: { name: foodName },
     });
 
-    if (!foodData) {
-      throw new Error('해당 음식이 존재하지 않습니다.');
-    }
     const nutritionData = {
       userId,
       date,
