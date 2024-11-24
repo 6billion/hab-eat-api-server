@@ -29,70 +29,100 @@ export class DietService {
         date: date,
       },
     });
-    return dailyNutrition;
+    return totals._sum;
   }
 
   async getMealNutrition(userId: number, date: Date) {
-    const startOfDay = new Date(date);
-    startOfDay.setHours(0, 0, 0, 0);
+    const meals = await this.prisma.mealNutritions.findMany({
+      where: {
+        userId: userId,
+        date: date,
+      },
+      orderBy: {
+        createdAt: 'asc',
+      },
+    });
 
-    const endOfDay = new Date(date);
-    endOfDay.setHours(23, 59, 59, 999);
-
-    const timeRanges = [
-      { name: 'Breakfast', start: 5, end: 11 },
-      { name: 'Lunch', start: 12, end: 16 },
-      { name: 'Dinner', start: 17, end: 22 },
-    ];
-
-    const results = [];
-
-    for (const range of timeRanges) {
-      const rangeStart = new Date(startOfDay);
-      const rangeEnd = new Date(startOfDay);
-
-      rangeStart.setHours(range.start, 0, 0, 0);
-      rangeEnd.setHours(range.end, 59, 59, 999);
-
-      const totals = await this.prisma.mealNutritions.aggregate({
-        _sum: {
-          amount: true,
-          kcal: true,
-          carbohydrate: true,
-          sugar: true,
-          fat: true,
-          protein: true,
-          calcium: true,
-          phosphorus: true,
-          natrium: true,
-          kalium: true,
-          magnesium: true,
-          iron: true,
-          zinc: true,
-          cholesterol: true,
-          transfat: true,
+    const calculateTotals = (meals) => {
+      return meals.reduce(
+        (totals, meal) => {
+          totals.amount += meal.amount || 0;
+          totals.kcal += meal.kcal || 0;
+          totals.carbohydrate += meal.carbohydrate || 0;
+          totals.sugar += meal.sugar || 0;
+          totals.fat += meal.fat || 0;
+          totals.protein += meal.protein || 0;
+          totals.calcium += meal.calcium || 0;
+          totals.phosphorus += meal.phosphorus || 0;
+          totals.natrium += meal.natrium || 0;
+          totals.kalium += meal.kalium || 0;
+          totals.magnesium += meal.magnesium || 0;
+          totals.iron += meal.iron || 0;
+          totals.zinc += meal.zinc || 0;
+          totals.cholesterol += meal.cholesterol || 0;
+          totals.transfat += meal.transfat || 0;
+          return totals;
         },
-        where: {
-          userId: userId,
-          date: {
-            gte: startOfDay,
-            lte: endOfDay,
-          },
-          createdAt: {
-            gte: rangeStart,
-            lte: rangeEnd,
-          },
+        {
+          amount: 0,
+          kcal: 0,
+          carbohydrate: 0,
+          sugar: 0,
+          fat: 0,
+          protein: 0,
+          calcium: 0,
+          phosphorus: 0,
+          natrium: 0,
+          kalium: 0,
+          magnesium: 0,
+          iron: 0,
+          zinc: 0,
+          cholesterol: 0,
+          transfat: 0,
         },
-      });
+      );
+    };
 
-      results.push({
-        mealType: range.name,
-        totals: totals._sum,
-      });
-    }
+    const breakfast = meals.filter((meal) => {
+      const mealDate = new Date(meal.createdAt);
+      const localTime = new Date(
+        mealDate.getTime() + mealDate.getTimezoneOffset() * 60000,
+      );
+      const hour = localTime.getHours();
+      return hour >= 0 && hour < 11;
+    });
 
-    return results;
+    const lunch = meals.filter((meal) => {
+      const mealDate = new Date(meal.createdAt);
+      const localTime = new Date(
+        mealDate.getTime() + mealDate.getTimezoneOffset() * 60000,
+      );
+      const hour = localTime.getHours();
+      return hour >= 11 && hour < 17;
+    });
+
+    const dinner = meals.filter((meal) => {
+      const mealDate = new Date(meal.createdAt);
+      const localTime = new Date(
+        mealDate.getTime() + mealDate.getTimezoneOffset() * 60000,
+      );
+      const hour = localTime.getHours();
+      return hour >= 17;
+    });
+
+    return {
+      breakfast: {
+        totals: calculateTotals(breakfast),
+      },
+      lunch: {
+        totals: calculateTotals(lunch),
+      },
+      dinner: {
+        totals: calculateTotals(dinner),
+      },
+    };
   }
+
   async updateNutrition(userId: number, date: Date, foodName: string) {
     const foodData = await this.prisma.food.findUnique({
       where: { name: foodName },

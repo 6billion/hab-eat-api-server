@@ -23,7 +23,7 @@ export class GetMealNutritionDto {
   userId: number;
 
   @ApiProperty({ description: 'date (YYYY-MM-DD)', type: Date })
-  @IsDateString()
+  @IsDate()
   date: Date;
 }
 
