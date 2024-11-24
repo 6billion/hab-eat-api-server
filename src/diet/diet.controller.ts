@@ -17,8 +17,7 @@ export class DietController {
   @ApiOperation({ summary: 'Get daily nutrition' })
   async getDailyNutrition(@Query() params: GetDailyNutritionDto) {
     const { userId, date } = params;
-    const dateObj = new Date(date);
-    return await this.dietService.getDailyNutrition(userId, dateObj);
+    return await this.dietService.getDailyNutrition(userId, date);
   }
 
   @Get('meals')

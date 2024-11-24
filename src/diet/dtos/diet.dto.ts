@@ -1,14 +1,20 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsOptional, IsString, IsDateString } from 'class-validator';
+import {
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsDateString,
+  IsDate,
+} from 'class-validator';
 
 export class GetDailyNutritionDto {
   @ApiProperty({ description: 'user ID', type: Number })
   @IsNumber()
   userId: number;
 
-  @ApiProperty({ description: 'date (YYYY-MM-DD)', type: String })
-  @IsDateString()
-  date: string;
+  @ApiProperty({ description: 'date (YYYY-MM-DD)', type: Date })
+  @IsDate()
+  date: Date;
 }
 
 export class GetMealNutritionDto {
@@ -16,9 +22,9 @@ export class GetMealNutritionDto {
   @IsNumber()
   userId: number;
 
-  @ApiProperty({ description: 'date (YYYY-MM-DD)', type: String })
+  @ApiProperty({ description: 'date (YYYY-MM-DD)', type: Date })
   @IsDateString()
-  date: string;
+  date: Date;
 }
 
 export class UpdateNutritionDto {
@@ -26,9 +32,9 @@ export class UpdateNutritionDto {
   @IsNumber()
   userId: number;
 
-  @ApiProperty({ description: 'date (YYYY-MM-DD)', type: String })
-  @IsDateString()
-  date: string;
+  @ApiProperty({ description: 'date (YYYY-MM-DD)', type: Date })
+  @IsDate()
+  date: Date;
 
   @ApiProperty({ description: 'food name', type: String })
   @IsString()
@@ -40,9 +46,9 @@ export class DeleteNutritionDto {
   @IsNumber()
   userId: number;
 
-  @ApiProperty({ description: 'date (YYYY-MM-DD)', type: String })
-  @IsDateString()
-  date: string;
+  @ApiProperty({ description: 'date (YYYY-MM-DD)', type: Date })
+  @IsDate()
+  date: Date;
 
   @ApiProperty({ description: '생성 시간', type: String })
   @IsDateString()

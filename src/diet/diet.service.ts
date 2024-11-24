@@ -6,59 +6,92 @@ export class DietService {
   constructor(private readonly prisma: PrismaService) {}
 
   async getDailyNutrition(userId: number, date: Date) {
-    const dailyNutrition = await this.prisma.dailyNutritions.findUnique({
+    const totals = await this.prisma.dailyNutritions.aggregate({
+      _sum: {
+        amount: true,
+        kcal: true,
+        carbohydrate: true,
+        sugar: true,
+        fat: true,
+        protein: true,
+        calcium: true,
+        phosphorus: true,
+        natrium: true,
+        kalium: true,
+        magnesium: true,
+        iron: true,
+        zinc: true,
+        cholesterol: true,
+        transfat: true,
+      },
       where: {
-        userId_date: {
-          userId: userId,
-          date: date,
-        },
+        userId: userId,
+        date: date,
       },
     });
     return dailyNutrition;
   }
 
   async getMealNutrition(userId: number, date: Date) {
-    const meals = await this.prisma.mealNutritions.findMany({
-      where: {
-        userId: userId,
-        date: date,
-      },
-      orderBy: {
-        createdAt: 'asc',
-      },
-    });
-    const breakfast = meals.filter((meal) => {
-      const mealDate = new Date(meal.createdAt);
-      const localTime = new Date(
-        mealDate.getTime() + mealDate.getTimezoneOffset() * 60000,
-      );
-      const hour = localTime.getHours();
-      return hour >= 0 && hour < 11;
-    });
+    const startOfDay = new Date(date);
+    startOfDay.setHours(0, 0, 0, 0);
 
-    const lunch = meals.filter((meal) => {
-      const mealDate = new Date(meal.createdAt);
-      const localTime = new Date(
-        mealDate.getTime() + mealDate.getTimezoneOffset() * 60000,
-      );
-      const hour = localTime.getHours();
-      return hour >= 11 && hour < 17;
-    });
+    const endOfDay = new Date(date);
+    endOfDay.setHours(23, 59, 59, 999);
 
-    const dinner = meals.filter((meal) => {
-      const mealDate = new Date(meal.createdAt);
-      const localTime = new Date(
-        mealDate.getTime() + mealDate.getTimezoneOffset() * 60000,
-      );
-      const hour = localTime.getHours();
-      return hour >= 17;
-    });
+    const timeRanges = [
+      { name: 'Breakfast', start: 5, end: 11 },
+      { name: 'Lunch', start: 12, end: 16 },
+      { name: 'Dinner', start: 17, end: 22 },
+    ];
 
-    return {
-      breakfast,
-      lunch,
-      dinner,
-    };
+    const results = [];
+
+    for (const range of timeRanges) {
+      const rangeStart = new Date(startOfDay);
+      const rangeEnd = new Date(startOfDay);
+
+      rangeStart.setHours(range.start, 0, 0, 0);
+      rangeEnd.setHours(range.end, 59, 59, 999);
+
+      const totals = await this.prisma.mealNutritions.aggregate({
+        _sum: {
+          amount: true,
+          kcal: true,
+          carbohydrate: true,
+          sugar: true,
+          fat: true,
+          protein: true,
+          calcium: true,
+          phosphorus: true,
+          natrium: true,
+          kalium: true,
+          magnesium: true,
+          iron: true,
+          zinc: true,
+          cholesterol: true,
+          transfat: true,
+        },
+        where: {
+          userId: userId,
+          date: {
+            gte: startOfDay,
+            lte: endOfDay,
+          },
+          createdAt: {
+            gte: rangeStart,
+            lte: rangeEnd,
+          },
+        },
+      });
+
+      results.push({
+        mealType: range.name,
+        totals: totals._sum,
+      });
+    }
+
+    return results;
   }
   async updateNutrition(userId: number, date: Date, foodName: string) {
     const foodData = await this.prisma.food.findUnique({
