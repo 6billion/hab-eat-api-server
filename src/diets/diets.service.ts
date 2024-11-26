@@ -43,50 +43,10 @@ export class DietsService {
       },
     });
 
-    const calculateTotals = (meals) => {
-      return meals.reduce(
-        (totals, meal) => {
-          totals.amount += meal.amount || 0;
-          totals.kcal += meal.kcal || 0;
-          totals.carbohydrate += meal.carbohydrate || 0;
-          totals.sugar += meal.sugar || 0;
-          totals.fat += meal.fat || 0;
-          totals.protein += meal.protein || 0;
-          totals.calcium += meal.calcium || 0;
-          totals.phosphorus += meal.phosphorus || 0;
-          totals.natrium += meal.natrium || 0;
-          totals.kalium += meal.kalium || 0;
-          totals.magnesium += meal.magnesium || 0;
-          totals.iron += meal.iron || 0;
-          totals.zinc += meal.zinc || 0;
-          totals.cholesterol += meal.cholesterol || 0;
-          totals.transfat += meal.transfat || 0;
-          return totals;
-        },
-        {
-          amount: 0,
-          kcal: 0,
-          carbohydrate: 0,
-          sugar: 0,
-          fat: 0,
-          protein: 0,
-          calcium: 0,
-          phosphorus: 0,
-          natrium: 0,
-          kalium: 0,
-          magnesium: 0,
-          iron: 0,
-          zinc: 0,
-          cholesterol: 0,
-          transfat: 0,
-        },
-      );
-    };
-
     const breakfast = meals.filter((meal) => {
       const mealDate = new Date(meal.createdAt);
       const localTime = new Date(
-        mealDate.getTime() + mealDate.getTimezoneOffset() * 60000,
+        mealDate.getTime() + mealDate.getTimezoneOffset() * 60 * 1000,
       );
       const hour = localTime.getHours();
       return hour >= 0 && hour < 11;
@@ -95,7 +55,7 @@ export class DietsService {
     const lunch = meals.filter((meal) => {
       const mealDate = new Date(meal.createdAt);
       const localTime = new Date(
-        mealDate.getTime() + mealDate.getTimezoneOffset() * 60000,
+        mealDate.getTime() + mealDate.getTimezoneOffset() * 60 * 1000,
       );
       const hour = localTime.getHours();
       return hour >= 11 && hour < 17;
@@ -104,22 +64,16 @@ export class DietsService {
     const dinner = meals.filter((meal) => {
       const mealDate = new Date(meal.createdAt);
       const localTime = new Date(
-        mealDate.getTime() + mealDate.getTimezoneOffset() * 60000,
+        mealDate.getTime() + mealDate.getTimezoneOffset() * 60 * 1000,
       );
       const hour = localTime.getHours();
       return hour >= 17;
     });
 
     return {
-      breakfast: {
-        totals: calculateTotals(breakfast),
-      },
-      lunch: {
-        totals: calculateTotals(lunch),
-      },
-      dinner: {
-        totals: calculateTotals(dinner),
-      },
+      breakfast,
+      lunch,
+      dinner,
     };
   }
 
