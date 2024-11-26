@@ -38,7 +38,7 @@ ALTER TABLE `Accounts` ADD CONSTRAINT `Accounts_userId_fkey` FOREIGN KEY (`userI
 ALTER TABLE `Tokens` ADD CONSTRAINT `Tokens_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `Users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- CreateTable
-CREATE TABLE `DailyNutritions` (
+CREATE TABLE `DietStats` (
     `userId` INTEGER NOT NULL,
     `date` DATE NOT NULL,
     `amount` DOUBLE NOT NULL,
@@ -58,12 +58,13 @@ CREATE TABLE `DailyNutritions` (
     `transfat` DOUBLE NOT NULL,
     `updatedAt` DATETIME(3) NOT NULL,
 
-    PRIMARY KEY (`userId`, `date`)
+    PRIMARY KEY (`userId`, `date`,'updateAt')
     FOREIGN KEY (`userId`) REFERENCES `Users` (`id`) ON DELETE CASCADE
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `MealNutritions` (
+CREATE TABLE `Diets` (
+    `id` INTEGER NOT NULL,
     `userId` INTEGER NOT NULL,
     `date`  DATE NOT NULL,
     `createdAt` DATETIME(3) NOT NULL,
@@ -82,8 +83,7 @@ CREATE TABLE `MealNutritions` (
     `zinc` DOUBLE NOT NULL,
     `cholesterol` DOUBLE NOT NULL,
     `transfat` DOUBLE NOT NULL,
-
-    PRIMARY KEY (`userId`, `date`, `createdAt`)
+    PRIMARY KEY (`id`)
     FOREIGN KEY (`userId`) REFERENCES `Users` (`id`) ON DELETE CASCADE
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 

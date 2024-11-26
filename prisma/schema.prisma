@@ -49,8 +49,8 @@ enum AccountsType {
   Facebook
   Local
 }
-model DailyNutritions {
-  userId       Int
+model DietStats {
+  userId       Int      
   date         DateTime @db.Date
   amount       Float
   kcal         Float
@@ -68,10 +68,11 @@ model DailyNutritions {
   cholesterol  Float
   transfat     Float
   updatedAt    DateTime @updatedAt
-  @@id([userId, date]) 
+  @@id([userId, date, updatedAt])
 }
 
-model MealNutritions {
+model Diets {
+  id           Int @id @default(autoincrement())
   userId       Int
   date         DateTime @db.Date
   createdAt    DateTime 
@@ -90,7 +91,7 @@ model MealNutritions {
   zinc         Float
   cholesterol  Float
   transfat     Float
-  @@id([userId, date, createdAt])
+  @@index([userId, date, createdAt])
 }
 model Food {
   name          String   @unique
