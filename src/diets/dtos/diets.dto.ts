@@ -27,7 +27,7 @@ export class GetMealNutritionDto {
   date: Date;
 }
 
-export class UpdateNutritionDto {
+export class createDietDto {
   @ApiProperty({ description: 'user ID', type: Number })
   @IsNumber()
   userId: number;
@@ -41,7 +41,7 @@ export class UpdateNutritionDto {
   foodName: string;
 }
 
-export class DeleteNutritionDto {
+export class deleteDietDto {
   @ApiProperty({ description: 'user ID', type: Number })
   @IsNumber()
   userId: number;

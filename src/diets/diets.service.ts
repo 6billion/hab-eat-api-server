@@ -77,7 +77,7 @@ export class DietsService {
     };
   }
 
-  async updateNutrition(userId: number, date: Date, foodName: string) {
+  async createDiet(userId: number, date: Date, foodName: string) {
     const foodData = await this.prisma.food.findUnique({
       where: { name: foodName },
     });
@@ -114,7 +114,7 @@ export class DietsService {
       },
     });
   }
-  async deleteNutrition(
+  async deleteDiet(
     userId: number,
     date: Date,
     createdAt: Date,
