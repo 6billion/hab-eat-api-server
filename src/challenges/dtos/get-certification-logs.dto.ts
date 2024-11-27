@@ -61,9 +61,6 @@ export class GetCertificationLogsResponseDto {
   @ApiProperty({ description: '챌린지 성공 여부', type: Boolean })
   status: boolean;
 
-  @ApiProperty({ description: '챌린지 가입 시간', type: Date })
-  joinedAt: Date;
-
   @ApiProperty({
     description: '챌린지 인증 날짜 리스트',
     type: [ChallengeCertificationLogsDto],

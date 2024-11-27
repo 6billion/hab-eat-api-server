@@ -47,9 +47,6 @@ export class PostParticipantsResponseDto {
   @ApiProperty({ description: '성공여부', type: Boolean })
   status: boolean;
 
-  @ApiProperty({ description: '참여 정보 업데이트 시간', type: Boolean })
-  joinedAt: Date;
-
   constructor(participant: ChallengeParticipants) {
     Object.assign(this, participant);
   }
