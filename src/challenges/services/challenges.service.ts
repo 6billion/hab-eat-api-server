@@ -14,6 +14,7 @@ import { ChallengeCertificationServiceFactory } from './challenge-certification.
 import { ChallengeParticipants } from '@prisma/client';
 import { TargetNutrients } from '@type';
 import { NutriChallengeTypes } from 'src/constants';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class ChallengesService {
@@ -21,6 +22,7 @@ export class ChallengesService {
     private readonly certificationServiceFactory: ChallengeCertificationServiceFactory,
     private readonly prismaService: PrismaService,
     private readonly util: UtilService,
+    private readonly configService: ConfigService,
   ) {}
 
   public async getChallenges(user: User) {
@@ -67,7 +69,12 @@ export class ChallengesService {
     const monday = new Date(this.util.getThisWeekMondayKST());
     const sunday = new Date(this.util.getThisWeekSundayKST());
 
-    if (today.getTime() !== monday.getTime()) throw new BadRequestException();
+    if (
+      this.configService.getOrThrow('NODE_ENV') === 'production' &&
+      today.getTime() !== monday.getTime()
+    ) {
+      throw new BadRequestException();
+    }
 
     const challenge = await this.prismaService.challenges.findUniqueOrThrow({
       where: { id },
