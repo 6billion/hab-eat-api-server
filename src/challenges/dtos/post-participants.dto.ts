@@ -42,7 +42,7 @@ export class PostParticipantsResponseDto {
   lastSuccessDate: Date;
 
   @ApiProperty({ description: '챌린지 성공일 수 수정일 ', type: Date })
-  lastCheckDate;
+  lastCheckDate: Date;
 
   @ApiProperty({ description: '성공여부', type: Boolean })
   status: boolean;
