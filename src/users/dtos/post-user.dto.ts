@@ -1,12 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { $Enums } from '@prisma/client';
-import {
-  IsBoolean,
-  IsEnum,
-  IsNumber,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class PostUserDto {
   @ApiProperty({ description: 'sns 토큰', type: String })
@@ -46,10 +40,6 @@ export class PostUserDto {
   @IsEnum($Enums.UserActivityLevel)
   @IsOptional()
   activityLevel: $Enums.UserActivityLevel;
-
-  @ApiProperty({ description: '질병 여부', type: Boolean })
-  @IsBoolean()
-  hasDisease: boolean;
 }
 
 export class UserDto {
@@ -88,9 +78,6 @@ export class UserDto {
     required: false,
   })
   activityLevel: $Enums.UserActivityLevel;
-
-  @ApiProperty({ description: '질병 여부', type: Boolean })
-  hasDisease: boolean;
 }
 
 export class PostUserResponseDto {

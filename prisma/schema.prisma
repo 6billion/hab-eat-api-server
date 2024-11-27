@@ -22,7 +22,6 @@ model Users {
   sex           Sex
   type          UserType
   activityLevel UserActivityLevel @default(lightlyActive)
-  hasDisease    Boolean           @default(false)
   createdAt     DateTime          @default(now())
 
   token   Tokens?    @relation("userToToken")

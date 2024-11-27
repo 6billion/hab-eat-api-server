@@ -89,7 +89,6 @@ export class UsersService {
         sex: dto.sex,
         type: dto.type,
         activityLevel: dto.activityLevel,
-        hasDisease: dto.hasDisease,
       },
     });
   }
@@ -119,7 +118,6 @@ export class UsersService {
           age: dto.age,
           sex: dto.sex,
           type: dto.type,
-          hasDisease: dto.hasDisease,
           activityLevel: dto.activityLevel,
         },
       });

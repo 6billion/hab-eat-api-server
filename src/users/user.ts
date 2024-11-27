@@ -9,7 +9,6 @@ export class User {
   sex: $Enums.Sex;
   type: $Enums.UserType;
   activityLevel: $Enums.UserActivityLevel;
-  hasDisease: boolean;
   createdAt: Date;
 
   get targetNutrients() {
@@ -22,7 +21,7 @@ export class User {
     const natrium = 2000;
     const cholesterol = 200;
 
-    const sugar = this.hasDisease ? kcal / 80 : kcal / 40;
+    const sugar = kcal / 40;
 
     switch (this.type) {
       case $Enums.UserType.bulk:

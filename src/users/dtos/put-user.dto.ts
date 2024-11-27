@@ -1,12 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { $Enums } from '@prisma/client';
-import {
-  IsBoolean,
-  IsEnum,
-  IsNumber,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class PutUserDto {
   @ApiProperty({ description: '닉네임', type: String, required: false })
@@ -51,9 +45,4 @@ export class PutUserDto {
   @IsEnum($Enums.UserActivityLevel)
   @IsOptional()
   activityLevel: $Enums.UserActivityLevel;
-
-  @ApiProperty({ description: '질병 여부', type: Boolean, required: false })
-  @IsOptional()
-  @IsBoolean()
-  hasDisease: boolean;
 }
