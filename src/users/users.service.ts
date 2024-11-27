@@ -1,10 +1,20 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PostUserDto } from './dtos/post-user.dto';
 import { HttpService } from '@nestjs/axios';
 import { PrismaService } from 'src/db/prisma.service';
 import * as crypto from 'crypto';
 import { $Enums } from '@prisma/client';
-import { SnsUser } from '@type';
+import {
+  KakaoGetUserProfileApiResponse,
+  NaverGetUserProfileApiResponse,
+  SnsUser,
+} from '@type';
+import { PutUserDto } from './dtos/put-user.dto';
+import { User } from './user';
 
 @Injectable()
 export class UsersService {
@@ -13,28 +23,46 @@ export class UsersService {
     private readonly prismaService: PrismaService,
   ) {}
 
-  public async getFacebookUser(snsToken: string) {
-    const response = await this.httpService.axiosRef
-      .get<{ id: string }>('https://graph.facebook.com/v7.0/me', {
-        headers: { Authorization: `Bearer ${snsToken}` },
-      })
-      .catch(() => {
-        throw new ForbiddenException();
-      });
+  public async getKakaoUser(snsToken: string) {
+    const response =
+      await this.httpService.axiosRef.get<KakaoGetUserProfileApiResponse>(
+        'https://kapi.kakao.com/v2/user/me',
+        {
+          headers: { Authorization: `Bearer ${snsToken}` },
+          validateStatus: (status) => status < 500,
+        },
+      );
 
-    return { type: $Enums.AccountsType.Facebook, id: response.data.id };
+    if (response.status !== 200 || !response?.data?.id) {
+      throw new ForbiddenException();
+    }
+
+    return {
+      type: $Enums.AccountType.kakao,
+      id: response.data.id,
+      nickname: response.data.kakao_account?.profile?.nickname,
+    };
   }
 
-  public async getGoolgeUser(snsToken: string) {
-    const response = await this.httpService.axiosRef
-      .get<{ sub: string }>('https://oauth2.googleapis.com/tokeninfo', {
-        headers: { Authorization: `Bearer ${snsToken}` },
-      })
-      .catch(() => {
-        throw new ForbiddenException();
-      });
+  public async getNaverUser(snsToken: string) {
+    const response =
+      await this.httpService.axiosRef.get<NaverGetUserProfileApiResponse>(
+        'https://openapi.naver.com/v1/nid/me',
+        {
+          headers: { Authorization: `Bearer ${snsToken}` },
+          validateStatus: (status) => status < 500,
+        },
+      );
 
-    return { type: $Enums.AccountsType.Google, id: response.data.sub };
+    if (response.status !== 200 || !response?.data?.response?.id) {
+      throw new ForbiddenException();
+    }
+
+    return {
+      type: $Enums.AccountType.naver,
+      id: response.data.response.id,
+      nickname: response.data.response.nickname,
+    };
   }
 
   public async signInOrUp(dto: PostUserDto, snsUser: SnsUser) {
@@ -48,6 +76,21 @@ export class UsersService {
 
   public deleteUser(userId: number) {
     return this.prismaService.users.delete({ where: { id: userId } });
+  }
+
+  public updateUser(id: number, dto: PutUserDto) {
+    return this.prismaService.users.update({
+      where: { id },
+      data: {
+        nickname: dto.nickname,
+        height: dto.height,
+        weight: dto.weight,
+        age: dto.age,
+        sex: dto.sex,
+        type: dto.type,
+        activityLevel: dto.activityLevel,
+      },
+    });
   }
 
   private async signIn(userId: number) {
@@ -69,10 +112,13 @@ export class UsersService {
     return this.prismaService.$transaction(async (prisma) => {
       const user = await prisma.users.create({
         data: {
-          nickname: dto.nickname,
-          hight: dto.hight,
+          nickname: dto.nickname || snsUser.nickname,
+          height: dto.height,
           weight: dto.weight,
-          goalKcal: dto.goalKcal,
+          age: dto.age,
+          sex: dto.sex,
+          type: dto.type,
+          activityLevel: dto.activityLevel,
         },
       });
 
@@ -95,5 +141,17 @@ export class UsersService {
 
   private generateToken() {
     return crypto.randomBytes(48).toString('base64url');
+  }
+
+  public async getUserByToken(requestToken: string) {
+    const token = await this.prismaService.tokens.findUnique({
+      where: { token: requestToken },
+    });
+    if (!token) throw new UnauthorizedException();
+
+    const user = await this.prismaService.users.findUniqueOrThrow({
+      where: { id: token.userId },
+    });
+    return new User(user);
   }
 }
