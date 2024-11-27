@@ -1,5 +1,9 @@
 import { UtilService } from '@lib/util';
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+} from '@nestjs/common';
 import { PrismaService } from 'src/db/prisma.service';
 import { User } from 'src/users/user';
 import {
@@ -20,20 +24,16 @@ export class ChallengesService {
   ) {}
 
   public async getChallenges(user: User) {
-    const now = new Date(this.util.getKSTDate());
+    const monday = new Date(this.util.getThisWeekMondayKST());
 
     const [challenges, participants] = await Promise.all([
       this.prismaService.challenges.findMany({
-        where: {
-          startDate: { lte: now },
-          endDate: { gte: now },
-          targetUserType: user.type,
-        },
+        where: { targetUserType: user.type },
       }),
       this.prismaService.challengeParticipants.findMany({
         where: {
           userId: user.id,
-          endDate: { gte: now },
+          startDate: monday,
         },
       }),
     ]);
@@ -63,15 +63,25 @@ export class ChallengesService {
     userId: number;
     goalDays: number;
   }) {
-    const now = new Date(this.util.getKSTDate());
+    const today = new Date(this.util.getKSTDate());
+    const monday = new Date(this.util.getThisWeekMondayKST());
+    const sunday = new Date(this.util.getThisWeekSundayKST());
+
+    if (today.getTime() !== monday.getTime()) throw new BadRequestException();
 
     const challenge = await this.prismaService.challenges.findUniqueOrThrow({
-      where: { id, startDate: { lte: now }, endDate: { gte: now } },
+      where: { id },
     });
 
     const participant =
       await this.prismaService.challengeParticipants.findUnique({
-        where: { userId_challengeId: { userId, challengeId: id } },
+        where: {
+          userId_startDate_challengeId: {
+            userId,
+            challengeId: id,
+            startDate: today,
+          },
+        },
       });
 
     if (participant) throw new ConflictException();
@@ -83,32 +93,29 @@ export class ChallengesService {
         challengeType: challenge.type,
         goalDays,
         successDays: 0,
-        startDate: challenge.startDate,
-        endDate: challenge.endDate,
+        startDate: monday,
+        endDate: sunday,
         status: false,
       },
     });
   }
 
   async findNutritionChallengeParticipants(userId: number) {
-    const today = new Date(this.util.getKSTDate());
+    const monday = new Date(this.util.getThisWeekMondayKST());
     return this.prismaService.challengeParticipants.findMany({
       where: {
         userId,
-        endDate: { gte: today },
+        startDate: monday,
         challengeType: { in: NutriChallengeTypes },
       },
     });
   }
 
   findUniqueParticipantOrThrow(userId: number, challengeId: number) {
-    const today = new Date(this.util.getKSTDate());
-
+    const startDate = this.util.getThisWeekMondayKST();
     return this.prismaService.challengeParticipants.findUniqueOrThrow({
       where: {
-        userId_challengeId: { userId, challengeId },
-        startDate: { lte: today },
-        endDate: { gte: today },
+        userId_startDate_challengeId: { userId, challengeId, startDate },
       },
     });
   }

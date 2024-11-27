@@ -66,19 +66,15 @@ export abstract class NutriChallengeCertificationService
       return cachedNutrientCondition;
     }
 
-    const [nutrientConditions, { endDate }] = await Promise.all([
-      this.prisma.nutrientChallengeConditions
-        .findFirst({ where: { challengeId } })
-        .then((result) => _.omitBy(result, _.isNil))
-        .then((result) => _.omit(result, 'challengeId')),
-      this.prisma.challenges.findUnique({
-        where: { id: challengeId },
-      }),
-    ]);
+    const nutrientConditions = await this.prisma.nutrientChallengeConditions
+      .findFirst({ where: { challengeId } })
+      .then((result) => _.omitBy(result, _.isNil))
+      .then((result) => _.omit(result, 'challengeId'));
 
     if (Date.now() > this.cacheExpiryTime) {
+      const sunday = new Date(this.util.getThisWeekSundayKST());
       this.cachedNutrientConditions = {};
-      this.cacheExpiryTime = endDate.getTime() - KR_TIME_DIFF + HOUR * 24;
+      this.cacheExpiryTime = sunday.getTime() - KR_TIME_DIFF + HOUR * 24;
     }
 
     this.cachedNutrientConditions[challengeId] = nutrientConditions;
@@ -98,12 +94,7 @@ export abstract class NutriChallengeCertificationService
 
     await this.prisma.$transaction([
       this.prisma.challengeParticipants.update({
-        where: {
-          userId_challengeId: {
-            userId: participant.userId,
-            challengeId: participant.challengeId,
-          },
-        },
+        where: { id: participant.id },
         data: {
           ...participant,
           lastCheckDate: today,
@@ -134,12 +125,7 @@ export abstract class NutriChallengeCertificationService
 
     await this.prisma.$transaction([
       this.prisma.challengeParticipants.update({
-        where: {
-          userId_challengeId: {
-            userId: participant.userId,
-            challengeId: participant.challengeId,
-          },
-        },
+        where: { id: participant.id },
         data: {
           ...participant,
           lastSuccessDate: null,

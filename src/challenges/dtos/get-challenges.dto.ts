@@ -11,12 +11,6 @@ export class AvaliableChallenge {
   @ApiProperty({ description: '설명', type: String })
   description: string;
 
-  @ApiProperty({ description: '시작일', type: Date })
-  startDate: Date;
-
-  @ApiProperty({ description: '종료일', type: Date })
-  endDate: Date;
-
   @ApiProperty({ description: '타켓 유저 탕비', type: String })
   targetUserType: $Enums.UserType;
 
@@ -29,6 +23,12 @@ export class AvaliableChallenge {
 }
 
 export class OngoingChallenge extends AvaliableChallenge {
+  @ApiProperty({ description: '시작일', type: Date })
+  startDate: Date;
+
+  @ApiProperty({ description: '종료일', type: Date })
+  endDate: Date;
+
   @ApiProperty({ description: '목표일수', type: Number })
   goalDays: number;
 
@@ -40,6 +40,8 @@ export class OngoingChallenge extends AvaliableChallenge {
 
   constructor(challenge: Challenges, participant: ChallengeParticipants) {
     super(challenge);
+    this.startDate = participant.startDate;
+    this.endDate = participant.endDate;
     this.goalDays = participant.goalDays;
     this.successDays = participant.successDays;
     this.status = participant.status;

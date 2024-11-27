@@ -81,7 +81,7 @@ export class HabitChallengeCertificationService
 
     await this.prisma.$transaction([
       this.prisma.challengeParticipants.update({
-        where: { userId_challengeId: participant },
+        where: { id: participant.id },
         data: {
           ...participant,
           lastCheckDate: today,

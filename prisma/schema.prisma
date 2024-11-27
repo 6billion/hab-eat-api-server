@@ -51,16 +51,12 @@ model Challenges {
   id             Int           @id @default(autoincrement())
   name           String
   description    String
-  startDate      DateTime      @db.Date
-  endDate        DateTime      @db.Date
   targetUserType UserType
   type           ChallengeType
 
   challengeParticipants      ChallengeParticipants[]            @relation("challengeToParticipant")
   nutrientChallengeCondition NutrientChallengeConditions?       @relation("challengeToNutriChallengeConditoin")
   imageDetectionServerUrl    ChallengeImageDetectionServerUrls? @relation("challengeToImageDetectionServerUrl")
-
-  @@index([startDate, endDate])
 }
 
 model ChallengeParticipants {
@@ -76,12 +72,10 @@ model ChallengeParticipants {
   lastCheckDate   DateTime?     @db.Date
   status          Boolean
 
-
   challengeCertificationLogs ChallengeCertificationLogs[] @relation("challengeParticipantToLog")
   challenge                  Challenges                   @relation("challengeToParticipant", fields: [challengeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  @@unique([userId, challengeId])
-  @@index([userId, endDate])
+  @@unique([userId, startDate, challengeId])
 }
 
 model ChallengeCertificationLogs {
