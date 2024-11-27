@@ -84,6 +84,6 @@ export class PostUserResponseDto {
   @ApiProperty({ description: '유저', type: UserDto })
   user: UserDto;
 
-  @ApiProperty({ description: '토큰', type: UserDto })
+  @ApiProperty({ description: '토큰', type: String })
   token: string;
 }
