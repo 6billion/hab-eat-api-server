@@ -127,7 +127,7 @@ export class DietsService {
         createdAt,
       },
     });
-    await this.prisma.DietStats.deleteMany({
+    await this.prisma.dietStats.deleteMany({
       where: {
         userId,
         date,

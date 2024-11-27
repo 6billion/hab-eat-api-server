@@ -1,4 +1,12 @@
-import { Controller, Get, Query, Post, Body, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Query,
+  Post,
+  Body,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { DietsService } from './diets.service';
 import {
   GetDailyNutritionDto,
@@ -6,14 +14,17 @@ import {
   createDietDto,
   deleteDietDto,
 } from 'src/diets/dtos/diets.dto';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { BearerGuard } from '../auth/guards/bearer.guard';
 
 @ApiTags('Diet')
+@ApiBearerAuth()
 @Controller('diets')
 export class DietsController {
   constructor(private readonly dietsService: DietsService) {}
 
   @Get('stats')
+  @UseGuards(BearerGuard)
   @ApiOperation({ summary: 'Get daily nutrition' })
   async getDailyNutrition(@Query() params: GetDailyNutritionDto) {
     const { userId, date } = params;
@@ -21,7 +32,8 @@ export class DietsController {
     return await this.dietsService.getDailyNutrition(userId, parsedDate);
   }
 
-  @Get('meals')
+  @Get()
+  @UseGuards(BearerGuard)
   @ApiOperation({ summary: 'Get meal nutrition' })
   async getMealNutrition(@Query() params: GetMealNutritionDto) {
     const { userId, date } = params;
@@ -30,6 +42,7 @@ export class DietsController {
   }
 
   @Post()
+  @UseGuards(BearerGuard)
   @ApiOperation({ summary: 'create Diet' })
   async createDiet(@Body() createDietDto: createDietDto) {
     const { userId, date, foodName } = createDietDto;
@@ -38,6 +51,7 @@ export class DietsController {
   }
 
   @Delete(':id')
+  @UseGuards(BearerGuard)
   @ApiOperation({ summary: 'delete Diet' })
   async deleteDiet(@Query() params: deleteDietDto) {
     const { userId, date, createdAt, updatedAt } = params;
