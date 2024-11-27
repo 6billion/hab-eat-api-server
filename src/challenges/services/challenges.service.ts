@@ -86,7 +86,7 @@ export class ChallengesService {
           userId_startDate_challengeId: {
             userId,
             challengeId: id,
-            startDate: today,
+            startDate: monday,
           },
         },
       });
