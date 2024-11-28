@@ -5,7 +5,7 @@ import { PrismaService } from 'src/db/prisma.service';
 export class FoodsService {
   constructor(private readonly prisma: PrismaService) {}
   async autoComplete(keyword: string) {
-    const results = await this.prisma.food.findMany({
+    const results = await this.prisma.foods.findMany({
       where: {
         name: {
           contains: keyword,
@@ -19,7 +19,7 @@ export class FoodsService {
     return results;
   }
   async searchDiet(foodName: string) {
-    const food = await this.prisma.food.findUnique({
+    const food = await this.prisma.foods.findUnique({
       where: { name: foodName },
     });
 

@@ -9,7 +9,7 @@ import { BearerGuard } from '../auth/guards/bearer.guard';
 export class FoodsController {
   constructor(private readonly foodsService: FoodsService) {}
 
-  @Get('autoComplete')
+  @Get('autocomplete')
   @UseGuards(BearerGuard)
   @ApiOperation({ summary: 'Get auto-complete food names based on keyword' })
   async getAutoComplete(@Query('keyword') keyword: string) {
