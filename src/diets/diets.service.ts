@@ -78,11 +78,11 @@ export class DietsService {
   }
 
   async createDiet(userId: number, date: Date, foodName: string) {
-    const foodData = await this.prisma.food.findUnique({
+    const foodData = await this.prisma.foods.findUnique({
       where: { name: foodName },
     });
 
-    const nutritionData = {
+    const nutrition = {
       userId,
       date,
       amount: foodData.amount,
@@ -103,13 +103,13 @@ export class DietsService {
     };
     await this.prisma.diets.create({
       data: {
-        ...nutritionData,
+        ...nutrition,
         createdAt: new Date(),
       },
     });
     await this.prisma.dietStats.create({
       data: {
-        ...nutritionData,
+        ...nutrition,
         updatedAt: new Date(),
       },
     });
