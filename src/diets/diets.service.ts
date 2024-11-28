@@ -5,31 +5,104 @@ import { PrismaService } from 'src/db/prisma.service';
 export class DietsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getDailyAccumulation(userId: number, date: Date) {
-    const totals = await this.prisma.dietStats.aggregate({
-      _sum: {
-        amount: true,
-        kcal: true,
-        carbohydrate: true,
-        sugar: true,
-        fat: true,
-        protein: true,
-        calcium: true,
-        phosphorus: true,
-        natrium: true,
-        kalium: true,
-        magnesium: true,
-        iron: true,
-        zinc: true,
-        cholesterol: true,
-        transfat: true,
+  async updateDailyAccumulation(userId: number, date: Date) {
+    const diets = await this.prisma.diets.findMany({
+      where: {
+        userId,
+        date,
       },
+    });
+
+    const totals = diets.reduce(
+      (acc, diet) => {
+        acc.amount += diet.amount;
+        acc.kcal += diet.kcal;
+        acc.carbohydrate += diet.carbohydrate;
+        acc.sugar += diet.sugar;
+        acc.fat += diet.fat;
+        acc.protein += diet.protein;
+        acc.calcium += diet.calcium;
+        acc.phosphorus += diet.phosphorus;
+        acc.natrium += diet.natrium;
+        acc.kalium += diet.kalium;
+        acc.magnesium += diet.magnesium;
+        acc.iron += diet.iron;
+        acc.zinc += diet.zinc;
+        acc.cholesterol += diet.cholesterol;
+        acc.transfat += diet.transfat;
+        return acc;
+      },
+      {
+        amount: 0,
+        kcal: 0,
+        carbohydrate: 0,
+        sugar: 0,
+        fat: 0,
+        protein: 0,
+        calcium: 0,
+        phosphorus: 0,
+        natrium: 0,
+        kalium: 0,
+        magnesium: 0,
+        iron: 0,
+        zinc: 0,
+        cholesterol: 0,
+        transfat: 0,
+      },
+    );
+
+    await this.prisma.dietStats.upsert({
+      where: {
+        userId,
+        date,
+      },
+      update: {
+        amount: totals.amount,
+        kcal: totals.kcal,
+        carbohydrate: totals.carbohydrate,
+        sugar: totals.sugar,
+        fat: totals.fat,
+        protein: totals.protein,
+        calcium: totals.calcium,
+        phosphorus: totals.phosphorus,
+        natrium: totals.natrium,
+        kalium: totals.kalium,
+        magnesium: totals.magnesium,
+        iron: totals.iron,
+        zinc: totals.zinc,
+        cholesterol: totals.cholesterol,
+        transfat: totals.transfat,
+      },
+      create: {
+        userId,
+        date,
+        amount: totals.amount,
+        kcal: totals.kcal,
+        carbohydrate: totals.carbohydrate,
+        sugar: totals.sugar,
+        fat: totals.fat,
+        protein: totals.protein,
+        calcium: totals.calcium,
+        phosphorus: totals.phosphorus,
+        natrium: totals.natrium,
+        kalium: totals.kalium,
+        magnesium: totals.magnesium,
+        iron: totals.iron,
+        zinc: totals.zinc,
+        cholesterol: totals.cholesterol,
+        transfat: totals.transfat,
+      },
+    });
+  }
+
+  async getDailyAccumulation(userId: number, date: Date) {
+    const totals = await this.prisma.dietStats.findFirst({
       where: {
         userId: userId,
         date: date,
       },
     });
-    return totals._sum;
+    return totals;
   }
 
   async getDailyMeal(userId: number, date: Date) {

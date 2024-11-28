@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { DietsService } from './diets.service';
 import {
-  GetDailyNutritionDto,
+  GetDailyAccumulationDto,
   GetDailyMealDto,
   CreateDietDto,
   DeleteDietDto,
@@ -33,10 +33,14 @@ export class DietsController {
   @Get('stats')
   @UseGuards(BearerGuard)
   @ApiOperation({ summary: 'Get daily nutrition' })
-  async getDailyNutrition(@Query() params: GetDailyNutritionDto) {
-    const { userId, date } = params;
-    const parsedDate = new Date(date);
-    return await this.dietsService.getDailyNutrition(userId, parsedDate);
+  @ApiResponse({ type: GetDailyAccumulationDto })
+  async getDailyAccumulation(
+    @RequestUser() user: Users,
+    @Query() query: GetDailyAccumulationDto,
+  ) {
+    const { date } = query;
+    const userId = user.id;
+    return await this.dietsService.getDailyAccumulation(userId, date);
   }
 
   @Get()
