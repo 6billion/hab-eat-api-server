@@ -11,7 +11,7 @@ import { DietsService } from './diets.service';
 import {
   GetDailyNutritionDto,
   GetDailyMealDto,
-  createDietDto,
+  CreateDietDto,
   deleteDietDto,
 } from 'src/diets/dtos/diets.dto';
 import {
@@ -56,11 +56,14 @@ export class DietsController {
 
   @Post()
   @UseGuards(BearerGuard)
-  @ApiOperation({ summary: 'create Diet' })
-  async createDiet(@Body() createDietDto: createDietDto) {
-    const { userId, date, foodName } = createDietDto;
-    const dateObj = new Date(date);
-    return await this.dietsService.createDiet(userId, dateObj, foodName);
+  @ApiOperation({ summary: 'Enter and upload nutritional information' })
+  @ApiResponse({ type: CreateDietDto })
+  async createDiet(
+    @RequestUser() user: Users,
+    @Body() createDietDto: CreateDietDto,
+  ) {
+    const { date, ...nutritionData } = createDietDto;
+    return await this.dietsService.createDiet(user.id, date, nutritionData);
   }
 
   @Delete(':id')

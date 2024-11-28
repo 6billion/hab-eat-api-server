@@ -77,42 +77,16 @@ export class DietsService {
     };
   }
 
-  async createDiet(userId: number, date: Date, foodName: string) {
-    const foodData = await this.prisma.foods.findUnique({
-      where: { name: foodName },
-    });
-
-    const nutrition = {
-      userId,
-      date,
-      amount: foodData.amount,
-      kcal: foodData.kcal,
-      carbohydrate: foodData.carbohydrate,
-      sugar: foodData.sugar,
-      fat: foodData.fat,
-      protein: foodData.protein,
-      calcium: foodData.calcium,
-      phosphorus: foodData.phosphorus,
-      natrium: foodData.natrium,
-      kalium: foodData.kalium,
-      magnesium: foodData.magnesium,
-      iron: foodData.iron,
-      zinc: foodData.zinc,
-      cholesterol: foodData.cholesterol,
-      transfat: foodData.transfat,
-    };
-    await this.prisma.diets.create({
+  async createDiet(userId: number, date: Date, nutritionData: any) {
+    const createdDiet = await this.prisma.diets.create({
       data: {
-        ...nutrition,
+        userId,
+        date,
         createdAt: new Date(),
+        ...nutritionData,
       },
     });
-    await this.prisma.dietStats.create({
-      data: {
-        ...nutrition,
-        updatedAt: new Date(),
-      },
-    });
+    return createdDiet;
   }
   async deleteDiet(
     userId: number,
