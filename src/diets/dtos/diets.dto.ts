@@ -50,13 +50,13 @@ export class deleteDietDto {
   @IsDate()
   date: Date;
 
-  @ApiProperty({ description: 'create time', type: String })
-  @IsDateString()
+  @ApiProperty({ description: 'create time', type: Date })
+  @IsDate()
   @IsOptional()
-  createdAt?: string;
+  createdAt?: Date;
 
-  @ApiProperty({ description: 'updated time', type: String })
-  @IsDateString()
+  @ApiProperty({ description: 'updated time', type: Date })
+  @IsDate()
   @IsOptional()
-  updatedAt?: string;
+  updatedAt?: Date;
 }
