@@ -50,12 +50,12 @@ export class deleteDietDto {
   @IsDate()
   date: Date;
 
-  @ApiProperty({ description: '생성 시간', type: String })
+  @ApiProperty({ description: 'create time', type: String })
   @IsDateString()
   @IsOptional()
   createdAt?: string;
 
-  @ApiProperty({ description: '업데이트 시간', type: String })
+  @ApiProperty({ description: 'updated time', type: String })
   @IsDateString()
   @IsOptional()
   updatedAt?: string;
