@@ -68,14 +68,14 @@ model DietStats {
   cholesterol  Float
   transfat     Float
   updatedAt    DateTime @updatedAt
-  @@id([userId, date, updatedAt])
+  @@id([userId, date])
 }
 
 model Diets {
   id           Int @id @default(autoincrement())
   userId       Int
   date         DateTime @db.Date
-  createdAt    DateTime 
+  createdAt    DateTime @default(now())
   amount       Float
   kcal         Float
   carbohydrate Float

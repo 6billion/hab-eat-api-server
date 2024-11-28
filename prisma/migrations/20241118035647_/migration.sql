@@ -58,7 +58,7 @@ CREATE TABLE `DietStats` (
     `transfat` DOUBLE NOT NULL,
     `updatedAt` DATETIME(3) NOT NULL,
 
-    PRIMARY KEY (`userId`, `date`,'updateAt')
+    PRIMARY KEY (`userId`, `date`)
     FOREIGN KEY (`userId`) REFERENCES `Users` (`id`) ON DELETE CASCADE
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -88,7 +88,7 @@ CREATE TABLE `Diets` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Food` (   
+CREATE TABLE `Foods` (   
     `name` VARCHAR(255) NOT NULL UNIQUE,  
     `amount` FLOAT,                       
     `kcal` FLOAT,                         
