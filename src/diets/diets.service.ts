@@ -88,24 +88,11 @@ export class DietsService {
     });
     return createdDiet;
   }
-  async deleteDiet(
-    userId: number,
-    date: Date,
-    createdAt: Date,
-    updatedAt: Date,
-  ) {
+  async deleteDiet(userId: number, dietId: number) {
     await this.prisma.diets.deleteMany({
       where: {
         userId,
-        date,
-        createdAt,
-      },
-    });
-    await this.prisma.dietStats.deleteMany({
-      where: {
-        userId,
-        date,
-        updatedAt,
+        id: dietId,
       },
     });
   }

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsOptional, IsDate } from 'class-validator';
+import { IsNumber, IsDate } from 'class-validator';
 
 export class GetDailyNutritionDto {
   @ApiProperty({ description: 'user ID', type: Number })
@@ -91,22 +91,12 @@ export class CreateDietDto {
   transfat: number;
 }
 
-export class deleteDietDto {
-  @ApiProperty({ description: 'user ID', type: Number })
+export class DeleteDietDto {
+  @ApiProperty({ description: 'Diet entry ID', type: Number })
+  @IsNumber()
+  dietId: number;
+
+  @ApiProperty({ description: 'User ID', type: Number })
   @IsNumber()
   userId: number;
-
-  @ApiProperty({ description: 'date (YYYY-MM-DD)', type: Date })
-  @IsDate()
-  date: Date;
-
-  @ApiProperty({ description: 'create time', type: Date })
-  @IsDate()
-  @IsOptional()
-  createdAt?: Date;
-
-  @ApiProperty({ description: 'updated time', type: Date })
-  @IsDate()
-  @IsOptional()
-  updatedAt?: Date;
 }

@@ -12,7 +12,7 @@ import {
   GetDailyNutritionDto,
   GetDailyMealDto,
   CreateDietDto,
-  deleteDietDto,
+  DeleteDietDto,
 } from 'src/diets/dtos/diets.dto';
 import {
   ApiTags,
@@ -69,14 +69,11 @@ export class DietsController {
   @Delete(':id')
   @UseGuards(BearerGuard)
   @ApiOperation({ summary: 'delete Diet' })
-  async deleteDiet(@Query() params: deleteDietDto) {
-    const { userId, date, createdAt, updatedAt } = params;
-
-    return await this.dietsService.deleteDiet(
-      userId,
-      date,
-      createdAt,
-      updatedAt,
-    );
+  @ApiResponse({ type: DeleteDietDto })
+  async deleteDiet(
+    @RequestUser() user: Users,
+    @Body() deleteDietDto: DeleteDietDto,
+  ) {
+    return await this.dietsService.deleteDiet(user.id, deleteDietDto.dietId);
   }
 }
