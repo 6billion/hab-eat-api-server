@@ -93,7 +93,7 @@ model Diets {
   transfat     Float
   @@index([userId, date, createdAt])
 }
-model Food {
+model Foods {
   name          String   @unique
   amount        Float    
   kcal          Float    
