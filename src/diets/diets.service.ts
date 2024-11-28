@@ -5,7 +5,7 @@ import { PrismaService } from 'src/db/prisma.service';
 export class DietsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getDailyNutrition(userId: number, date: Date) {
+  async getDailyAccumulation(userId: number, date: Date) {
     const totals = await this.prisma.dietStats.aggregate({
       _sum: {
         amount: true,
@@ -32,7 +32,7 @@ export class DietsService {
     return totals._sum;
   }
 
-  async getMealNutrition(userId: number, date: Date) {
+  async getDailyMeal(userId: number, date: Date) {
     const meals = await this.prisma.diets.findMany({
       where: {
         userId: userId,

@@ -10,12 +10,19 @@ import {
 import { DietsService } from './diets.service';
 import {
   GetDailyNutritionDto,
-  GetMealNutritionDto,
+  GetDailyMealDto,
   createDietDto,
   deleteDietDto,
 } from 'src/diets/dtos/diets.dto';
-import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiBearerAuth,
+  ApiResponse,
+} from '@nestjs/swagger';
 import { BearerGuard } from '../auth/guards/bearer.guard';
+import { Users } from '@prisma/client';
+import { RequestUser } from 'src/request-user.decorator';
 
 @ApiTags('Diet')
 @ApiBearerAuth()
@@ -34,11 +41,17 @@ export class DietsController {
 
   @Get()
   @UseGuards(BearerGuard)
-  @ApiOperation({ summary: 'Get meal nutrition' })
-  async getMealNutrition(@Query() params: GetMealNutritionDto) {
-    const { userId, date } = params;
-    const dateObj = new Date(date);
-    return await this.dietsService.getMealNutrition(userId, dateObj);
+  @ApiOperation({
+    summary: 'Get a list of meal for breakfast, lunch, and dinner.',
+  })
+  @ApiResponse({ type: GetDailyMealDto })
+  async getDailyMeal(
+    @RequestUser() user: Users,
+    @Query() params: GetDailyMealDto,
+  ) {
+    const userId = user.id;
+    const { date } = params;
+    return await this.dietsService.getDailyMeal(userId, date);
   }
 
   @Post()
@@ -55,15 +68,12 @@ export class DietsController {
   @ApiOperation({ summary: 'delete Diet' })
   async deleteDiet(@Query() params: deleteDietDto) {
     const { userId, date, createdAt, updatedAt } = params;
-    const dateObj = new Date(date);
-    const createdAtDate = createdAt ? new Date(createdAt) : undefined;
-    const updatedAtDate = updatedAt ? new Date(updatedAt) : undefined;
 
     return await this.dietsService.deleteDiet(
       userId,
-      dateObj,
-      createdAtDate,
-      updatedAtDate,
+      date,
+      createdAt,
+      updatedAt,
     );
   }
 }

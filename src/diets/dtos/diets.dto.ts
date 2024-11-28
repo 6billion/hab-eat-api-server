@@ -17,7 +17,7 @@ export class GetDailyNutritionDto {
   date: Date;
 }
 
-export class GetMealNutritionDto {
+export class GetDailyMealDto {
   @ApiProperty({ description: 'user ID', type: Number })
   @IsNumber()
   userId: number;
