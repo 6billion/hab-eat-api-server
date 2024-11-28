@@ -13,6 +13,7 @@ import {
   GetDailyMealDto,
   CreateDietDto,
   DeleteDietDto,
+  UpdateDailyAccumulationDto,
 } from 'src/diets/dtos/diets.dto';
 import {
   ApiTags,
@@ -29,6 +30,18 @@ import { RequestUser } from 'src/request-user.decorator';
 @Controller('diets')
 export class DietsController {
   constructor(private readonly dietsService: DietsService) {}
+
+  @Post()
+  @UseGuards(BearerGuard)
+  @ApiOperation({ summary: 'Update daily accumulation' })
+  @ApiResponse({ type: UpdateDailyAccumulationDto })
+  async updateDailyAccumulation(
+    @RequestUser() user: Users,
+    @Body() updateDailyAccumulationDto: UpdateDailyAccumulationDto,
+  ) {
+    const { date } = updateDailyAccumulationDto;
+    return await this.dietsService.updateDailyAccumulation(user.id, date);
+  }
 
   @Get('stats')
   @UseGuards(BearerGuard)
