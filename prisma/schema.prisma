@@ -14,12 +14,15 @@ datasource db {
 }
 
 model Users {
-  id        Int      @unique @default(autoincrement())
-  nickname  String
-  hight     Int
-  weight    Int
-  goalKcal  Int
-  createdAt DateTime @default(now())
+  id            Int               @unique @default(autoincrement())
+  nickname      String            @default("햅잇")
+  height        Int
+  weight        Int
+  age           Int
+  sex           Sex
+  type          UserType
+  activityLevel UserActivityLevel @default(lightlyActive)
+  createdAt     DateTime          @default(now())
 
   token   Tokens?    @relation("userToToken")
   account Accounts[] @relation("userToAccount")
@@ -27,9 +30,9 @@ model Users {
 
 model Accounts {
   id        String
-  type      AccountsType
-  userId    Int          @unique
-  createdAt DateTime     @default(now())
+  type      AccountType
+  userId    Int         @unique
+  createdAt DateTime    @default(now())
 
   user Users @relation("userToAccount", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
@@ -44,10 +47,96 @@ model Tokens {
   user Users @relation("userToToken", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
-enum AccountsType {
-  Google
-  Facebook
-  Local
+model Challenges {
+  id             Int           @id @default(autoincrement())
+  name           String
+  description    String
+  targetUserType UserType
+  type           ChallengeType
+
+  challengeParticipants      ChallengeParticipants[]            @relation("challengeToParticipant")
+  nutrientChallengeCondition NutrientChallengeConditions?       @relation("challengeToNutriChallengeConditoin")
+  imageDetectionServerUrl    ChallengeImageDetectionServerUrls? @relation("challengeToImageDetectionServerUrl")
+}
+
+model ChallengeParticipants {
+  id              Int           @id @default(autoincrement())
+  userId          Int
+  challengeId     Int
+  challengeType   ChallengeType
+  goalDays        Int
+  successDays     Int
+  startDate       DateTime      @db.Date
+  endDate         DateTime      @db.Date
+  lastSuccessDate DateTime?     @db.Date
+  lastCheckDate   DateTime?     @db.Date
+  status          Boolean
+
+  challengeCertificationLogs ChallengeCertificationLogs[] @relation("challengeParticipantToLog")
+  challenge                  Challenges                   @relation("challengeToParticipant", fields: [challengeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([userId, startDate, challengeId])
+}
+
+model ChallengeCertificationLogs {
+  userId                  Int
+  challengeParticipantsId Int
+  date                    DateTime @db.Date
+
+  challengesParticipants ChallengeParticipants @relation("challengeParticipantToLog", fields: [challengeParticipantsId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([userId, challengeParticipantsId, date])
+}
+
+model NutrientChallengeConditions {
+  challengeId  Int    @id
+  kcal         Float?
+  carbohydrate Float?
+  protein      Float?
+  fat          Float?
+  natrium      Float?
+  cholesterol  Float?
+  sugar        Float?
+
+  challenge Challenges @relation("challengeToNutriChallengeConditoin", fields: [challengeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model ChallengeImageDetectionServerUrls {
+  challengeId Int    @id
+  url         String
+
+  challenge Challenges @relation("challengeToImageDetectionServerUrl", fields: [challengeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+enum UserType {
+  diet
+  bulk
+  maintain
+}
+
+enum UserActivityLevel {
+  sedentary
+  lightlyActive
+  moderatelyActive
+  veryActive
+  extraActive
+}
+
+enum AccountType {
+  kakao
+  naver
+}
+
+enum Sex {
+  male
+  felmale
+}
+
+enum ChallengeType {
+  bulk
+  diet
+  habit
+  protein2x
 }
 model DietStats {
   userId       Int      

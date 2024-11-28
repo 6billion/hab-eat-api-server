@@ -1,22 +1,16 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { Strategy } from 'passport-http-bearer';
-import { PrismaService } from 'src/db/prisma.service';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class BearerStrategy extends PassportStrategy(Strategy, 'bearer') {
-  constructor(private prismaService: PrismaService) {
+  constructor(private readonly usersService: UsersService) {
     super({ passReqToCallback: true });
   }
 
   async validate(req: Request, requestToken: string) {
-    const token = await this.prismaService.tokens.findUnique({
-      where: { token: requestToken },
-    });
-    if (!token) throw new UnauthorizedException();
-    return this.prismaService.users.findUniqueOrThrow({
-      where: { id: token.userId },
-    });
+    return this.usersService.getUserByToken(requestToken);
   }
 }
