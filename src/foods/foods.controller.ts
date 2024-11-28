@@ -3,7 +3,7 @@ import { FoodsService } from './foods.service';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { BearerGuard } from '../auth/guards/bearer.guard';
 
-@ApiTags('Food')
+@ApiTags('Foods')
 @ApiBearerAuth()
 @Controller('foods')
 export class FoodsController {
