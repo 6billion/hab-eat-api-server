@@ -36,3 +36,73 @@ ALTER TABLE `Accounts` ADD CONSTRAINT `Accounts_userId_fkey` FOREIGN KEY (`userI
 
 -- AddForeignKey
 ALTER TABLE `Tokens` ADD CONSTRAINT `Tokens_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `Users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- CreateTable
+CREATE TABLE `DietStats` (
+    `userId` INTEGER NOT NULL,
+    `date` DATE NOT NULL,
+    `amount` DOUBLE NOT NULL,
+    `kcal` DOUBLE NOT NULL,
+    `carbohydrate` DOUBLE NOT NULL,
+    `sugar` DOUBLE NOT NULL,
+    `fat` DOUBLE NOT NULL,
+    `protein` DOUBLE NOT NULL,
+    `calcium` DOUBLE NOT NULL,
+    `phosphorus` DOUBLE NOT NULL,
+    `natrium` DOUBLE NOT NULL,
+    `kalium` DOUBLE NOT NULL,
+    `magnesium` DOUBLE NOT NULL,
+    `iron` DOUBLE NOT NULL,
+    `zinc` DOUBLE NOT NULL,
+    `cholesterol` DOUBLE NOT NULL,
+    `transfat` DOUBLE NOT NULL,
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    PRIMARY KEY (`userId`, `date`)
+    FOREIGN KEY (`userId`) REFERENCES `Users` (`id`) ON DELETE CASCADE
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Diets` (
+    `id` INTEGER NOT NULL,
+    `userId` INTEGER NOT NULL,
+    `date`  DATE NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL,
+    `amount` DOUBLE NOT NULL,
+    `kcal` DOUBLE NOT NULL,
+    `carbohydrate` DOUBLE NOT NULL,
+    `sugar` DOUBLE NOT NULL,
+    `fat` DOUBLE NOT NULL,
+    `protein` DOUBLE NOT NULL,
+    `calcium` DOUBLE NOT NULL,
+    `phosphorus` DOUBLE NOT NULL,
+    `natrium` DOUBLE NOT NULL,
+    `kalium` DOUBLE NOT NULL,
+    `magnesium` DOUBLE NOT NULL,
+    `iron` DOUBLE NOT NULL,
+    `zinc` DOUBLE NOT NULL,
+    `cholesterol` DOUBLE NOT NULL,
+    `transfat` DOUBLE NOT NULL,
+    PRIMARY KEY (`id`)
+    FOREIGN KEY (`userId`) REFERENCES `Users` (`id`) ON DELETE CASCADE
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Foods` (   
+    `name` VARCHAR(255) NOT NULL UNIQUE,  
+    `amount` FLOAT,                       
+    `kcal` FLOAT,                         
+    `carbohydrate` FLOAT,                 
+    `sugar` FLOAT,                        
+    `fat` FLOAT,                          
+    `protein` FLOAT,                      
+    `calcium` FLOAT,                      
+    `phosphorus` FLOAT,                   
+    `natrium` FLOAT,                      
+    `kalium` FLOAT,                       
+    `magnesium` FLOAT,                    
+    `iron` FLOAT,                         
+    `zinc` FLOAT,                         
+    `cholesterol` FLOAT,                  
+    `transfat` FLOAT,                     
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

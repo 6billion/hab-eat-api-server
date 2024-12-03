@@ -9,6 +9,8 @@ import { AuthModule } from './auth/auth.module';
 import { ChallengesModule } from './challenges/challenges.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { UtilModule } from '@lib/util';
+import { DietsModule } from './diets/diets.module';
+import { FoodsModule } from './foods/foods.module';
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { UtilModule } from '@lib/util';
     UsersModule,
     AuthModule,
     ChallengesModule,
+    DietsModule,
+    FoodsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

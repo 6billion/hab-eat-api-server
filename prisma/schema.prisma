@@ -138,3 +138,65 @@ enum ChallengeType {
   habit
   protein2x
 }
+model DietStats {
+  userId       Int      
+  date         DateTime @db.Date
+  amount       Float
+  kcal         Float
+  carbohydrate Float
+  sugar        Float
+  fat          Float
+  protein      Float
+  calcium      Float
+  phosphorus   Float
+  natrium      Float
+  kalium       Float
+  magnesium    Float
+  iron         Float
+  zinc         Float
+  cholesterol  Float
+  transfat     Float
+  updatedAt    DateTime @updatedAt
+  @@id([userId, date])
+}
+
+model Diets {
+  id           Int @id @default(autoincrement())
+  userId       Int
+  date         DateTime @db.Date
+  createdAt    DateTime @default(now())
+  amount       Float
+  kcal         Float
+  carbohydrate Float
+  sugar        Float
+  fat          Float
+  protein      Float
+  calcium      Float
+  phosphorus   Float
+  natrium      Float
+  kalium       Float
+  magnesium    Float
+  iron         Float
+  zinc         Float
+  cholesterol  Float
+  transfat     Float
+  @@index([userId, date, createdAt])
+}
+model Foods {
+  name          String   @unique
+  amount        Float    
+  kcal          Float    
+  carbohydrate  Float    
+  sugar         Float    
+  fat           Float    
+  protein       Float    
+  calcium       Float    
+  phosphorus    Float    
+  natrium       Float    
+  kalium        Float    
+  magnesium     Float    
+  iron          Float    
+  zinc          Float    
+  cholesterol   Float    
+  transfat      Float    
+} 
