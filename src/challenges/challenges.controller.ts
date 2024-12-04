@@ -116,7 +116,7 @@ export class ChallengesController {
   @Get(':id/conditions')
   @ApiOperation({
     summary:
-      '영양 챌린지 인증 조건 조회(영양 챌린지: "habit" 타입 챌린지 제외한 모든 챌린지)',
+      '영양 챌린지 인증 조건 조회 (영양 챌린지: 챌린지 타입에 nutri prefix 가 붙은 챌린지 (nutriBulk, nutriDiet...))',
   })
   @ApiResponse({ type: GetChallengeConditonResponseDto })
   async getChallengeNutrientCondition(

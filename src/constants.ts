@@ -5,9 +5,9 @@ export const EventNames = {
 };
 
 export const NutriChallengeTypes = [
-  $Enums.ChallengeType.bulk,
-  $Enums.ChallengeType.diet,
-  $Enums.ChallengeType.protein2x,
+  $Enums.ChallengeType.nutriBulk,
+  $Enums.ChallengeType.nutriDiet,
+  $Enums.ChallengeType.nutriProtein2x,
 ];
 
 export enum NutriChallengeCondition {

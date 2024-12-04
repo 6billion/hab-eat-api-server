@@ -133,10 +133,10 @@ enum Sex {
 }
 
 enum ChallengeType {
-  bulk
-  diet
+  nutriBulk 
+  nutriDiet 
+  nutriProtein2x
   habit
-  protein2x
 }
 model DietStats {
   userId       Int      
