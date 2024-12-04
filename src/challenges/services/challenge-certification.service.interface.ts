@@ -14,7 +14,7 @@ export interface IChallengeCertificationService<T> {
     participant: ChallengeParticipants;
     user: User;
     data: T;
-  }) => Promise<boolean>;
+  }) => Promise<ChallengeParticipants>;
 
   getCertifyCondition: (
     challengeId: number,
@@ -43,10 +43,9 @@ export abstract class NutriChallengeCertificationService
     data: TargetNutrients;
   }) {
     const isSuccess = await this.validateCertifyCondition(params);
-    if (isSuccess) await this.increaseSuccessCount(params.participant);
-    else await this.decreaseSuccessCounts(params.participant);
-
-    return isSuccess;
+    return isSuccess
+      ? this.increaseSuccessCount(params.participant)
+      : this.decreaseSuccessCounts(params.participant);
   }
 
   protected abstract validateCertifyCondition(input: {
@@ -86,13 +85,14 @@ export abstract class NutriChallengeCertificationService
     if (
       participant.lastSuccessDate &&
       participant.lastSuccessDate.getTime() === today.getTime()
-    )
-      return;
+    ) {
+      return participant;
+    }
 
     const successDays = participant.successDays + 1;
     const status = successDays >= participant.goalDays;
 
-    await this.prisma.$transaction([
+    const [result] = await this.prisma.$transaction([
       this.prisma.challengeParticipants.update({
         where: { id: participant.id },
         data: {
@@ -111,6 +111,8 @@ export abstract class NutriChallengeCertificationService
         },
       }),
     ]);
+
+    return result;
   }
 
   private async decreaseSuccessCounts(participant: ChallengeParticipants) {
@@ -118,12 +120,14 @@ export abstract class NutriChallengeCertificationService
     if (
       !participant.lastSuccessDate ||
       participant.lastSuccessDate.getTime() !== today.getTime()
-    )
-      return;
+    ) {
+      return participant;
+    }
+
     const successDays = participant.successDays - 1;
     const status = successDays >= participant.goalDays;
 
-    await this.prisma.$transaction([
+    const [result] = await this.prisma.$transaction([
       this.prisma.challengeParticipants.update({
         where: { id: participant.id },
         data: {
@@ -144,5 +148,7 @@ export abstract class NutriChallengeCertificationService
         },
       }),
     ]);
+
+    return result;
   }
 }

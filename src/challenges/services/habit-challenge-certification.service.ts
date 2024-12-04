@@ -41,8 +41,7 @@ export class HabitChallengeCertificationService
       throw new BadRequestException();
     }
 
-    await this.increaseSuccessCount(params.participant);
-    return true;
+    return this.increaseSuccessCount(params.participant);
   }
 
   private async validateCertifyCondition(
@@ -79,7 +78,7 @@ export class HabitChallengeCertificationService
     const successDays = participant.successDays + 1;
     const status = successDays >= participant.goalDays;
 
-    await this.prisma.$transaction([
+    const [result] = await this.prisma.$transaction([
       this.prisma.challengeParticipants.update({
         where: { id: participant.id },
         data: {
@@ -98,6 +97,8 @@ export class HabitChallengeCertificationService
         },
       }),
     ]);
+
+    return result;
   }
 
   async getCertifyCondition(): Promise<CertifyCondition> {

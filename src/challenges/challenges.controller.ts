@@ -37,6 +37,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { PostChallengeCertificationRequestDto } from './dtos/post-certification.dto';
 import { GetChallengeConditonResponseDto } from './dtos/get-challenge-condition.dto';
+import { ChallengeParticipants } from '@prisma/client';
 
 @ApiTags('챌린지')
 @ApiBearerAuth()
@@ -131,7 +132,7 @@ export class ChallengesController {
   }: {
     user: User;
     data: TargetNutrients;
-  }) {
+  }): Promise<ChallengeParticipants[]> {
     const participants =
       await this.challengesService.findNutritionChallengeParticipants(user.id);
     return this.challengesService.certifyManyNutritionChallenges({
