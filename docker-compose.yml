@@ -13,7 +13,7 @@ services:
     image: abjin/hab-eat-api-server:latest
     container_name: api-server
     ports:
-      - '8080:8080'
+      - '8080:3000'
     networks:
       - api-network
     depends_on:
