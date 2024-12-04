@@ -1,0 +1,24 @@
+version: '3.3'
+name: hab-eat-server
+
+services:
+  ai-server:
+    image: abjin/hab-eat-ai-api-server:latest
+    container_name: ai-server
+    ports:
+      - '8000:8000'
+    networks:
+      - api-network
+  api-server:
+    image: abjin/hab-eat-api-server:latest
+    container_name: api-server
+    ports:
+      - '8080:8080'
+    networks:
+      - api-network
+    depends_on:
+      - ai-server
+    env_file:
+      - .env
+networks:
+  api-network:
