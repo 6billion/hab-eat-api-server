@@ -15,7 +15,12 @@ export class FoodsController {
   async getAutoComplete(@Query('keyword') keyword: string) {
     return this.foodsService.autoComplete(keyword);
   }
-
+  @Get('fulltextsearch')
+  @UseGuards(BearerGuard)
+  @ApiOperation({ summary: 'Get auto-complete food names based on keyword' })
+  async fullTextSearch(@Query('keyword') keyword: string) {
+    return this.foodsService.fullTextSearch(keyword);
+  }
   @Get(':name')
   @UseGuards(BearerGuard)
   @ApiOperation({ summary: 'Search food details by food name' })
