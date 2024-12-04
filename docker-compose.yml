@@ -5,8 +5,6 @@ services:
   ai-server:
     image: abjin/hab-eat-ai-api-server:latest
     container_name: ai-server
-    ports:
-      - '8000:8000'
     networks:
       - api-network
   api-server:
