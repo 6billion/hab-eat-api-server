@@ -11,6 +11,6 @@ export const NutriChallengeTypes = [
 ];
 
 export enum NutriChallengeCondition {
-  lte,
-  gte,
+  lte = 'lte',
+  gte = 'gte',
 }
