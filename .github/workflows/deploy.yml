@@ -27,7 +27,7 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_TAGS }}
 
       - name: Generate deployment package
-        run: zip deploy.zip docker-compose.yml
+        run: zip deploy.zip docker-compose.yml nginx.conf
 
       - name: Beanstalk Deploy
         uses: einaregilsson/beanstalk-deploy@ebe3476a4ce991d54336935e75e78dd9d86f9408
@@ -37,7 +37,5 @@ jobs:
           region: ${{ secrets.AWS_REGION }}
           environment_name: ${{ secrets.EB_ENVIRONMENT_NAME }}
           application_name: ${{ secrets.EB_APPLICATION_NAME }}
+          version_label: api-server-deploy
           use_existing_version_if_available: true
-          deployment_package: ${{ secrets.EB_DEPLOYMENT_PACKAGE }}
-          version_label: github-action-${{steps.current-time.outputs.formattedTime}}
-          version_description: Version ${{steps.build-number.outputs.BUILD_NUMBER}} deployed via github actions ${{ github.sha }}
