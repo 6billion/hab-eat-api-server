@@ -26,9 +26,6 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_TAGS }}
 
-      - name: Generate deployment package
-        run: zip deploy.zip docker-compose.yml nginx.conf
-
       - name: Beanstalk Deploy
         uses: einaregilsson/beanstalk-deploy@ebe3476a4ce991d54336935e75e78dd9d86f9408
         with:
