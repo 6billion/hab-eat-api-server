@@ -86,7 +86,7 @@ export class ChallengesController {
   @ApiOperation({ summary: '습관 챌린지 이미지 인증하기' })
   @ApiBody({ type: PostChallengeCertificationRequestDto })
   @ApiResponse({ type: Boolean, description: '인증 성공 여부' })
-  @Post(':id/images')
+  @Post(':id/certifications')
   async postChallengeCertifications(
     @RequestUser() user: User,
     @Param('id', ParseIntPipe) challengeId: number,
@@ -134,7 +134,7 @@ export class ChallengesController {
     return this.challengesService.getChallengeConditions(id, user);
   }
 
-  @Post('/nutrition/certification')
+  @Post('/nutritions/certifications')
   @ApiOperation({ summary: '영양 챌린지 인증' })
   @ApiBody({ type: PostNutritionChallengesCertificationRequestDto })
   @ApiResponse({ type: [PostNutritionChallengesCertificationResponseDto] })
