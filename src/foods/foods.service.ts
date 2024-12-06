@@ -17,13 +17,13 @@ export class FoodsService {
     const result = await this.prisma.foods.findMany({
       where: {
         name: {
-          search: keyword, // Prisma의 Full-Text Search 활용
+          search: keyword,
         },
       },
       skip: offset,
       take: limit,
       select: {
-        name: true, // 필요한 필드만 선택
+        name: true,
       },
     });
 
