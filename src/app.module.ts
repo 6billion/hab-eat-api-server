@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { ChallengesModule } from './challenges/challenges.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { UtilModule } from '@lib/util';
+import { S3Module } from '@lib/s3';
 import { DietsModule } from './diets/diets.module';
 import { FoodsModule } from './foods/foods.module';
 
@@ -18,6 +19,7 @@ import { FoodsModule } from './foods/foods.module';
     { ...HttpModule.register({}), global: true },
     EventEmitterModule.forRoot(),
     UtilModule,
+    S3Module,
     DbModule,
     UsersModule,
     AuthModule,

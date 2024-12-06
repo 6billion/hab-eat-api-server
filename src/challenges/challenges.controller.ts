@@ -39,6 +39,10 @@ import {
 } from './dtos/post-certification.dto';
 import { GetChallengeConditonResponseDto } from './dtos/get-challenge-condition.dto';
 import { ChallengeParticipants } from '@prisma/client';
+import {
+  GetPresignedUrlRequestDto,
+  GetPresignedUrlResponseDto,
+} from './dtos/get-presigned-url.dto';
 
 @ApiTags('챌린지')
 @ApiBearerAuth()
@@ -71,6 +75,16 @@ export class ChallengesController {
       });
 
     return new PostParticipantsResponseDto(participant);
+  }
+
+  @Get('presigned-urls')
+  @ApiOperation({ summary: '챌린지 이미지 업로드 presigned url 발급' })
+  @ApiResponse({ type: GetPresignedUrlResponseDto })
+  getChallengePreSignedUrls(
+    @Query() { count }: GetPresignedUrlRequestDto,
+    @RequestUser() { id }: User,
+  ) {
+    return this.challengesService.getPreSignedUrls(id, count);
   }
 
   @ApiOperation({ summary: '습관 챌린지 이미지 업로드 하기' })
