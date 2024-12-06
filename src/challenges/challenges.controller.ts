@@ -27,16 +27,22 @@ import {
   PostParticipantsRequestDto,
   PostParticipantsResponseDto,
 } from './dtos/post-participants.dto';
-import { OnEvent } from '@nestjs/event-emitter';
-import { EventNames } from 'src/constants';
-import { TargetNutrients } from '@type';
 import {
   GetCertificationLogsRequestDto,
   GetCertificationLogsResponseDto,
 } from './dtos/get-certification-logs.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { PostChallengeCertificationRequestDto } from './dtos/post-certification.dto';
+import {
+  PostChallengeCertificationRequestDto,
+  PostNutritionChallengesCertificationRequestDto,
+  PostNutritionChallengesCertificationResponseDto,
+} from './dtos/post-certification.dto';
 import { GetChallengeConditonResponseDto } from './dtos/get-challenge-condition.dto';
+import { ChallengeParticipants } from '@prisma/client';
+import {
+  GetPresignedUrlRequestDto,
+  GetPresignedUrlResponseDto,
+} from './dtos/get-presigned-url.dto';
 
 @ApiTags('챌린지')
 @ApiBearerAuth()
@@ -69,6 +75,16 @@ export class ChallengesController {
       });
 
     return new PostParticipantsResponseDto(participant);
+  }
+
+  @Get('presigned-urls')
+  @ApiOperation({ summary: '챌린지 이미지 업로드 presigned url 발급' })
+  @ApiResponse({ type: GetPresignedUrlResponseDto })
+  getChallengePreSignedUrls(
+    @Query() { count }: GetPresignedUrlRequestDto,
+    @RequestUser() { id }: User,
+  ) {
+    return this.challengesService.getPreSignedUrls(id, count);
   }
 
   @ApiOperation({ summary: '습관 챌린지 이미지 업로드 하기' })
@@ -114,7 +130,7 @@ export class ChallengesController {
   @Get(':id/conditions')
   @ApiOperation({
     summary:
-      '영양 챌린지 인증 조건 조회(영양 챌린지: "habit" 타입 챌린지 제외한 모든 챌린지)',
+      '영양 챌린지 인증 조건 조회 (영양 챌린지: 챌린지 타입에 nutri prefix 가 붙은 챌린지 (nutriBulk, nutriDiet...))',
   })
   @ApiResponse({ type: GetChallengeConditonResponseDto })
   async getChallengeNutrientCondition(
@@ -124,14 +140,14 @@ export class ChallengesController {
     return this.challengesService.getChallengeConditions(id, user);
   }
 
-  @OnEvent(EventNames.certifiyNutritionChallenges)
-  async certifiyNutritionChallenges({
-    user,
-    data,
-  }: {
-    user: User;
-    data: TargetNutrients;
-  }) {
+  @Post('/nutrition/certification')
+  @ApiOperation({ summary: '영양 챌린지 인증' })
+  @ApiBody({ type: PostNutritionChallengesCertificationRequestDto })
+  @ApiResponse({ type: [PostNutritionChallengesCertificationResponseDto] })
+  async certifiyNutritionChallenges(
+    @RequestUser() user: User,
+    @Body() data: PostNutritionChallengesCertificationRequestDto,
+  ): Promise<ChallengeParticipants[]> {
     const participants =
       await this.challengesService.findNutritionChallengeParticipants(user.id);
     return this.challengesService.certifyManyNutritionChallenges({

@@ -30,6 +30,12 @@
       ],
       "@lib/util/*": [
         "libs/util/src/*"
+      ],
+      "@lib/s3": [
+        "libs/s3/src"
+      ],
+      "@lib/s3/*": [
+        "libs/s3/src/*"
       ]
     }
   }

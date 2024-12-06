@@ -5,7 +5,7 @@ import { PrismaService } from 'src/db/prisma.service';
 export class FoodsService {
   constructor(private readonly prisma: PrismaService) {}
   async searchDiet(foodName: string) {
-    const food = await this.prisma.foods.findUnique({
+    const food = await this.prisma.foods.findFirst({
       where: { name: foodName },
     });
 
