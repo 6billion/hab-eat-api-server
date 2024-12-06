@@ -14,10 +14,18 @@ export class FoodsService {
   async autoComplete(keyword: string, page: number = 1, limit: number = 10) {
     const offset = (page - 1) * limit;
 
-    const result = await this.prisma.$queryRaw`
-      SELECT name FROM Foods 
-      WHERE MATCH(name) AGAINST(${keyword} IN BOOLEAN MODE) 
-      LIMIT ${limit} OFFSET ${offset}`;
+    const result = await this.prisma.foods.findMany({
+      where: {
+        name: {
+          search: keyword, // Prisma의 Full-Text Search 활용
+        },
+      },
+      skip: offset,
+      take: limit,
+      select: {
+        name: true, // 필요한 필드만 선택
+      },
+    });
 
     return result;
   }
