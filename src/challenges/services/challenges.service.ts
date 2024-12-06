@@ -15,6 +15,7 @@ import { ChallengeParticipants } from '@prisma/client';
 import { TargetNutrients } from '@type';
 import { NutriChallengeTypes } from 'src/constants';
 import { ConfigService } from '@nestjs/config';
+import { S3Service } from '@lib/s3';
 
 @Injectable()
 export class ChallengesService {
@@ -23,6 +24,7 @@ export class ChallengesService {
     private readonly prismaService: PrismaService,
     private readonly util: UtilService,
     private readonly configService: ConfigService,
+    private readonly s3Service: S3Service,
   ) {}
 
   public async getChallenges(user: User) {
@@ -203,5 +205,19 @@ export class ChallengesService {
         challenge.type,
       );
     return certificationService.getCertifyCondition(challengeId, user);
+  }
+
+  getPreSignedUrls(userId: number, count = 1) {
+    const today = this.util.getKSTDate();
+    const ts = Date.now();
+
+    const result = [];
+    for (let i = 0; i < count; i += 1) {
+      const key = `/challenges/${today}/${userId}/${ts}_${i}`;
+      const url = this.s3Service.makePutImagePreSignedUrl(key);
+      result.push({ url, key });
+    }
+
+    return result;
   }
 }
