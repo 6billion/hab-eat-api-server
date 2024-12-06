@@ -20,11 +20,11 @@ export class ChallengeCertificationServiceFactory {
   getChallengeCertificationService(
     type: $Enums.ChallengeType,
   ): IChallengeCertificationService<Express.Multer.File | TargetNutrients> {
-    if (type === $Enums.ChallengeType.diet) {
+    if (type === $Enums.ChallengeType.nutriDiet) {
       return this.dietChallengeCertificationService;
-    } else if (type === $Enums.ChallengeType.bulk) {
+    } else if (type === $Enums.ChallengeType.nutriBulk) {
       return this.bulkChallengeCertificationService;
-    } else if (type === $Enums.ChallengeType.protein2x) {
+    } else if (type === $Enums.ChallengeType.nutriProtein2x) {
       return this.protein2xChallengecertificationService;
     } else if (type === $Enums.ChallengeType.habit) {
       return this.habitChallengeCertificationService;
