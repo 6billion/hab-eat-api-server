@@ -12,15 +12,14 @@ export class FoodsController {
   @Get('autocomplete')
   @UseGuards(BearerGuard)
   @ApiOperation({ summary: 'Get auto-complete food names based on keyword' })
-  async getAutoComplete(@Query('keyword') keyword: string) {
-    return this.foodsService.autoComplete(keyword);
+  async getAutoComplete(
+    @Query('keyword') keyword: string,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ) {
+    return this.foodsService.autoComplete(keyword, page, limit);
   }
-  @Get('fulltextsearch')
-  @UseGuards(BearerGuard)
-  @ApiOperation({ summary: 'Get auto-complete food names based on keyword' })
-  async fullTextSearch(@Query('keyword') keyword: string) {
-    return this.foodsService.fullTextSearch(keyword);
-  }
+
   @Get(':name')
   @UseGuards(BearerGuard)
   @ApiOperation({ summary: 'Search food details by food name' })

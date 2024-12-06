@@ -11,14 +11,14 @@ export class FoodsService {
 
     return food;
   }
-  async fullTextSearch(keyword: string) {
+  async autoComplete(keyword: string, page: number = 1, limit: number = 10) {
+    const offset = (page - 1) * limit;
+
     const result = await this.prisma.$queryRaw`
-      SELECT name FROM Foods WHERE MATCH(name) AGAINST(${keyword}) LIMIT 10`;
-    return result;
-  }
-  async autoComplete(keyword: string) {
-    const result = await this.prisma.$queryRaw`
-    SELECT name FROM Foods WHERE name LIKE ${'%' + keyword + '%'} LIMIT 10`;
+      SELECT name FROM Foods 
+      WHERE MATCH(name) AGAINST(${keyword} IN BOOLEAN MODE) 
+      LIMIT ${limit} OFFSET ${offset}`;
+
     return result;
   }
 }
