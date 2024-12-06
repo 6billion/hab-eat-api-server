@@ -213,7 +213,7 @@ export class ChallengesService {
 
     const result = [];
     for (let i = 0; i < count; i += 1) {
-      const key = `/challenges/${today}/${userId}/${ts}_${i}`;
+      const key = `challenges/${today}/${userId}/${ts}_${i}`;
       const url = this.s3Service.makePutImagePreSignedUrl(key);
       result.push({ url, key });
     }
