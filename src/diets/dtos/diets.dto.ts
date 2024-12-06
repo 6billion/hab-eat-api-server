@@ -109,7 +109,7 @@ export class DeleteDietDto {
   userId: number;
 }
 export class GetPresignedUrlRequestDto {
-  @ApiProperty({ description: '°³¼ö', type: Number, required: false })
+  @ApiProperty({ description: 'ê°œìˆ˜', type: Number, required: false })
   @IsNumber()
   @IsOptional()
   count?: number = 1;
