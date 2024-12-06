@@ -19,7 +19,7 @@ export class FoodsService {
     return results;
   }
   async searchDiet(foodName: string) {
-    const food = await this.prisma.foods.findUnique({
+    const food = await this.prisma.foods.findFirst({
       where: { name: foodName },
     });
 

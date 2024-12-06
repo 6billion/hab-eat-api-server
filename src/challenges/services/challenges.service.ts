@@ -172,7 +172,7 @@ export class ChallengesService {
       });
     });
 
-    return Promise.allSettled(promises);
+    return Promise.all(promises);
   }
 
   async getChallengeCertificationLogs({
