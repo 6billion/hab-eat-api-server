@@ -89,7 +89,8 @@
       "<rootDir>/libs/"
     ],
     "moduleNameMapper": {
-      "^@lib/util(|/.*)$": "<rootDir>/libs/util/src/$1"
+      "^@lib/util(|/.*)$": "<rootDir>/libs/util/src/$1",
+      "^@lib/s3(|/.*)$": "<rootDir>/libs/s3/src/$1"
     }
   }
 }
