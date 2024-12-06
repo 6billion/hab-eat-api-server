@@ -202,4 +202,5 @@ model Foods {
   zinc          Float    
   cholesterol   Float    
   transfat      Float    
+  @@fulltext([name])
 } 
