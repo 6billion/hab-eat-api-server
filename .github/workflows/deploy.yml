@@ -37,5 +37,6 @@ jobs:
           region: ${{ secrets.AWS_REGION }}
           environment_name: ${{ secrets.EB_ENVIRONMENT_NAME }}
           application_name: ${{ secrets.EB_APPLICATION_NAME }}
+          deployment_package: deploy.zip
           version_label: api-server-deploy
           use_existing_version_if_available: true
