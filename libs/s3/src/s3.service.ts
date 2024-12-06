@@ -4,7 +4,15 @@ import * as AWS from 'aws-sdk';
 
 @Injectable()
 export class S3Service {
-  constructor(private readonly config: ConfigService) {}
+  constructor(private readonly config: ConfigService) {
+    const url = this.makePutImagePreSignedUrl(
+      'hab-eat-images',
+      'test-11.jpg',
+      1000 * 60,
+    );
+
+    console.log('presigned url', url);
+  }
 
   private readonly s3 = new AWS.S3({
     signatureVersion: 'v4',
