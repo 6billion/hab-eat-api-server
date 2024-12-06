@@ -1,10 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsString } from 'class-validator';
 import { IsNumber } from 'class-validator';
 import { PostParticipantsResponseDto } from './post-participants.dto';
 
 export class PostChallengeCertificationRequestDto {
-  @ApiProperty({ type: 'string', format: 'binary', required: true })
-  file: Express.Multer.File;
+  @ApiProperty({ description: 'S3 이미지 Key', type: String })
+  @IsString()
+  key: string;
 }
 
 export class PostNutritionChallengesCertificationRequestDto {

@@ -136,7 +136,7 @@ export class ChallengesService {
   }: {
     participant: ChallengeParticipants;
     user: User;
-    data: Express.Multer.File | TargetNutrients;
+    data: string | TargetNutrients;
   }) {
     const certificationService =
       this.certificationServiceFactory.getChallengeCertificationService(

@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   ConflictException,
-  Inject,
   Injectable,
 } from '@nestjs/common';
 import { ChallengeParticipants } from '@prisma/client';
@@ -11,19 +10,29 @@ import { PrismaService } from 'src/db/prisma.service';
 import { UtilService } from '@lib/util';
 import { HttpService } from '@nestjs/axios';
 import { CertifyCondition } from '@type';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class HabitChallengeCertificationService
-  implements IChallengeCertificationService<Express.Multer.File>
+  implements IChallengeCertificationService<string>
 {
-  @Inject() prisma: PrismaService;
-  @Inject() util: UtilService;
-  @Inject() httpService: HttpService;
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly util: UtilService,
+    private readonly httpService: HttpService,
+    private readonly configService: ConfigService,
+  ) {}
+
+  private readonly challengeImageBaseUrl =
+    this.configService.getOrThrow('S3_BASE_URL');
+  private readonly aiServerBaseUrl = this.configService.getOrThrow(
+    'AI_SERVER_BASER_URL',
+  );
 
   public async certyfiyChallenge(params: {
     participant: ChallengeParticipants;
     user: User;
-    data: Express.Multer.File;
+    data: string;
   }) {
     const today = new Date(this.util.getKSTDate());
     if (
@@ -32,7 +41,6 @@ export class HabitChallengeCertificationService
     ) {
       throw new ConflictException();
     }
-
     const success = await this.validateCertifyCondition(
       params.participant.challengeId,
       params.data,
@@ -46,31 +54,22 @@ export class HabitChallengeCertificationService
 
   private async validateCertifyCondition(
     challengeId: number,
-    data: Express.Multer.File,
+    key: string,
   ): Promise<boolean> {
-    const url = await this.getDetectionServerUrl(challengeId);
-    const blob = new Blob([data.buffer], { type: data.mimetype });
-    const file = new File([blob], data.originalname, { type: data.mimetype });
+    const aiModel = await this.getDetectionServerUrl(challengeId);
+    const aiServerUrl = `${this.aiServerBaseUrl}/${aiModel.path}`;
+    const imageUrl = `${this.challengeImageBaseUrl}/${key}`;
+    const response = await this.httpService.axiosRef.post<string>(aiServerUrl, {
+      url: imageUrl,
+    });
 
-    const formData = new FormData();
-    formData.append('file', file);
-
-    const response = await this.httpService.axiosRef.post<boolean>(
-      url,
-      formData,
-      { headers: { 'Content-Type': 'multipart/form-data' } },
-    );
-
-    return response?.data === true;
+    return response?.data === aiModel.answer;
   }
 
   private async getDetectionServerUrl(challengeId: number) {
-    const result =
-      await this.prisma.challengeImageDetectionServerUrls.findUnique({
-        where: { challengeId },
-      });
-
-    return result.url;
+    return this.prisma.challengeAiModels.findUnique({
+      where: { challengeId },
+    });
   }
 
   private async increaseSuccessCount(participant: ChallengeParticipants) {
