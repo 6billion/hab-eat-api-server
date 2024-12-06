@@ -59,11 +59,11 @@ export class HabitChallengeCertificationService
     const aiModel = await this.getDetectionServerUrl(challengeId);
     const aiServerUrl = `${this.aiServerBaseUrl}/${aiModel.path}`;
     const imageUrl = `${this.challengeImageBaseUrl}/${key}`;
-    const response = await this.httpService.axiosRef.post<string>(aiServerUrl, {
-      url: imageUrl,
-    });
+    const response = await this.httpService.axiosRef.post<{
+      top1ClassName: string;
+    }>(aiServerUrl, { url: imageUrl });
 
-    return response?.data === aiModel.answer;
+    return response?.data?.top1ClassName === aiModel.answer;
   }
 
   private async getDetectionServerUrl(challengeId: number) {
