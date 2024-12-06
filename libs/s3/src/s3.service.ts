@@ -13,7 +13,14 @@ export class S3Service {
     accessKeyId: this.config.get('AWS_ACCESS_KEY_ID'),
   });
 
-  makePutImagePreSignedUrl(bucket: string, key: string, expires: number) {
+  private readonly s3DefaultBucket = 'hab-eat-images';
+  private readonly signedUrlDefaultExpires = 1000 * 60 * 3;
+
+  makePutImagePreSignedUrl(
+    key: string,
+    bucket = this.s3DefaultBucket,
+    expires = this.signedUrlDefaultExpires,
+  ): string {
     return this.s3.getSignedUrl('putObject', {
       Bucket: bucket,
       Key: key,
