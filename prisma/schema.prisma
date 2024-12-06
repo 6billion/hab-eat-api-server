@@ -183,7 +183,10 @@ model Diets {
   @@index([userId, date, createdAt])
 }
 model Foods {
-  name          String   @unique
+  id            Int    @id 
+  name          String 
+  category      String
+  servingSize   Float?
   amount        Float    
   kcal          Float    
   carbohydrate  Float    
