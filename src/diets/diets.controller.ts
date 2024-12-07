@@ -96,7 +96,7 @@ export class DietsController {
     return await this.dietsService.deleteDiet(user.id, deleteDietDto.dietId);
   }
   @Get('presigned-urls')
-  @ApiOperation({ summary: '½Ä´Ü ÀÌ¹ÌÁö ¾÷·Îµå presigned url ¹ß±Ş' })
+  @ApiOperation({ summary: 'ì‹ë‹¨ ì´ë¯¸ì§€ ì—…ë¡œë“œ presigned url ë°œê¸‰' })
   @ApiResponse({ type: GetPresignedUrlResponseDto })
   getChallengePreSignedUrls(
     @Query() { count }: GetPresignedUrlRequestDto,
