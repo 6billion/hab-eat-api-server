@@ -23,6 +23,7 @@ export class FoodsService {
       skip: offset,
       take: limit,
       select: {
+        id: true,
         name: true,
       },
     });
