@@ -4,9 +4,9 @@ import { PrismaService } from 'src/db/prisma.service';
 @Injectable()
 export class FoodsService {
   constructor(private readonly prisma: PrismaService) {}
-  async searchDiet(foodName: string) {
+  async searchDiet(foodId: number) {
     const food = await this.prisma.foods.findFirst({
-      where: { name: foodName },
+      where: { id: foodId },
     });
 
     return food;
