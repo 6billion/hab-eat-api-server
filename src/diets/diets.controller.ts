@@ -96,6 +96,7 @@ export class DietsController {
     return await this.dietsService.deleteDiet(user.id, deleteDietDto.dietId);
   }
   @Get('presigned-urls')
+  @UseGuards(BearerGuard)
   @ApiOperation({ summary: '식단 이미지 업로드 presigned url 발급' })
   @ApiResponse({ type: GetPresignedUrlResponseDto })
   getChallengePreSignedUrls(
