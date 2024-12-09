@@ -121,7 +121,7 @@ export class ChallengesService {
   }
 
   findUniqueParticipantOrThrow(userId: number, challengeId: number) {
-    const startDate = this.util.getThisWeekMondayKST();
+    const startDate = new Date(this.util.getThisWeekMondayKST());
     return this.prismaService.challengeParticipants.findUniqueOrThrow({
       where: {
         userId_startDate_challengeId: { userId, challengeId, startDate },
@@ -136,7 +136,7 @@ export class ChallengesService {
   }: {
     participant: ChallengeParticipants;
     user: User;
-    data: Express.Multer.File | TargetNutrients;
+    data: string | TargetNutrients;
   }) {
     const certificationService =
       this.certificationServiceFactory.getChallengeCertificationService(
