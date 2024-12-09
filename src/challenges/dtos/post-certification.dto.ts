@@ -39,4 +39,4 @@ export class PostNutritionChallengesCertificationRequestDto {
   sugar: number;
 }
 
-export class PostNutritionChallengesCertificationResponseDto extends PostParticipantsResponseDto {}
+export class PostChallengesCertificationResponseDto extends PostParticipantsResponseDto {}

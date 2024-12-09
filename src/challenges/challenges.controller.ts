@@ -31,7 +31,7 @@ import {
 import {
   PostChallengeCertificationRequestDto,
   PostNutritionChallengesCertificationRequestDto,
-  PostNutritionChallengesCertificationResponseDto,
+  PostChallengesCertificationResponseDto,
 } from './dtos/post-certification.dto';
 import { GetChallengeConditonResponseDto } from './dtos/get-challenge-condition.dto';
 import { ChallengeParticipants } from '@prisma/client';
@@ -85,7 +85,10 @@ export class ChallengesController {
 
   @ApiOperation({ summary: '습관 챌린지 이미지 인증하기' })
   @ApiBody({ type: PostChallengeCertificationRequestDto })
-  @ApiResponse({ type: Boolean, description: '인증 성공 여부' })
+  @ApiResponse({
+    type: PostChallengesCertificationResponseDto,
+    description: '챌린지 참여 정보',
+  })
   @Post(':id/certifications')
   async postChallengeCertifications(
     @RequestUser() user: User,
@@ -137,7 +140,7 @@ export class ChallengesController {
   @Post('/nutritions/certifications')
   @ApiOperation({ summary: '영양 챌린지 인증' })
   @ApiBody({ type: PostNutritionChallengesCertificationRequestDto })
-  @ApiResponse({ type: [PostNutritionChallengesCertificationResponseDto] })
+  @ApiResponse({ type: [PostChallengesCertificationResponseDto] })
   async certifiyNutritionChallenges(
     @RequestUser() user: User,
     @Body() data: PostNutritionChallengesCertificationRequestDto,
