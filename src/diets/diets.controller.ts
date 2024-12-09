@@ -14,6 +14,8 @@ import {
   CreateDietDto,
   DeleteDietDto,
   UpdateDailyAccumulationDto,
+  GetPresignedUrlRequestDto,
+  GetPresignedUrlResponseDto,
 } from 'src/diets/dtos/diets.dto';
 import {
   ApiTags,
@@ -92,5 +94,15 @@ export class DietsController {
     @Body() deleteDietDto: DeleteDietDto,
   ) {
     return await this.dietsService.deleteDiet(user.id, deleteDietDto.dietId);
+  }
+  @Get('presigned-urls')
+  @UseGuards(BearerGuard)
+  @ApiOperation({ summary: '식단 이미지 업로드 presigned url 발급' })
+  @ApiResponse({ type: GetPresignedUrlResponseDto })
+  getChallengePreSignedUrls(
+    @Query() { count }: GetPresignedUrlRequestDto,
+    @RequestUser() { id }: Users,
+  ) {
+    return this.dietsService.getPreSignedUrls(id, count);
   }
 }
