@@ -10,7 +10,7 @@ export class FoodsService {
     private readonly httpService: HttpService,
     private readonly configService: ConfigService,
   ) {}
-  async searchDiet(foodName: string) {
+  async searchDiet(foodId: number) {
     const food = await this.prisma.foods.findFirst({
       where: { id: foodId },
     });
