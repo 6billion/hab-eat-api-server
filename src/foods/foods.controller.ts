@@ -1,7 +1,17 @@
-import { Controller, Get, Query, Param, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Query,
+  Param,
+  UseGuards,
+  Post,
+  Body,
+} from '@nestjs/common';
 import { FoodsService } from './foods.service';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { BearerGuard } from '../auth/guards/bearer.guard';
+import { SearchImageDto } from './dtos/search-image.dto';
+import { ImageSearchResponseDto } from './dtos/image-search-response.dto';
 
 @ApiTags('Foods')
 @ApiBearerAuth()
@@ -25,5 +35,13 @@ export class FoodsController {
   @ApiOperation({ summary: 'Search food details by food name' })
   async getSearchDiet(@Param('name') name: string) {
     return await this.foodsService.searchDiet(name);
+  }
+  @Post('get-image-name')
+  async getImageName(
+    @Body() searchImageDto: SearchImageDto,
+  ): Promise<ImageSearchResponseDto> {
+    const { key } = searchImageDto;
+    const name = await this.foodsService.getImageNameFromAi(key);
+    return { name };
   }
 }
