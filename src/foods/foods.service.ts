@@ -38,12 +38,11 @@ export class FoodsService {
 
   private readonly dietsImageBaseUrl =
     this.configService.getOrThrow('S3_BASE_URL');
-  private readonly aiServerBaseUrl = this.configService.getOrThrow(
-    'AI_SERVER_FOOD_PREDICT_URL',
-  );
 
   async getImageNameFromAi(key: string): Promise<string> {
-    const aiServerUrl = this.aiServerBaseUrl;
+    const aiServerUrl = this.configService.getOrThrow(
+      'AI_SERVER_FOOD_PREDICT_URL',
+    );
     const imageUrl = `${this.dietsImageBaseUrl}/${key}`;
 
     const response = await this.httpService.axiosRef.post<{
