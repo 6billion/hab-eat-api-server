@@ -16,7 +16,7 @@ datasource db {
 
 model Users {
   id            Int               @unique @default(autoincrement())
-  nickname      String            @default("?–…?ž‡")
+  nickname      String            @default("í–…ìž‡")
   height        Int
   weight        Int
   age           Int
