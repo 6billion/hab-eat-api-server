@@ -30,11 +30,11 @@ export class FoodsController {
     return this.foodsService.autoComplete(keyword, page, limit);
   }
 
-  @Get(':name')
+  @Get(':id')
   @UseGuards(BearerGuard)
-  @ApiOperation({ summary: 'Search food details by food name' })
-  async getSearchDiet(@Param('name') name: string) {
-    return await this.foodsService.searchDiet(name);
+  @ApiOperation({ summary: 'Search food details by food Id' })
+  async getSearchDiet(@Param('id') id: number) {
+    return await this.foodsService.searchDiet(id);
   }
   @Post('get-image-name')
   async getImageName(
