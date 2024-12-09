@@ -11,7 +11,7 @@ import {
   OngoingChallenge,
 } from '../dtos/get-challenges.dto';
 import { ChallengeCertificationServiceFactory } from './challenge-certification.factory';
-import { ChallengeParticipants } from '@prisma/client';
+import { ChallengeParticipants, TargetUserType } from '@prisma/client';
 import { TargetNutrients } from '@type';
 import { NutriChallengeTypes } from 'src/constants';
 import { ConfigService } from '@nestjs/config';
@@ -32,7 +32,7 @@ export class ChallengesService {
 
     const [challenges, participants] = await Promise.all([
       this.prismaService.challenges.findMany({
-        where: { targetUserType: user.type },
+        where: { targetUserType: { in: [user.type, TargetUserType.all] } },
       }),
       this.prismaService.challengeParticipants.findMany({
         where: {

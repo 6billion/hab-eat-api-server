@@ -51,7 +51,7 @@ model Challenges {
   id             Int           @id @default(autoincrement())
   name           String
   description    String
-  targetUserType UserType
+  targetUserType TargetUserType
   type           ChallengeType
 
   challengeParticipants      ChallengeParticipants[]      @relation("challengeToParticipant")
@@ -113,6 +113,13 @@ enum UserType {
   diet
   bulk
   maintain
+}
+
+enum TargetUserType {
+  diet
+  bulk
+  maintain
+  all
 }
 
 enum UserActivityLevel {
