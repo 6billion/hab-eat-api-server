@@ -1,16 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/db/prisma.service';
-import { S3Service } from '@lib/s3';
-import { UtilService } from '@lib/util';
 
 @Injectable()
 export class DietsService {
-  constructor(
-    private readonly prisma: PrismaService,
-    private readonly util: UtilService,
-    private readonly s3Service: S3Service,
-  ) {}
-
+  constructor(private readonly prisma: PrismaService) {}
   async updateDailyAccumulation(userId: number, date: Date) {
     const diets = await this.prisma.diets.findMany({
       where: {
@@ -146,17 +139,5 @@ export class DietsService {
         id: dietId,
       },
     });
-  }
-  getPreSignedUrls(userId: number, count = 1) {
-    const today = this.util.getKSTDate();
-
-    const result = [];
-    for (let i = 0; i < count; i += 1) {
-      const key = `images/diets/${userId}/${today}/meal_${i}.jpeg`;
-      const url = this.s3Service.makePutImagePreSignedUrl(key);
-      result.push({ url, key });
-    }
-
-    return result;
   }
 }
