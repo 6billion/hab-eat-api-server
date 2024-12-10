@@ -138,7 +138,7 @@ enum AccountType {
 
 enum Sex {
   male
-  felmale
+  female
 }
 
 enum ChallengeType {
