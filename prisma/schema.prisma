@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  previewFeatures = ["fullTextIndex"]
+  previewFeatures = ["fullTextIndex", "fullTextSearch"]
 }
 
 datasource db {
@@ -52,12 +52,12 @@ model Challenges {
   id             Int           @id @default(autoincrement())
   name           String
   description    String
-  targetUserType UserType
+  targetUserType TargetUserType
   type           ChallengeType
 
-  challengeParticipants      ChallengeParticipants[]            @relation("challengeToParticipant")
-  nutrientChallengeCondition NutrientChallengeConditions?       @relation("challengeToNutriChallengeConditoin")
-  imageDetectionServerUrl    ChallengeImageDetectionServerUrls? @relation("challengeToImageDetectionServerUrl")
+  challengeParticipants      ChallengeParticipants[]      @relation("challengeToParticipant")
+  nutrientChallengeCondition NutrientChallengeConditions? @relation("challengeToNutriChallengeConditoin")
+  imageDetectionServerUrl    ChallengeAiModels?           @relation("challengeToImageDetectionServerUrl")
 }
 
 model ChallengeParticipants {
@@ -102,9 +102,10 @@ model NutrientChallengeConditions {
   challenge Challenges @relation("challengeToNutriChallengeConditoin", fields: [challengeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
-model ChallengeImageDetectionServerUrls {
+model ChallengeAiModels {
   challengeId Int    @id
-  url         String
+  path        String
+  answer      String
 
   challenge Challenges @relation("challengeToImageDetectionServerUrl", fields: [challengeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
@@ -113,6 +114,13 @@ enum UserType {
   diet
   bulk
   maintain
+}
+
+enum TargetUserType {
+  diet
+  bulk
+  maintain
+  all
 }
 
 enum UserActivityLevel {
@@ -139,8 +147,9 @@ enum ChallengeType {
   nutriProtein2x
   habit
 }
+
 model DietStats {
-  userId       Int      
+  userId       Int
   date         DateTime @db.Date
   amount       Float
   kcal         Float
@@ -158,11 +167,12 @@ model DietStats {
   cholesterol  Float
   transfat     Float
   updatedAt    DateTime @updatedAt
+
   @@id([userId, date])
 }
 
 model Diets {
-  id           Int @id @default(autoincrement())
+  id           Int      @id @default(autoincrement())
   userId       Int
   date         DateTime @db.Date
   createdAt    DateTime @default(now())
@@ -181,8 +191,10 @@ model Diets {
   zinc         Float
   cholesterol  Float
   transfat     Float
+
   @@index([userId, date, createdAt])
 }
+
 model Foods {
   id            Int    @id 
   name          String 

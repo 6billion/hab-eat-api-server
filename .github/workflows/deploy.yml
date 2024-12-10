@@ -2,7 +2,7 @@ name: Build and Push Docker Image
 on:
   push:
     branches:
-      - test
+      - main
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
@@ -26,6 +26,9 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_TAGS }}
 
+      - name: Generate deployment package
+        run: zip deploy.zip docker-compose.yml nginx.conf
+
       - name: Beanstalk Deploy
         uses: einaregilsson/beanstalk-deploy@ebe3476a4ce991d54336935e75e78dd9d86f9408
         with:
@@ -34,5 +37,6 @@ jobs:
           region: ${{ secrets.AWS_REGION }}
           environment_name: ${{ secrets.EB_ENVIRONMENT_NAME }}
           application_name: ${{ secrets.EB_APPLICATION_NAME }}
+          deployment_package: deploy.zip
           version_label: api-server-deploy
           use_existing_version_if_available: true

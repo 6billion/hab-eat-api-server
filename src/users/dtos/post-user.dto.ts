@@ -20,9 +20,10 @@ export class PostUserDto {
   @IsNumber()
   weight: number;
 
-  @ApiProperty({ description: '나이', type: Number })
+  @ApiProperty({ description: '나이', type: Number, default: 25 })
   @IsNumber()
-  age: number;
+  @IsOptional()
+  age: number = 25;
 
   @ApiProperty({ description: '성별', enum: $Enums.Sex })
   @IsEnum($Enums.Sex)

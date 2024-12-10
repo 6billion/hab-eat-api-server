@@ -6,9 +6,7 @@ import {
   ParseIntPipe,
   Post,
   Query,
-  UploadedFile,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
 import { BearerGuard } from 'src/auth/guards/bearer.guard';
 import { ChallengesService } from './services/challenges.service';
@@ -17,7 +15,6 @@ import { User } from 'src/users/user';
 import {
   ApiBearerAuth,
   ApiBody,
-  ApiConsumes,
   ApiOperation,
   ApiResponse,
   ApiTags,
@@ -31,11 +28,10 @@ import {
   GetCertificationLogsRequestDto,
   GetCertificationLogsResponseDto,
 } from './dtos/get-certification-logs.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
 import {
   PostChallengeCertificationRequestDto,
   PostNutritionChallengesCertificationRequestDto,
-  PostNutritionChallengesCertificationResponseDto,
+  PostChallengesCertificationResponseDto,
 } from './dtos/post-certification.dto';
 import { GetChallengeConditonResponseDto } from './dtos/get-challenge-condition.dto';
 import { ChallengeParticipants } from '@prisma/client';
@@ -87,16 +83,17 @@ export class ChallengesController {
     return this.challengesService.getPreSignedUrls(id, count);
   }
 
-  @ApiOperation({ summary: '습관 챌린지 이미지 업로드 하기' })
+  @ApiOperation({ summary: '습관 챌린지 이미지 인증하기' })
   @ApiBody({ type: PostChallengeCertificationRequestDto })
-  @ApiConsumes('multipart/form-data')
-  @ApiResponse({ type: Boolean, description: '인증 성공 여부' })
-  @Post(':id/images')
-  @UseInterceptors(FileInterceptor('file'))
+  @ApiResponse({
+    type: PostChallengesCertificationResponseDto,
+    description: '챌린지 참여 정보',
+  })
+  @Post(':id/certifications')
   async postChallengeCertifications(
-    @UploadedFile() data: Express.Multer.File,
     @RequestUser() user: User,
     @Param('id', ParseIntPipe) challengeId: number,
+    @Body() body: PostChallengeCertificationRequestDto,
   ) {
     const participant =
       await this.challengesService.findUniqueParticipantOrThrow(
@@ -105,7 +102,7 @@ export class ChallengesController {
       );
 
     return this.challengesService.certyfyChallenge({
-      data,
+      data: body.key,
       participant,
       user,
     });
@@ -140,10 +137,10 @@ export class ChallengesController {
     return this.challengesService.getChallengeConditions(id, user);
   }
 
-  @Post('/nutrition/certification')
+  @Post('/nutritions/certifications')
   @ApiOperation({ summary: '영양 챌린지 인증' })
   @ApiBody({ type: PostNutritionChallengesCertificationRequestDto })
-  @ApiResponse({ type: [PostNutritionChallengesCertificationResponseDto] })
+  @ApiResponse({ type: [PostChallengesCertificationResponseDto] })
   async certifiyNutritionChallenges(
     @RequestUser() user: User,
     @Body() data: PostNutritionChallengesCertificationRequestDto,

@@ -15,6 +15,10 @@ services:
       - nginx-connection
     depends_on:
       - api-server
+    deploy:
+      resources:
+        limits:
+          memory: 128M
   api-server:
     image: abjin/hab-eat-api-server:latest
     container_name: api-server
@@ -27,11 +31,19 @@ services:
       - ai-server
     env_file:
       - .env
+    deploy:
+      resources:
+        limits:
+          memory: 216M
   ai-server:
     image: abjin/hab-eat-ai-api-server:latest
     container_name: ai-server
     networks:
       - api-network
+    deploy:
+      resources:
+        limits:
+          memory: 512M
 networks:
   nginx-connection:
   api-network:

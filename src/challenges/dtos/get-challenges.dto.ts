@@ -11,8 +11,8 @@ export class AvaliableChallenge {
   @ApiProperty({ description: '설명', type: String })
   description: string;
 
-  @ApiProperty({ description: '타켓 유저 탕비', type: String })
-  targetUserType: $Enums.UserType;
+  @ApiProperty({ description: '타켓 유저 탕비', enum: $Enums.TargetUserType })
+  targetUserType: $Enums.TargetUserType;
 
   @ApiProperty({ description: '챌린지 타입', type: String })
   type: $Enums.ChallengeType;
