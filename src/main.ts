@@ -25,6 +25,15 @@ async function bootstrap() {
 
   configService.getOrThrow('NODE_ENV') !== 'production' && useSwagger(app);
 
+  const origins = ['http://localhost:3000', 'https://localhost:3000'];
+
+  app.enableCors({
+    origin: origins,
+    credentials: true,
+    methods: ['POST', 'PUT', 'GET', 'PATCH', 'DELETE'],
+    optionsSuccessStatus: 200,
+  });
+
   if (
     cluster.isPrimary &&
     configService.getOrThrow('NODE_ENV') !== 'development'
