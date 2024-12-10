@@ -4,7 +4,6 @@ import { PrismaService } from 'src/db/prisma.service';
 @Injectable()
 export class DietsService {
   constructor(private readonly prisma: PrismaService) {}
-
   async updateDailyAccumulation(userId: number, date: Date) {
     const diets = await this.prisma.diets.findMany({
       where: {

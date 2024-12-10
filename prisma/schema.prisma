@@ -6,6 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["fullTextIndex"]
 }
 
 datasource db {
@@ -214,4 +215,5 @@ model Foods {
   zinc          Float    
   cholesterol   Float    
   transfat      Float    
+  @@fulltext([name])
 } 
