@@ -4,7 +4,7 @@ import { PrismaService } from 'src/db/prisma.service';
 import * as admin from 'firebase-admin';
 
 @Injectable()
-export class PushService {
+export class DietPushService {
   constructor(private readonly prisma: PrismaService) {}
 
   @Cron('0 9 * * *')
