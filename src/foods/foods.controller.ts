@@ -41,13 +41,7 @@ export class FoodsController {
     return this.foodsService.autoComplete(keyword, page, limit);
   }
 
-  @Get(':id')
-  @UseGuards(BearerGuard)
-  @ApiOperation({ summary: 'Search food details by food Id' })
-  async getSearchDiet(@Param('id') id: number) {
-    return await this.foodsService.searchDiet(id);
-  }
-  @Post('get-image-name')
+  @Post('class-names')
   async getImageName(
     @Body() searchImageDto: SearchImageDto,
   ): Promise<ImageSearchResponseDto> {
@@ -55,14 +49,22 @@ export class FoodsController {
     const name = await this.foodsService.getImageNameFromAi(key);
     return { name };
   }
+
   @Get('presigned-urls')
   @UseGuards(BearerGuard)
-  @ApiOperation({ summary: '식단 이미지 업로드 presigned url 발급' })
+  @ApiOperation({ summary: 'get presigned url' })
   @ApiResponse({ type: GetPresignedUrlResponseDto })
   getChallengePreSignedUrls(
     @Query() { count }: GetPresignedUrlRequestDto,
     @RequestUser() { id }: Users,
   ) {
     return this.foodsService.getPreSignedUrls(id, count);
+  }
+
+  @Get(':id')
+  @UseGuards(BearerGuard)
+  @ApiOperation({ summary: 'Search food details by food Id' })
+  async getSearchDiet(@Param('id') id: number) {
+    return await this.foodsService.searchDiet(id);
   }
 }
