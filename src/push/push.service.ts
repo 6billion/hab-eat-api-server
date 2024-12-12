@@ -8,17 +8,17 @@ export class PushService {
   constructor(private readonly prisma: PrismaService) {}
 
   @Cron('0 9 * * *')
-  async handlePushNotificationMorning() {
+  async PushNotificationMorning() {
     await this.dietEncouragementPush('morning');
   }
 
   @Cron('0 12 * * *')
-  async handlePushNotificationAfternoon() {
+  async PushNotificationAfternoon() {
     await this.dietEncouragementPush('afternoon');
   }
 
   @Cron('0 19 * * *')
-  async handlePushNotificationEvening() {
+  async PushNotificationEvening() {
     await this.dietEncouragementPush('evening');
   }
 
@@ -31,25 +31,25 @@ export class PushService {
 
   async getAllTokens() {
     return await this.prisma.tokens.findMany();
-  } //fcm tokenÀ» °¡Á®¿Àµµ·Ï º¯°æ ¿¹Á¤
+  } //fcm tokenì„ ê°€ì ¸ì˜¤ë„ë¡ ë³€ê²½ ì˜ˆì •
 
   async sendPushNotification(fcmToken: string, timeOfDay: string) {
     let messageBody = '';
     switch (timeOfDay) {
       case 'morning':
-        messageBody = '¾ÆÄ§¹ä ²À Ã¬°Üµå¼¼¿ä!';
+        messageBody = 'ì•„ì¹¨ë°¥ ê¼­ ì±™ê²¨ë“œì„¸ìš”!';
         break;
       case 'afternoon':
-        messageBody = '¹Ù»Ú´Ù ¹Ùºü~ Á¡½Éµå½Ç ½Ã°£ÀÌ¿¡¿ä';
+        messageBody = 'ë°”ì˜ë‹¤ ë°”ë¹ ~ ì ì‹¬ë“œì‹¤ ì‹œê°„ì´ì—ìš”';
         break;
       case 'evening':
-        messageBody = 'ÇÏ·çµ¿¾È °í»ıÇß¾î¿ä! Àú³á½Ä»ç´Â ¸ÀÀÖ´Â °É·Î~';
+        messageBody = 'í•˜ë£¨ë™ì•ˆ ê³ ìƒí–ˆì–´ìš”! ì €ë…ì‹ì‚¬ëŠ” ë§›ìˆëŠ” ê±¸ë¡œ~';
         break;
     }
     const message = {
       token: fcmToken,
       notification: {
-        title: '¿À´ÃÀÇ ½Ä´ÜÀº?',
+        title: 'ì˜¤ëŠ˜ì˜ ì‹ë‹¨ì€?',
         body: messageBody,
       },
     };
