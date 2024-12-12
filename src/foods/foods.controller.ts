@@ -41,7 +41,7 @@ export class FoodsController {
     return this.foodsService.autoComplete(keyword, page, limit);
   }
 
-  @Post('get-image-name')
+  @Post('class-name')
   async getImageName(
     @Body() searchImageDto: SearchImageDto,
   ): Promise<ImageSearchResponseDto> {
@@ -49,6 +49,7 @@ export class FoodsController {
     const name = await this.foodsService.getImageNameFromAi(key);
     return { name };
   }
+
   @Get('presigned-urls')
   @UseGuards(BearerGuard)
   @ApiOperation({ summary: 'get presigned url' })
