@@ -12,7 +12,7 @@ export class PushService {
     await this.dietEncouragementPush('morning');
   }
 
-  @Cron('0 15 * * *')
+  @Cron('0 12 * * *')
   async handlePushNotificationAfternoon() {
     await this.dietEncouragementPush('afternoon');
   }
@@ -37,19 +37,19 @@ export class PushService {
     let messageBody = '';
     switch (timeOfDay) {
       case 'morning':
-        messageBody = '아침문구';
+        messageBody = '아침밥 꼭 챙겨드세요!';
         break;
       case 'afternoon':
-        messageBody = '점심문구';
+        messageBody = '바쁘다 바빠~ 점심드실 시간이에요';
         break;
       case 'evening':
-        messageBody = '저녁문구';
+        messageBody = '하루동안 고생했어요! 저녁식사는 맛있는 걸로~';
         break;
     }
     const message = {
       token: fcmToken,
       notification: {
-        title: '오늘의 알림(가제)',
+        title: '오늘의 식단은?',
         body: messageBody,
       },
     };
