@@ -51,7 +51,7 @@ export class FoodsController {
   }
   @Get('presigned-urls')
   @UseGuards(BearerGuard)
-  @ApiOperation({ summary: '�Ĵ� �̹��� ���ε� presigned url �߱�' })
+  @ApiOperation({ summary: 'get presigned url' })
   @ApiResponse({ type: GetPresignedUrlResponseDto })
   getChallengePreSignedUrls(
     @Query() { count }: GetPresignedUrlRequestDto,
