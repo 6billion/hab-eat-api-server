@@ -41,7 +41,7 @@ export class FoodsController {
     return this.foodsService.autoComplete(keyword, page, limit);
   }
 
-  @Post('class-name')
+  @Post('class-names')
   async getImageName(
     @Body() searchImageDto: SearchImageDto,
   ): Promise<ImageSearchResponseDto> {
