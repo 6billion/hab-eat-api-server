@@ -5,7 +5,6 @@ import * as admin from 'firebase-admin';
 export class FirebaseAdminService implements OnModuleInit {
   onModuleInit() {
     admin.initializeApp();
-    console.log('Firebase Admin SDK initialized');
   }
 
   getMessaging() {
