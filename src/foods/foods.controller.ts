@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  Query,
-  Param,
-  UseGuards,
-  Post,
-  Body,
-} from '@nestjs/common';
+import { Controller, Get, Query, UseGuards, Post, Body } from '@nestjs/common';
 import { FoodsService } from './foods.service';
 import {
   ApiTags,
