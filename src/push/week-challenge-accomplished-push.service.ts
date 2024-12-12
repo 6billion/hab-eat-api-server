@@ -2,73 +2,64 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/db/prisma.service';
 import { Cron } from '@nestjs/schedule';
 import * as admin from 'firebase-admin';
-import { ChallengeParticipants } from '@prisma/client';
 
 @Injectable()
 export class WeekChallengeAccomplishedPushService {
   constructor(private readonly prisma: PrismaService) {}
 
   @Cron('0 9 * * MON')
-  async handleWeeklyChallengePushNotification() {
+  async WeeklyChallengePushNotification() {
     const participants = await this.getChallengeParticipants();
 
-    participants.forEach(async (participant) => {
-      const isSuccess = this.checkChallengeSuccess(participant);
-      await this.chaellengeCheckAchievement(participant, isSuccess);
-    });
-  }
+    for (const participant of participants) {
+      const isSuccess = participant.status;
 
+      await this.sendPushNotification(participant, isSuccess);
+    }
+  }
   async getChallengeParticipants() {
+    const lastSunday = this.getLastSunday();
     return await this.prisma.challengeParticipants.findMany({
       where: {
         status: true,
-        endDate: {
-          gte: new Date(),
-        },
+        endDate: lastSunday,
       },
     });
   }
 
-  checkChallengeSuccess(participant: ChallengeParticipants): boolean {
-    return participant.successDays >= participant.goalDays;
-  }
-
-  async chaellengeCheckAchievement(
-    participant: ChallengeParticipants,
-    isSuccess: boolean,
-  ) {
+  async sendPushNotification(participant: any, isSuccess: boolean) {
     let messageBody = '';
     if (isSuccess) {
-      messageBody = 'ÃàÇÏÇÕ´Ï´Ù! ÀÌ¹ø ÁÖ Ã§¸°Áö¸¦ ¼º°øÀûÀ¸·Î ´Ş¼ºÇÏ¼Ì½À´Ï´Ù.';
+      messageBody = 'ì¶•í•˜í•´ìš”! ì´ë²ˆ ì£¼ ì±Œë¦°ì§€ë¥¼ ì„±ê³µì ìœ¼ë¡œ ë‹¬ì„±í•˜ì…¨ìŠµë‹ˆë‹¤!';
     } else {
       messageBody =
-        'ÀÌ¹ø ÁÖ Ã§¸°Áö ¸ñÇ¥¸¦ ´Ş¼ºÇÏÁö ¸øÇÏ¼Ì½À´Ï´Ù. ´ÙÀ½ ÁÖ¿¡ ´Ù½Ã µµÀüÇØ º¸¼¼¿ä!';
+        'ì•„ì‰¬ì›Œìš”. ì´ë²ˆ ì£¼ ì±Œë¦°ì§€ ëª©í‘œë¥¼ ë‹¬ì„±í•˜ì§€ ëª»í•˜ì…¨ìŠµë‹ˆë‹¤ (á¡Â´Ñ‚ â€§Ì« Ñ‚ á¡)';
     }
 
-    // »ç¿ëÀÚ FCM ÅäÅ«À» °¡Á®¿É´Ï´Ù.
     const fcmToken = await this.getUserFcmToken(participant.userId);
 
-    // Çª½Ã ¾Ë¸² ¸Ş½ÃÁö ±¸¼º
     const message = {
       token: fcmToken,
       notification: {
-        title: 'Ã§¸°Áö °á°ú',
+        title: 'ì±Œë¦°ì§€ ê²°ê³¼',
         body: messageBody,
       },
     };
     await admin.messaging().send(message);
   }
 
-  // »ç¿ëÀÚ FCM ÅäÅ«À» °¡Á®¿À´Â ÇÔ¼ö
+  // FCM í† í° ê°€ì ¸ì˜¤ê¸°(ë³€ê²½ì˜ˆì •)
   async getUserFcmToken(userId: number): Promise<string> {
     const token = await this.prisma.tokens.findUnique({
       where: { userId },
     });
-
-    if (!token) {
-      throw new Error(`FCM TokenÀ» Ã£À» ¼ö ¾ø½À´Ï´Ù: ${userId}`);
-    }
-
     return token.token;
+  }
+  getLastSunday(): Date {
+    const today = new Date();
+    const lastSunday = new Date(today);
+    lastSunday.setDate(today.getDate() - today.getDay());
+    lastSunday.setHours(23, 59, 59, 999);
+    return lastSunday;
   }
 }
