@@ -41,12 +41,6 @@ export class FoodsController {
     return this.foodsService.autoComplete(keyword, page, limit);
   }
 
-  @Get(':id')
-  @UseGuards(BearerGuard)
-  @ApiOperation({ summary: 'Search food details by food Id' })
-  async getSearchDiet(@Param('id') id: number) {
-    return await this.foodsService.searchDiet(id);
-  }
   @Post('get-image-name')
   async getImageName(
     @Body() searchImageDto: SearchImageDto,
@@ -57,12 +51,19 @@ export class FoodsController {
   }
   @Get('presigned-urls')
   @UseGuards(BearerGuard)
-  @ApiOperation({ summary: '½Ä´Ü ÀÌ¹ÌÁö ¾÷·Îµå presigned url ¹ß±Þ' })
+  @ApiOperation({ summary: 'ï¿½Ä´ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Îµï¿½ presigned url ï¿½ß±ï¿½' })
   @ApiResponse({ type: GetPresignedUrlResponseDto })
   getChallengePreSignedUrls(
     @Query() { count }: GetPresignedUrlRequestDto,
     @RequestUser() { id }: Users,
   ) {
     return this.foodsService.getPreSignedUrls(id, count);
+  }
+
+  @Get(':id')
+  @UseGuards(BearerGuard)
+  @ApiOperation({ summary: 'Search food details by food Id' })
+  async getSearchDiet(@Param('id') id: number) {
+    return await this.foodsService.searchDiet(id);
   }
 }
