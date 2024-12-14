@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  Query,
-  Param,
-  UseGuards,
-  Post,
-  Body,
-} from '@nestjs/common';
+import { Controller, Get, Query, UseGuards, Post, Body } from '@nestjs/common';
 import { FoodsService } from './foods.service';
 import {
   ApiTags,
@@ -64,5 +56,11 @@ export class FoodsController {
     @RequestUser() { id }: Users,
   ) {
     return this.foodsService.getPreSignedUrls(id, count);
+  }
+  @Get(':id')
+  @UseGuards(BearerGuard)
+  @ApiOperation({ summary: 'Search food details by food Id' })
+  async getSearchDiet(@Param('id') id: number) {
+    return await this.foodsService.searchDiet(id);
   }
 }

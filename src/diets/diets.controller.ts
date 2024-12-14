@@ -31,18 +31,6 @@ import { RequestUser } from 'src/request-user.decorator';
 export class DietsController {
   constructor(private readonly dietsService: DietsService) {}
 
-  @Post()
-  @UseGuards(BearerGuard)
-  @ApiOperation({ summary: 'Update daily accumulation' })
-  @ApiResponse({ type: UpdateDailyAccumulationDto })
-  async updateDailyAccumulation(
-    @RequestUser() user: Users,
-    @Body() updateDailyAccumulationDto: UpdateDailyAccumulationDto,
-  ) {
-    const { date } = updateDailyAccumulationDto;
-    return await this.dietsService.updateDailyAccumulation(user.id, date);
-  }
-
   @Get('stats')
   @UseGuards(BearerGuard)
   @ApiOperation({ summary: 'Get daily nutrition' })
@@ -71,18 +59,6 @@ export class DietsController {
     return await this.dietsService.getDailyMeal(userId, date);
   }
 
-  @Post()
-  @UseGuards(BearerGuard)
-  @ApiOperation({ summary: 'Enter and upload nutritional information' })
-  @ApiResponse({ type: CreateDietDto })
-  async createDiet(
-    @RequestUser() user: Users,
-    @Body() createDietDto: CreateDietDto,
-  ) {
-    const { date, ...nutritionData } = createDietDto;
-    return await this.dietsService.createDiet(user.id, date, nutritionData);
-  }
-
   @Delete(':id')
   @UseGuards(BearerGuard)
   @ApiOperation({ summary: 'delete Diet' })
@@ -92,5 +68,28 @@ export class DietsController {
     @Body() deleteDietDto: DeleteDietDto,
   ) {
     return await this.dietsService.deleteDiet(user.id, deleteDietDto.dietId);
+  }
+  @Post('total')
+  @UseGuards(BearerGuard)
+  @ApiOperation({ summary: 'Update total daily accumulation' })
+  @ApiResponse({ type: UpdateDailyAccumulationDto })
+  async updateDailyAccumulation(
+    @RequestUser() user: Users,
+    @Body() updateDailyAccumulationDto: UpdateDailyAccumulationDto,
+  ) {
+    const { date } = updateDailyAccumulationDto;
+    const userId = user.id;
+    return await this.dietsService.updateDailyAccumulation(userId, date);
+  }
+  @Post()
+  @UseGuards(BearerGuard)
+  @ApiOperation({ summary: 'Create nutritional information' })
+  @ApiResponse({ type: CreateDietDto })
+  async createDiet(
+    @RequestUser() user: Users,
+    @Body() createDietDto: CreateDietDto,
+  ) {
+    const { date, ...nutritionData } = createDietDto;
+    return await this.dietsService.createDiet(user.id, date, nutritionData);
   }
 }

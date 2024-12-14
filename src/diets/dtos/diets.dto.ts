@@ -1,10 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsDate, IsOptional } from 'class-validator';
+import { IsNumber, IsDate } from 'class-validator';
 
 export class UpdateDailyAccumulationDto {
+  @ApiProperty({ description: 'user ID', type: Number })
   @IsNumber()
   userId: number;
 
+  @ApiProperty({ description: 'date (YYYY-MM-DD)', type: Date })
   @IsDate()
   date: Date;
 }
@@ -107,18 +109,4 @@ export class DeleteDietDto {
   @ApiProperty({ description: 'User ID', type: Number })
   @IsNumber()
   userId: number;
-}
-export class GetPresignedUrlRequestDto {
-  @ApiProperty({ description: '개수', type: Number, required: false })
-  @IsNumber()
-  @IsOptional()
-  count?: number = 1;
-}
-
-export class GetPresignedUrlResponseDto {
-  @ApiProperty({ description: 'presigned-url key', type: String })
-  url: string;
-
-  @ApiProperty({ description: 'presigned-url key', type: String })
-  key: string;
 }
