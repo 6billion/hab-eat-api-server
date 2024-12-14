@@ -1,4 +1,12 @@
-import { Controller, Get, Query, UseGuards, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Query,
+  Param,
+  UseGuards,
+  Post,
+  Body,
+} from '@nestjs/common';
 import { FoodsService } from './foods.service';
 import {
   ApiTags,
@@ -12,7 +20,7 @@ import { ImageSearchResponseDto } from './dtos/image-search-response.dto';
 import {
   GetPresignedUrlRequestDto,
   GetPresignedUrlResponseDto,
-} from 'src/diets/dtos/diets.dto';
+} from './dtos/presigned-url.dto';
 import { Users } from '@prisma/client';
 import { RequestUser } from 'src/request-user.decorator';
 
@@ -33,13 +41,7 @@ export class FoodsController {
     return this.foodsService.autoComplete(keyword, page, limit);
   }
 
-  @Get(':id')
-  @UseGuards(BearerGuard)
-  @ApiOperation({ summary: 'Search food details by food Id' })
-  async getSearchDiet(@Param('id') id: number) {
-    return await this.foodsService.searchDiet(id);
-  }
-  @Post('get-image-name')
+  @Post('class-names')
   async getImageName(
     @Body() searchImageDto: SearchImageDto,
   ): Promise<ImageSearchResponseDto> {
@@ -47,9 +49,10 @@ export class FoodsController {
     const name = await this.foodsService.getImageNameFromAi(key);
     return { name };
   }
+
   @Get('presigned-urls')
   @UseGuards(BearerGuard)
-  @ApiOperation({ summary: '식단 이미지 업로드 presigned url 발급' })
+  @ApiOperation({ summary: 'get presigned url' })
   @ApiResponse({ type: GetPresignedUrlResponseDto })
   getChallengePreSignedUrls(
     @Query() { count }: GetPresignedUrlRequestDto,
@@ -57,6 +60,7 @@ export class FoodsController {
   ) {
     return this.foodsService.getPreSignedUrls(id, count);
   }
+
   @Get(':id')
   @UseGuards(BearerGuard)
   @ApiOperation({ summary: 'Search food details by food Id' })
