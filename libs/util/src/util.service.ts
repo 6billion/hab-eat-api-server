@@ -37,6 +37,11 @@ export class UtilService {
 
   getThisWeekSundayKST(): string {
     const today = dayjs().tz(this.KST_TIMEZONE);
+
+    if (today.day() == Days.sunday) {
+      return today.format('YYYY-MM-DD');
+    }
+
     const monday = today.startOf('week').add(7, 'day');
     return monday.format('YYYY-MM-DD');
   }
