@@ -6,6 +6,10 @@ import * as timezone from 'dayjs/plugin/timezone';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
+enum Days {
+  sunday = 0,
+}
+
 @Injectable()
 export class UtilService {
   constructor() {}
@@ -22,6 +26,11 @@ export class UtilService {
 
   getThisWeekMondayKST(): string {
     const today = dayjs().tz(this.KST_TIMEZONE);
+
+    if (today.day() == Days.sunday) {
+      return today.add(-6, 'day').format('YYYY-MM-DD');
+    }
+
     const monday = today.startOf('week').add(1, 'day');
     return monday.format('YYYY-MM-DD');
   }
