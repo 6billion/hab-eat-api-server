@@ -14,6 +14,7 @@ import { DietsModule } from './diets/diets.module';
 import { FoodsModule } from './foods/foods.module';
 import { PushModule } from '../libs/push/push.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { TaskModule } from './task/task.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     DietsModule,
     FoodsModule,
     PushModule,
+    TaskModule,
   ],
   controllers: [AppController],
   providers: [AppService],
