@@ -31,7 +31,7 @@ export class DietPushService {
 
   async getAllTokens() {
     return await this.prisma.tokens.findMany();
-  } //fcm token을 가져오도록 변경 예정
+  }
 
   async sendPushNotification(fcmToken: string, timeOfDay: string) {
     let messageBody = '';

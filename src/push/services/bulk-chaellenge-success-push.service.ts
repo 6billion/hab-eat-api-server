@@ -23,8 +23,8 @@ export class BulkChallengeSuccessPushService {
     if (fcmToken) {
       await this.sendFcm(
         fcmToken,
-        '¹úÅ©¾÷ ¼º°ø',
-        '¿À´Ã nutriBulk Ã§¸°Áö¸¦ ¼º°øÇÏ¼Ì½À´Ï´Ù!',
+        'ë²Œí¬ì—… ì„±ê³µ',
+        'ì˜¤ëŠ˜ nutriBulk ì±Œë¦°ì§€ë¥¼ ì„±ê³µí•˜ì…¨ìŠµë‹ˆë‹¤!',
       );
     }
   }

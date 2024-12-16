@@ -1,4 +1,12 @@
-import { Controller, Get, Query, UseGuards, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Query,
+  UseGuards,
+  Post,
+  Body,
+  Param,
+} from '@nestjs/common';
 import { FoodsService } from './foods.service';
 import {
   ApiTags,
@@ -12,9 +20,14 @@ import { ImageSearchResponseDto } from './dtos/image-search-response.dto';
 import {
   GetPresignedUrlRequestDto,
   GetPresignedUrlResponseDto,
-} from 'src/diets/dtos/diets.dto';
+} from './dtos/presigned-url.dto';
 import { Users } from '@prisma/client';
 import { RequestUser } from 'src/request-user.decorator';
+import {
+  AutoCompleteResponseDto,
+  ClassNameResponseDto,
+  SearchResponseDto,
+} from './dtos/response.dto';
 
 @ApiTags('Foods')
 @ApiBearerAuth()
@@ -25,6 +38,7 @@ export class FoodsController {
   @Get('autocomplete')
   @UseGuards(BearerGuard)
   @ApiOperation({ summary: 'Get auto-complete food names based on keyword' })
+  @ApiResponse({ type: AutoCompleteResponseDto })
   async getAutoComplete(
     @Query('keyword') keyword: string,
     @Query('page') page: number = 1,
@@ -34,6 +48,8 @@ export class FoodsController {
   }
 
   @Post('class-names')
+  @UseGuards(BearerGuard)
+  @ApiResponse({ type: ClassNameResponseDto })
   async getImageName(
     @Body() searchImageDto: SearchImageDto,
   ): Promise<ImageSearchResponseDto> {
@@ -51,5 +67,13 @@ export class FoodsController {
     @RequestUser() { id }: Users,
   ) {
     return this.foodsService.getPreSignedUrls(id, count);
+  }
+
+  @Get(':id')
+  @UseGuards(BearerGuard)
+  @ApiResponse({ type: SearchResponseDto })
+  @ApiOperation({ summary: 'Search food details by food Id' })
+  async getSearchDiet(@Param('id') id: number) {
+    return await this.foodsService.searchDiet(id);
   }
 }
