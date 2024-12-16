@@ -20,7 +20,7 @@ import { ImageSearchResponseDto } from './dtos/image-search-response.dto';
 import {
   GetPresignedUrlRequestDto,
   GetPresignedUrlResponseDto,
-} from 'src/diets/dtos/diets.dto';
+} from './dtos/presigned-url.dto';
 import { Users } from '@prisma/client';
 import { RequestUser } from 'src/request-user.decorator';
 
