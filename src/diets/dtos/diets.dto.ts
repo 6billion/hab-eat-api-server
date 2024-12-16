@@ -9,6 +9,15 @@ export class GetDailyAccumulationDto {
   @ApiProperty({ description: 'date (YYYY-MM-DD)', type: Date })
   @IsDate()
   date: Date;
+}
+export class GetDailyAccumulationResponseDto {
+  @ApiProperty({ description: 'user ID', type: Number })
+  @IsNumber()
+  userId: number;
+
+  @ApiProperty({ description: 'date (YYYY-MM-DD)', type: Date })
+  @IsDate()
+  date: Date;
 
   @ApiProperty({ description: 'Amount of food consumed' })
   @IsNumber()
@@ -79,6 +88,15 @@ export class GetDailyMealDto {
   @ApiProperty({ description: 'date (YYYY-MM-DD)', type: Date })
   @IsDate()
   date: Date;
+}
+export class GetDailyMealResponseDto {
+  @ApiProperty({ description: 'user ID', type: Number })
+  @IsNumber()
+  userId: number;
+
+  @ApiProperty({ description: 'date (YYYY-MM-DD)', type: Date })
+  @IsDate()
+  date: Date;
 
   @ApiProperty({ description: 'Amount of food consumed' })
   @IsNumber()
@@ -140,7 +158,6 @@ export class GetDailyMealDto {
   @IsNumber()
   transfat: number;
 }
-
 export class CreateDietDto {
   @ApiProperty({ description: 'User ID' })
   @IsNumber()
