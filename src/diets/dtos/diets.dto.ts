@@ -1,16 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsDate } from 'class-validator';
 
-export class UpdateDailyAccumulationDto {
-  @ApiProperty({ description: 'user ID', type: Number })
-  @IsNumber()
-  userId: number;
-
-  @ApiProperty({ description: 'date (YYYY-MM-DD)', type: Date })
-  @IsDate()
-  date: Date;
-}
-
 export class GetDailyAccumulationDto {
   @ApiProperty({ description: 'user ID', type: Number })
   @IsNumber()

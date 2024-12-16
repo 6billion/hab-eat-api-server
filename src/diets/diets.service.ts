@@ -139,6 +139,7 @@ export class DietsService {
         ...nutritionData,
       },
     });
+    await this.updateDailyAccumulation(userId, date);
     return createdDiet;
   }
   async deleteDiet(userId: number, dietId: number) {
