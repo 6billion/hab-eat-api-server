@@ -23,6 +23,11 @@ import {
 } from './dtos/presigned-url.dto';
 import { Users } from '@prisma/client';
 import { RequestUser } from 'src/request-user.decorator';
+import {
+  AutoCompleteResponseDto,
+  ClassNameResponseDto,
+  SearchResponseDto,
+} from './dtos/response.dto';
 
 @ApiTags('Foods')
 @ApiBearerAuth()
@@ -33,6 +38,7 @@ export class FoodsController {
   @Get('autocomplete')
   @UseGuards(BearerGuard)
   @ApiOperation({ summary: 'Get auto-complete food names based on keyword' })
+  @ApiResponse({ type: AutoCompleteResponseDto })
   async getAutoComplete(
     @Query('keyword') keyword: string,
     @Query('page') page: number = 1,
@@ -42,6 +48,8 @@ export class FoodsController {
   }
 
   @Post('class-names')
+  @UseGuards(BearerGuard)
+  @ApiResponse({ type: ClassNameResponseDto })
   async getImageName(
     @Body() searchImageDto: SearchImageDto,
   ): Promise<ImageSearchResponseDto> {
@@ -64,6 +72,7 @@ export class FoodsController {
   @Get(':id')
   @UseGuards(BearerGuard)
   @ApiOperation({ summary: 'Search food details by food Id' })
+  @ApiResponse({ type: SearchResponseDto })
   async getSearchDiet(@Param('id') id: number) {
     return await this.foodsService.searchDiet(id);
   }
