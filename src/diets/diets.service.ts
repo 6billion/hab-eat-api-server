@@ -1,9 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/db/prisma.service';
+import { UtilService } from 'libs/util/src/util.service';
+import * as dayjs from 'dayjs';
 
 @Injectable()
 export class DietsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly utilService: UtilService,
+  ) {}
   async updateDailyAccumulation(userId: number, date: Date) {
     const diets = await this.prisma.diets.findMany({
       where: {
@@ -50,9 +55,6 @@ export class DietsService {
       },
     );
 
-    //const utcDate = new Date();
-    //const kstDate = new Date(utcDate.getTime() + 9 * 60 * 60 * 1000);
-
     await this.prisma.dietStats.upsert({
       where: {
         userId_date: {
@@ -62,13 +64,11 @@ export class DietsService {
       },
       update: {
         ...totals,
-        updatedAt: date,
       },
       create: {
         userId,
         date,
         ...totals,
-        updatedAt: date,
       },
     });
   }
@@ -95,30 +95,21 @@ export class DietsService {
     });
 
     const breakfast = meals.filter((meal) => {
-      const mealDate = new Date(meal.createdAt);
-      const localTime = new Date(
-        mealDate.getTime() + mealDate.getTimezoneOffset() * 60 * 1000,
-      );
-      const hour = localTime.getHours();
+      const kstTime = this.utilService.convertUtcToKst(meal.createdAt);
+      const hour = dayjs(kstTime).hour();
       return hour >= 0 && hour < 11;
     });
 
     const lunch = meals.filter((meal) => {
-      const mealDate = new Date(meal.createdAt);
-      const localTime = new Date(
-        mealDate.getTime() + mealDate.getTimezoneOffset() * 60 * 1000,
-      );
-      const hour = localTime.getHours();
+      const kstTime = this.utilService.convertUtcToKst(meal.createdAt);
+      const hour = dayjs(kstTime).hour();
       return hour >= 11 && hour < 17;
     });
 
     const dinner = meals.filter((meal) => {
-      const mealDate = new Date(meal.createdAt);
-      const localTime = new Date(
-        mealDate.getTime() + mealDate.getTimezoneOffset() * 60 * 1000,
-      );
-      const hour = localTime.getHours();
-      return hour >= 17;
+      const kstTime = this.utilService.convertUtcToKst(meal.createdAt);
+      const hour = dayjs(kstTime).hour();
+      return hour >= 17 && hour < 24;
     });
 
     return {
@@ -129,13 +120,10 @@ export class DietsService {
   }
 
   async createDiet(userId: number, date: Date, nutritionData: any) {
-    //const utcDate = new Date();
-    //const kstDate = new Date(utcDate.getTime() + 9 * 60 * 60 * 1000);
     const createdDiet = await this.prisma.diets.create({
       data: {
         userId,
         date,
-        createdAt: date,
         ...nutritionData,
       },
     });
