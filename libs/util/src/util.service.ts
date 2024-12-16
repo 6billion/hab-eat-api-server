@@ -31,4 +31,7 @@ export class UtilService {
     const monday = today.startOf('week').add(7, 'day');
     return monday.format('YYYY-MM-DD');
   }
+  convertUtcToKst(utcDate: string | Date): string {
+    return dayjs(utcDate).tz(this.KST_TIMEZONE).format('YYYY-MM-DD HH:mm:ss');
+  }
 }

@@ -1,9 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/db/prisma.service';
+import { UtilService } from 'libs/util/src/util.service';
+import * as dayjs from 'dayjs';
 
 @Injectable()
 export class DietsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly utilService: UtilService,
+  ) {}
   async updateDailyAccumulation(userId: number, date: Date) {
     const diets = await this.prisma.diets.findMany({
       where: {
@@ -90,23 +95,20 @@ export class DietsService {
     });
 
     const breakfast = meals.filter((meal) => {
-      const mealDate = new Date(meal.createdAt);
-      const kstTime = new Date(mealDate.getTime() + 9 * 60 * 1000);
-      const hour = kstTime.getHours();
+      const kstTime = this.utilService.convertUtcToKst(meal.createdAt);
+      const hour = dayjs(kstTime).hour();
       return hour >= 0 && hour < 11;
     });
 
     const lunch = meals.filter((meal) => {
-      const mealDate = new Date(meal.createdAt);
-      const kstTime = new Date(mealDate.getTime() + 9 * 60 * 1000);
-      const hour = kstTime.getHours();
+      const kstTime = this.utilService.convertUtcToKst(meal.createdAt);
+      const hour = dayjs(kstTime).hour();
       return hour >= 11 && hour < 17;
     });
 
     const dinner = meals.filter((meal) => {
-      const mealDate = new Date(meal.createdAt);
-      const kstTime = new Date(mealDate.getTime() + 9 * 60 * 1000);
-      const hour = kstTime.getHours();
+      const kstTime = this.utilService.convertUtcToKst(meal.createdAt);
+      const hour = dayjs(kstTime).hour();
       return hour >= 17 && hour < 24;
     });
 
