@@ -50,8 +50,8 @@ export class DietsService {
       },
     );
 
-    const utcDate = new Date();
-    const kstDate = new Date(utcDate.getTime() + 9 * 60 * 60 * 1000);
+    //const utcDate = new Date();
+    //const kstDate = new Date(utcDate.getTime() + 9 * 60 * 60 * 1000);
 
     await this.prisma.dietStats.upsert({
       where: {
@@ -62,13 +62,13 @@ export class DietsService {
       },
       update: {
         ...totals,
-        updatedAt: kstDate,
+        updatedAt: date,
       },
       create: {
         userId,
         date,
         ...totals,
-        updatedAt: kstDate,
+        updatedAt: date,
       },
     });
   }
@@ -129,13 +129,13 @@ export class DietsService {
   }
 
   async createDiet(userId: number, date: Date, nutritionData: any) {
-    const utcDate = new Date();
-    const kstDate = new Date(utcDate.getTime() + 9 * 60 * 60 * 1000);
+    //const utcDate = new Date();
+    //const kstDate = new Date(utcDate.getTime() + 9 * 60 * 60 * 1000);
     const createdDiet = await this.prisma.diets.create({
       data: {
         userId,
         date,
-        createdAt: kstDate,
+        createdAt: date,
         ...nutritionData,
       },
     });
