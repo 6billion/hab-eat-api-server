@@ -13,6 +13,8 @@ import {
   GetDailyMealDto,
   CreateDietDto,
   DeleteDietDto,
+  GetDailyAccumulationResponseDto,
+  GetDailyMealResponseDto,
 } from 'src/diets/dtos/diets.dto';
 import {
   ApiTags,
@@ -33,7 +35,7 @@ export class DietsController {
   @Get('stats')
   @UseGuards(BearerGuard)
   @ApiOperation({ summary: 'Get daily nutrition' })
-  @ApiResponse({ type: GetDailyAccumulationDto })
+  @ApiResponse({ type: GetDailyAccumulationResponseDto })
   async getDailyAccumulation(
     @RequestUser() user: Users,
     @Query() query: GetDailyAccumulationDto,
@@ -48,7 +50,7 @@ export class DietsController {
   @ApiOperation({
     summary: 'Get a list of meal for breakfast, lunch, and dinner.',
   })
-  @ApiResponse({ type: GetDailyMealDto })
+  @ApiResponse({ type: GetDailyMealResponseDto })
   async getDailyMeal(
     @RequestUser() user: Users,
     @Query() params: GetDailyMealDto,
