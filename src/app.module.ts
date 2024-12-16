@@ -12,8 +12,7 @@ import { UtilModule } from '@lib/util';
 import { S3Module } from '@lib/s3';
 import { DietsModule } from './diets/diets.module';
 import { FoodsModule } from './foods/foods.module';
-import { PushModule } from './push/push.module';
-import { FirebaseAdminModule } from './firebase-admin/firebase-admin.module';
+import { PushModule } from '../libs/push/push.module';
 import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
@@ -31,7 +30,6 @@ import { ScheduleModule } from '@nestjs/schedule';
     DietsModule,
     FoodsModule,
     PushModule,
-    FirebaseAdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],
