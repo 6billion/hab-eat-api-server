@@ -168,7 +168,7 @@ model DietStats {
   transfat     Float
   updatedAt    DateTime @updatedAt
 
-  @@id([userId, date])
+  @@unique([userId, date])
 }
 
 model Diets {
