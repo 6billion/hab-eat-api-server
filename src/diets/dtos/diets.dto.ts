@@ -77,14 +77,11 @@ export class GetDailyAccumulationResponseDto {
 }
 
 export class GetDailyMealDto {
-  @ApiProperty({ description: 'user ID', type: Number })
-  @IsNumber()
-  userId: number;
-
   @ApiProperty({ description: 'date (YYYY-MM-DD)', type: Date })
   @IsDate()
   date: Date;
 }
+
 export class GetDailyMealResponseDto {
   @ApiProperty({ description: 'user ID', type: Number })
   @IsNumber()
