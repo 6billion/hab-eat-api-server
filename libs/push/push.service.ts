@@ -8,7 +8,7 @@ export class PushService {
     const message = {
       topic: 'diet',
       notification: {
-        title: '¿À´ÃÀÇ ½Ä´ÜÀº?',
+        title: 'ì˜¤ëŠ˜ì˜ ì‹ë‹¨ì€?',
         body: messageBody,
       },
     };
@@ -18,27 +18,37 @@ export class PushService {
   private getMessageBody(timeOfDay: string): string {
     switch (timeOfDay) {
       case 'morning':
-        return '¾ÆÄ§¹ä ²À Ã¬°Üµå¼¼¿ä!';
+        return 'ì•„ì¹¨ë°¥ ê¼­ ì±™ê²¨ë“œì„¸ìš”!';
       case 'afternoon':
-        return '¹Ù»Ú´Ù ¹Ùºü~ Á¡½Éµå½Ç ½Ã°£ÀÌ¿¡¿ä';
+        return 'ë°”ì˜ë‹¤ ë°”ë¹ ~ ì ì‹¬ë“œì‹¤ ì‹œê°„ì´ì—ìš”';
       case 'evening':
-        return 'ÇÏ·çµ¿¾È °í»ıÇß¾î¿ä! Àú³á½Ä»ç´Â ¸ÀÀÖ´Â °É·Î~';
+        return 'í•˜ë£¨ë™ì•ˆ ê³ ìƒí–ˆì–´ìš”! ì €ë…ì‹ì‚¬ëŠ” ë§›ìˆëŠ” ê±¸ë¡œ~';
       default:
         return '';
     }
   }
   async sendChallengePushNotification(isSuccess: boolean) {
     const messageBody = isSuccess
-      ? 'ÃàÇÏÇØ¿ä! ÀÌ¹ø ÁÖ Ã§¸°Áö¸¦ ¼º°øÀûÀ¸·Î ´Ş¼ºÇÏ¼Ì½À´Ï´Ù!'
-      : '¾Æ½¬¿ö¿ä. ÀÌ¹ø ÁÖ Ã§¸°Áö ¸ñÇ¥¸¦ ´Ş¼ºÇÏÁö ¸øÇÏ¼Ì½À´Ï´Ù (?¢¥¬ä ?? ¬ä ?)';
+      ? 'ì¶•í•˜í•´ìš”! ì´ë²ˆ ì£¼ ì±Œë¦°ì§€ë¥¼ ì„±ê³µì ìœ¼ë¡œ ë‹¬ì„±í•˜ì…¨ìŠµë‹ˆë‹¤!'
+      : 'ì•„ì‰¬ì›Œìš”. ì´ë²ˆ ì£¼ ì±Œë¦°ì§€ ëª©í‘œë¥¼ ë‹¬ì„±í•˜ì§€ ëª»í•˜ì…¨ìŠµë‹ˆë‹¤ (á¡Â´Ñ‚ â€§Ì« Ñ‚ á¡)';
 
     const message = {
       topic: 'weekly-challenge',
       notification: {
-        title: 'Ã§¸°Áö °á°ú',
+        title: 'ì±Œë¦°ì§€ ê²°ê³¼',
         body: messageBody,
       },
     };
     await admin.messaging().send(message);
+  }
+  async sendFcm(token: string, title: string, message: string) {
+    const payload = {
+      token: token,
+      notification: {
+        title: title,
+        body: message,
+      },
+    };
+    await admin.messaging().send(payload);
   }
 }
