@@ -159,10 +159,6 @@ export class GetDailyMealResponseDto {
   transfat: number;
 }
 export class CreateDietDto {
-  @ApiProperty({ description: 'User ID' })
-  @IsNumber()
-  userId: number;
-
   @ApiProperty({ description: 'Date of the meal' })
   @IsDate()
   date: Date;
