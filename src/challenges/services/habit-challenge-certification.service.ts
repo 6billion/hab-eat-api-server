@@ -37,7 +37,7 @@ export class HabitChallengeCertificationService
     const today = new Date(this.util.getKSTDate());
     if (
       params.participant.lastSuccessDate &&
-      params.participant.lastCheckDate.getTime() === today.getTime()
+      params.participant.lastSuccessDate.getTime() === today.getTime()
     ) {
       throw new ConflictException();
     }
