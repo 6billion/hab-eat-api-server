@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsDate } from 'class-validator';
+import { IsNumber, IsDate, IsString } from 'class-validator';
 
 export class GetDailyAccumulationDto {
   @ApiProperty({ description: 'date (YYYY-MM-DD)', type: Date })
@@ -83,9 +83,13 @@ export class GetDailyMealDto {
 }
 
 export class GetDailyMealResponseDto {
-  @ApiProperty({ description: 'user ID', type: Number })
+  @ApiProperty({ description: 'userId', type: Number })
   @IsNumber()
-  userId: number;
+  usere: number;
+
+  @ApiProperty({ description: 'name', type: String })
+  @IsString()
+  name: string;
 
   @ApiProperty({ description: 'date (YYYY-MM-DD)', type: Date })
   @IsDate()
@@ -152,6 +156,10 @@ export class GetDailyMealResponseDto {
   transfat: number;
 }
 export class CreateDietDto {
+  @ApiProperty({ description: 'food name' })
+  @IsString()
+  name: string;
+
   @ApiProperty({ description: 'Date of the meal' })
   @IsDate()
   date: Date;
@@ -221,8 +229,4 @@ export class DeleteDietDto {
   @ApiProperty({ description: 'Diet entry ID', type: Number })
   @IsNumber()
   dietId: number;
-
-  @ApiProperty({ description: 'User ID', type: Number })
-  @IsNumber()
-  userId: number;
 }

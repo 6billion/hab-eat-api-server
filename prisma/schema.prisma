@@ -173,6 +173,7 @@ model DietStats {
 
 model Diets {
   id           Int      @id @default(autoincrement())
+  name         String
   userId       Int
   date         DateTime @db.Date
   createdAt    DateTime @default(now())
