@@ -63,6 +63,8 @@ export class DietsService {
         },
       },
       update: {
+        userId,
+        date,
         ...totals,
       },
       create: {
