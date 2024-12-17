@@ -89,6 +89,23 @@ export class ChallengesController {
     type: PostChallengesCertificationResponseDto,
     description: '챌린지 참여 정보',
   })
+  @Post('/nutritions/certifications')
+  @ApiOperation({ summary: '영양 챌린지 인증' })
+  @ApiBody({ type: PostNutritionChallengesCertificationRequestDto })
+  @ApiResponse({ type: [PostChallengesCertificationResponseDto] })
+  async certifiyNutritionChallenges(
+    @RequestUser() user: User,
+    @Body() data: PostNutritionChallengesCertificationRequestDto,
+  ): Promise<ChallengeParticipants[]> {
+    const participants =
+      await this.challengesService.findNutritionChallengeParticipants(user.id);
+    return this.challengesService.certifyManyNutritionChallenges({
+      user,
+      data,
+      participants,
+    });
+  }
+
   @Post(':id/certifications')
   async postChallengeCertifications(
     @RequestUser() user: User,
@@ -135,22 +152,5 @@ export class ChallengesController {
     @RequestUser() user: User,
   ) {
     return this.challengesService.getChallengeConditions(id, user);
-  }
-
-  @Post('/nutritions/certifications')
-  @ApiOperation({ summary: '영양 챌린지 인증' })
-  @ApiBody({ type: PostNutritionChallengesCertificationRequestDto })
-  @ApiResponse({ type: [PostChallengesCertificationResponseDto] })
-  async certifiyNutritionChallenges(
-    @RequestUser() user: User,
-    @Body() data: PostNutritionChallengesCertificationRequestDto,
-  ): Promise<ChallengeParticipants[]> {
-    const participants =
-      await this.challengesService.findNutritionChallengeParticipants(user.id);
-    return this.challengesService.certifyManyNutritionChallenges({
-      user,
-      data,
-      participants,
-    });
   }
 }
