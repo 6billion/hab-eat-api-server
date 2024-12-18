@@ -12,7 +12,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
 
-  const port = configService.get('PORT') || 3000;
+  const port = configService.get('PORT') || 8080;
 
   app.enableShutdownHooks();
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
@@ -25,7 +25,12 @@ async function bootstrap() {
 
   configService.getOrThrow('NODE_ENV') !== 'production' && useSwagger(app);
 
-  const origins = ['http://localhost:3000', 'https://localhost:3000'];
+  const origins = [
+    'http://localhost:3000',
+    'https://localhost:3000',
+    'http://hab-eat.com',
+    'https://hab-eat.com',
+  ];
 
   app.enableCors({
     origin: origins,
