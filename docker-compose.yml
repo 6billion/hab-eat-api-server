@@ -31,14 +31,19 @@ services:
       - api-server
     env_file:
       - .env
+    deploy:
+      resources:
+        limits:
+          memory: 216M
   api-server:
     image: abjin/hab-eat-api-server:latest
     container_name: api-server
-    expose:
-      - '8080'
+    ports:
+      - '8080:8080'
     networks:
       - api-network
       - front-network
+      - nginx-connection
     depends_on:
       - ai-server
     env_file:

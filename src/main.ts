@@ -25,7 +25,11 @@ async function bootstrap() {
 
   configService.getOrThrow('NODE_ENV') !== 'production' && useSwagger(app);
 
-  const origins = ['http://localhost:3000', 'https://localhost:3000'];
+  const origins = [
+    'http://localhost:3000',
+    'https://localhost:3000',
+    'http://hab-eat.com',
+  ];
 
   app.enableCors({
     origin: origins,
