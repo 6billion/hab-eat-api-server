@@ -30,6 +30,9 @@ export class FoodsService {
           search: keyword,
         },
       },
+      orderBy: {
+        name: 'asc',
+      },
       skip: offset,
       take: limit,
       select: {

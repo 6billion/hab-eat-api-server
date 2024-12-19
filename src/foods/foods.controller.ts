@@ -2,10 +2,10 @@ import {
   Controller,
   Get,
   Query,
-  Param,
   UseGuards,
   Post,
   Body,
+  Param,
 } from '@nestjs/common';
 import { FoodsService } from './foods.service';
 import {
@@ -71,8 +71,8 @@ export class FoodsController {
 
   @Get(':id')
   @UseGuards(BearerGuard)
-  @ApiOperation({ summary: 'Search food details by food Id' })
   @ApiResponse({ type: SearchResponseDto })
+  @ApiOperation({ summary: 'Search food details by food Id' })
   async getSearchDiet(@Param('id') id: number) {
     return await this.foodsService.searchDiet(id);
   }

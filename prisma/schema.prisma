@@ -24,6 +24,7 @@ model Users {
   type          UserType
   activityLevel UserActivityLevel @default(lightlyActive)
   createdAt     DateTime          @default(now())
+  fcmToken      String?  
 
   token   Tokens?    @relation("userToToken")
   account Accounts[] @relation("userToAccount")

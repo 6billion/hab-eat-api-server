@@ -119,6 +119,7 @@ export class UsersService {
           sex: dto.sex,
           type: dto.type,
           activityLevel: dto.activityLevel,
+          fcmToken: dto.fcmToken,
         },
       });
 

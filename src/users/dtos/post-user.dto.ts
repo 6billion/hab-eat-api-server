@@ -41,6 +41,11 @@ export class PostUserDto {
   @IsEnum($Enums.UserActivityLevel)
   @IsOptional()
   activityLevel: $Enums.UserActivityLevel;
+
+  @ApiProperty({ description: 'fcm token', type: String, required: false })
+  @IsString()
+  @IsOptional()
+  fcmToken?: string;
 }
 
 export class UserDto {
@@ -79,6 +84,11 @@ export class UserDto {
     required: false,
   })
   activityLevel: $Enums.UserActivityLevel;
+
+  @ApiProperty({ description: 'fcm토큰', type: String, required: false })
+  @IsString()
+  @IsOptional()
+  fcmToken?: string;
 }
 
 export class PostUserResponseDto {
