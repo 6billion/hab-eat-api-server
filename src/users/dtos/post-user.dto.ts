@@ -87,4 +87,7 @@ export class PostUserResponseDto {
 
   @ApiProperty({ description: '토큰', type: String })
   token: string;
+
+  @ApiProperty({ description: '유저 생성 여부', type: Boolean })
+  isNew: boolean;
 }

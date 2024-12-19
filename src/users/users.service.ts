@@ -105,7 +105,7 @@ export class UsersService {
       update: { token },
     });
 
-    return { user, token };
+    return { user, token, isNew: false };
   }
 
   private async signUp(dto: PostUserDto, snsUser: SnsUser) {
@@ -135,7 +135,7 @@ export class UsersService {
         data: { userId: user.id, token },
       });
 
-      return { user, token };
+      return { user, token, isNew: true };
     });
   }
 
