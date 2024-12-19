@@ -7,40 +7,76 @@ export class PostUserDto {
   @IsString()
   snsToken: string;
 
-  @ApiProperty({ description: '닉네임', type: String, required: false })
+  @ApiProperty({
+    description: '닉네임',
+    type: String,
+    default: '햅잇',
+    required: false,
+  })
   @IsString()
   @IsOptional()
-  nickname?: string;
+  nickname?: string = '햅잇';
 
-  @ApiProperty({ description: '키', type: Number })
-  @IsNumber()
-  height: number;
-
-  @ApiProperty({ description: '몸무게', type: Number })
-  @IsNumber()
-  weight: number;
-
-  @ApiProperty({ description: '나이', type: Number, default: 25 })
+  @ApiProperty({
+    description: '키',
+    type: Number,
+    default: 180,
+    required: false,
+  })
   @IsNumber()
   @IsOptional()
-  age: number = 25;
+  height?: number = 180;
 
-  @ApiProperty({ description: '성별', enum: $Enums.Sex })
+  @ApiProperty({
+    description: '몸무게',
+    type: Number,
+    default: 80,
+    required: false,
+  })
+  @IsNumber()
+  @IsOptional()
+  weight?: number = 80;
+
+  @ApiProperty({
+    description: '나이',
+    type: Number,
+    default: 25,
+    required: false,
+  })
+  @IsNumber()
+  @IsOptional()
+  age?: number = 25;
+
+  @ApiProperty({
+    description: '성별',
+    enum: $Enums.Sex,
+    default: $Enums.Sex.male,
+    required: false,
+  })
   @IsEnum($Enums.Sex)
-  sex: $Enums.Sex;
+  @IsOptional()
+  sex?: $Enums.Sex = $Enums.Sex.male;
 
-  @ApiProperty({ description: '유저 타입', enum: $Enums.UserType })
+  @ApiProperty({
+    description: '유저 타입',
+    enum: $Enums.UserType,
+    default: $Enums.UserType.maintain,
+    required: false,
+  })
   @IsEnum($Enums.UserType)
-  type: $Enums.UserType;
+  @IsOptional()
+  type?: $Enums.UserType = $Enums.UserType.maintain;
 
   @ApiProperty({
     description: '활동 레벨',
     enum: $Enums.UserActivityLevel,
+    default: $Enums.UserActivityLevel.moderatelyActive,
     required: false,
   })
   @IsEnum($Enums.UserActivityLevel)
   @IsOptional()
-  activityLevel: $Enums.UserActivityLevel;
+  activityLevel?: $Enums.UserActivityLevel =
+    $Enums.UserActivityLevel.moderatelyActive;
 }
 
 export class UserDto {
