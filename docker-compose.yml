@@ -34,7 +34,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 216M
+          memory: 300M
   ai-server:
     image: abjin/hab-eat-ai-api-server:latest
     container_name: ai-server
@@ -43,7 +43,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 900M
+          memory: 1000M
 networks:
   nginx-connection:
   api-network:
