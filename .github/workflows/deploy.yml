@@ -40,4 +40,4 @@ jobs:
           deployment_package: deploy.zip
           version_label: api-server-deploy
           use_existing_version_if_available: true
-          wait_for_environment_recovery: 180
+          wait_for_deployment: false
