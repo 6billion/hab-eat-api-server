@@ -41,6 +41,9 @@ services:
     container_name: ai-server
     networks:
       - api-network
+      - nginx-connection
+    expose:
+      - '3000'
     deploy:
       resources:
         limits:
